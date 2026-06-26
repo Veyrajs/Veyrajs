@@ -1,7 +1,7 @@
 {
   "name": "@annotacanvas/vue",
   "version": "0.0.0",
-  "description": "Vue 3 adapter for AnnotaCanvas. (Placeholder — built in a later phase.)",
+  "description": "Vue 3 adapter for AnnotaCanvas — declarative components + composables over the engine.",
   "license": "UNLICENSED",
   "private": true,
   "type": "module",
@@ -19,13 +19,18 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "test": "vitest run --passWithNoTests",
+    "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
     "vue": "^3.4.0"
   },
+  "dependencies": {
+    "@annotacanvas/core": "workspace:*"
+  },
   "devDependencies": {
+    "@vue/test-utils": "catalog:",
+    "happy-dom": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:",

@@ -12,6 +12,7 @@ catalog:
   vue: ^3.5.13
   vite: ^6.0.7
   '@vitejs/plugin-vue': ^5.2.1
+  '@vue/test-utils': ^2.4.6
   vue-tsc: ^2.1.10
   '@biomejs/biome': 1.9.4
   '@changesets/cli': ^2.27.11

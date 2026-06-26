@@ -5,15 +5,15 @@ abstraction, camera, events, hit-testing, transforms, selection/controls, versio
 serialization, command/undo, and a plugin system. Designed to later host annotation
 workflows as optional plugins, without baking annotation logic into the core.
 
-> **Status:** Phase 1 (monorepo scaffold). The architecture plan lives outside the repo
-> in the approved planning document. This is the foundation, not the finished engine.
+> **Status:** Phases 1–9 complete — the core engine (MVP) plus the Vue adapter. See
+> [`packages/core/docs/`](./packages/core/docs/README.md) for per-module documentation.
 
 ## Packages
 
 | Package | Status | Description |
 | --- | --- | --- |
-| `@annotacanvas/core` | scaffold | The engine. Zero runtime dependencies. The product. |
-| `@annotacanvas/vue` | placeholder | Vue 3 adapter (built in a later phase). |
+| `@annotacanvas/core` | ✅ MVP | The engine. Zero runtime dependencies. The product. |
+| `@annotacanvas/vue` | ✅ | Vue 3 adapter — declarative components + composables. |
 | `@annotacanvas/tools` | placeholder | Reusable interaction tools (pan/select/transform/marquee). |
 | `@annotacanvas/annotations` | placeholder | **Future only.** Annotation node types + controls. Intentionally empty. |
 | `@annotacanvas/demo` (`apps/`) | scaffold | Vite + Vue demo proving the engine. Private. |

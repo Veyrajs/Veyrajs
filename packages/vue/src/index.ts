@@ -1,9 +1,17 @@
-/**
- * `@annotacanvas/vue` — Vue 3 adapter for AnnotaCanvas.
- *
- * Placeholder. The declarative components (`<ACStage>`, `<ACLayer>`, shapes),
- * composables (`useStage`, `useSelection`, `useCamera`), prop→mutation batching,
- * event re-emission, and imperative `expose()` refs are built in a later phase
- * (see the architecture plan, Phase 9).
- */
-export const VERSION = '0.0.0'
+export { ACStage } from './stage'
+export {
+  ACLayer,
+  ACGroup,
+  ACRect,
+  ACCircle,
+  ACEllipse,
+  ACLine,
+  ACPolygon,
+  ACText,
+  ACImage,
+} from './components'
+export { useStage, useCamera, useSelection, useHistory } from './composables'
+export { useNodeContext, NodeContextKey } from './context'
+export type { NodeContext } from './context'
+export { defineNodeComponent } from './node-component'
+export type { NodeComponentConfig } from './node-component'
