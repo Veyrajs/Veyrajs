@@ -196,6 +196,7 @@ importers:
       zone.js:
         specifier: 'catalog:'
         version: 0.14.10
+    publishDirectory: dist
 
   packages/annotations:
     devDependencies:

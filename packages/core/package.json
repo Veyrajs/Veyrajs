@@ -1,9 +1,29 @@
 {
   "name": "@veyrajs/core",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Framework-agnostic 2D canvas engine: scene graph, renderer abstraction, camera, events, hit-testing, transforms, controls, serialization, and plugin system.",
-  "license": "UNLICENSED",
-  "private": true,
+  "license": "MIT",
+  "author": "Veyrajs",
+  "homepage": "https://github.com/Samandar0021305/AnnotaCanvas/tree/main/packages/core#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Samandar0021305/AnnotaCanvas.git",
+    "directory": "packages/core"
+  },
+  "bugs": "https://github.com/Samandar0021305/AnnotaCanvas/issues",
+  "keywords": [
+    "canvas",
+    "2d",
+    "scene-graph",
+    "graphics",
+    "renderer",
+    "typescript",
+    "konva",
+    "fabric"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "sideEffects": false,
   "files": ["dist"],

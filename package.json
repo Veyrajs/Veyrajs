@@ -19,6 +19,7 @@
     "dev": "pnpm --filter @veyrajs/demo dev",
     "changeset": "changeset",
     "version-packages": "changeset version",
+    "release": "pnpm -r build && changeset publish",
     "clean": "pnpm -r exec rm -rf dist coverage .turbo *.tsbuildinfo"
   },
   "devDependencies": {
