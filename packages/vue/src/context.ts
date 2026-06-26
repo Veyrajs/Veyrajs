@@ -1,4 +1,4 @@
-import type { Container, History, SelectionManager, Stage } from '@annotacanvas/core'
+import type { Container, History, SelectionManager, Stage } from '@veyrajs/core'
 import { type InjectionKey, type Ref, inject } from 'vue'
 
 /** Reactive context passed from a stage/container down to its child components. */
@@ -10,12 +10,12 @@ export interface NodeContext {
   history: Ref<History | null>
 }
 
-export const NodeContextKey: InjectionKey<NodeContext> = Symbol('annotacanvas:node-context')
+export const NodeContextKey: InjectionKey<NodeContext> = Symbol('veyrajs:node-context')
 
 export function useNodeContext(): NodeContext {
   const context = inject(NodeContextKey)
   if (context === undefined) {
-    throw new Error('AnnotaCanvas components must be used inside <ACStage>')
+    throw new Error('Veyrajs components must be used inside <ACStage>')
   }
   return context
 }

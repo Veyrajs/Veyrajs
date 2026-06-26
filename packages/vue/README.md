@@ -1,13 +1,13 @@
-# @annotacanvas/vue
+# @veyrajs/vue
 
-Vue 3 adapter for [`@annotacanvas/core`](../core) — declarative components and composables
+Vue 3 adapter for [`@veyrajs/core`](../core) — declarative components and composables
 over the imperative engine, with an always-available escape hatch to the underlying nodes.
 
 ## Usage
 
 ```vue
 <script setup lang="ts">
-import { ACStage, ACLayer, ACRect, ACCircle } from '@annotacanvas/vue'
+import { ACStage, ACLayer, ACRect, ACCircle } from '@veyrajs/vue'
 import { ref } from 'vue'
 
 const x = ref(40)

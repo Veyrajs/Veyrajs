@@ -1,5 +1,5 @@
 <script lang="ts">
-import { Line } from '@annotacanvas/core'
+import { Line } from '@veyrajs/core'
 import Node from './Node.svelte'
 import { SHAPE_KEYS } from './keys.js'
 import type { ShapeProps } from './types.js'

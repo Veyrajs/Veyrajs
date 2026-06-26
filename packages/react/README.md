@@ -1,12 +1,12 @@
-# @annotacanvas/react
+# @veyrajs/react
 
-React adapter for [`@annotacanvas/core`](../core) — declarative components and hooks over the
+React adapter for [`@veyrajs/core`](../core) — declarative components and hooks over the
 imperative engine, with an always-available escape hatch (`ref`) to the underlying nodes.
 
 ## Usage
 
 ```tsx
-import { ACStage, ACLayer, ACRect, ACCircle } from '@annotacanvas/react'
+import { ACStage, ACLayer, ACRect, ACCircle } from '@veyrajs/react'
 import { useState } from 'react'
 
 export function Scene() {
@@ -45,6 +45,6 @@ It's a thin layer over the engine: prop changes are mirrored onto the node (the 
 guarded setters make this loop-safe), events are re-emitted as callbacks, and the scene is
 assembled via a reactive cascade (context state) so children attach as soon as the stage is
 ready. The core stays fully framework-agnostic; this package is the only React-aware code,
-and a parallel sibling to [`@annotacanvas/vue`](../vue).
+and a parallel sibling to [`@veyrajs/vue`](../vue).
 
 See [docs/](./docs/README.md) for the per-module documentation.

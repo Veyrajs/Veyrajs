@@ -16,7 +16,7 @@ import type {
   SceneEventType,
   SelectionManager,
   Stage,
-} from '@annotacanvas/core'
+} from '@veyrajs/core'
 import { NODE_CONTEXT, type NodeContext } from './context'
 
 const EVENTS: SceneEventType[] = [

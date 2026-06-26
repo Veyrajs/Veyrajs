@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { Stage, VERSION } from '../index'
 
-describe('@annotacanvas/core', () => {
+describe('@veyrajs/core', () => {
   it('exposes a version string', () => {
     expect(typeof VERSION).toBe('string')
   })

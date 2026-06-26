@@ -1,6 +1,6 @@
-# @annotacanvas/angular
+# @veyrajs/angular
 
-Angular adapter for [`@annotacanvas/core`](../core) — declarative standalone components over
+Angular adapter for [`@veyrajs/core`](../core) — declarative standalone components over
 the imperative engine, with an always-available escape hatch (the public `node` field) to the
 underlying nodes.
 
@@ -8,7 +8,7 @@ underlying nodes.
 
 ```ts
 import { Component, signal } from '@angular/core'
-import { ACStage, ACLayer, ACRect, ACCircle } from '@annotacanvas/angular'
+import { ACStage, ACLayer, ACRect, ACCircle } from '@veyrajs/angular'
 
 @Component({
   selector: 'app-scene',

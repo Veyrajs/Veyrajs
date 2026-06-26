@@ -1,6 +1,6 @@
 # `src/index.ts` — Public API barrel
 
-> The single entry point consumers import from: `@annotacanvas/core`.
+> The single entry point consumers import from: `@veyrajs/core`.
 
 ## Purpose
 
@@ -50,7 +50,7 @@ Pure re-exports. Type-only symbols are re-exported with `export type { … }` so
 ## Relationships
 
 - **Re-exports from:** every public module under `src/`.
-- **Consumed by:** the demo app, future adapters (`@annotacanvas/vue`), and `@annotacanvas/tools`.
+- **Consumed by:** the demo app, future adapters (`@veyrajs/vue`), and `@veyrajs/tools`.
 
 ## Future / not yet
 

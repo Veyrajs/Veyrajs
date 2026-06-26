@@ -1,5 +1,5 @@
-import type { Container, Stage } from '@annotacanvas/core'
 import { render } from '@testing-library/svelte'
+import type { Container, Stage } from '@veyrajs/core'
 import { flushSync } from 'svelte'
 import { describe, expect, it } from 'vitest'
 import Fixture from './Fixture.svelte'

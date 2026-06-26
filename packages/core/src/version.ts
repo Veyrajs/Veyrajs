@@ -1,5 +1,5 @@
 /**
- * Current `@annotacanvas/core` version.
+ * Current `@veyrajs/core` version.
  * Kept in sync with `package.json` at release time.
  */
 export const VERSION = '0.0.0'

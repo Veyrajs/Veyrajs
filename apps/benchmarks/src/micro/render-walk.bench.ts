@@ -1,4 +1,4 @@
-import { Stage } from '@annotacanvas/core'
+import { Stage } from '@veyrajs/core'
 import { bench, describe } from 'vitest'
 import { blackhole } from '../blackhole'
 import { CountingRenderer } from '../counting-renderer'

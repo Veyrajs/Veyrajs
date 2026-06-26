@@ -1,4 +1,4 @@
-import type { Container, Stage } from '@annotacanvas/core'
+import type { Container, Stage } from '@veyrajs/core'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'

@@ -1,6 +1,6 @@
 {
-  "name": "@annotacanvas/docs",
+  "name": "@veyrajs/docs",
   "version": "0.0.0",
   "private": true,
-  "description": "AnnotaCanvas documentation site (VitePress). Scaffolding deferred to V1."
+  "description": "Veyrajs documentation site (VitePress). Scaffolding deferred to V1."
 }

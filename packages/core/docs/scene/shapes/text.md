@@ -34,7 +34,7 @@ the node's `x`/`y` is the text's top-left.
 ## Example
 
 ```ts
-new Text({ x: 40, y: 320, text: 'AnnotaCanvas', fontSize: 20, fill: '#e2e8f0' })
+new Text({ x: 40, y: 320, text: 'Veyrajs', fontSize: 20, fill: '#e2e8f0' })
 ```
 
 See [shapes overview](./index.md), [`Shape`](../shape.md), and the

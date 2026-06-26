@@ -1,4 +1,4 @@
-import { Matrix, type Vec2 } from '@annotacanvas/core'
+import { Matrix, type Vec2 } from '@veyrajs/core'
 import { bench, describe } from 'vitest'
 import { blackhole } from '../blackhole'
 

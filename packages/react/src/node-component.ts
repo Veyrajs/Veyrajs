@@ -1,4 +1,4 @@
-import { Container, type Node, type SceneEvent, type SceneEventType } from '@annotacanvas/core'
+import { Container, type Node, type SceneEvent, type SceneEventType } from '@veyrajs/core'
 import {
   type ForwardRefExoticComponent,
   type ReactNode,

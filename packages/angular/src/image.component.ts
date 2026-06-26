@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
-import { Image as ImageNode, type Node } from '@annotacanvas/core'
+import { Image as ImageNode, type Node } from '@veyrajs/core'
 import { AcShapeBase } from './ac-shape.base'
 import { SHAPE_KEYS } from './keys'
 

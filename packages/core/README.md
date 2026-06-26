@@ -1,6 +1,6 @@
-# @annotacanvas/core
+# @veyrajs/core
 
-The AnnotaCanvas engine. Framework-agnostic, zero runtime dependencies.
+The Veyrajs engine. Framework-agnostic, zero runtime dependencies.
 
 > **Status:** Phase 1 scaffold. Currently exports a minimal placeholder `Stage` that
 > mounts a DPR-correct `<canvas>` and clears it. The real scene graph, renderer
@@ -8,7 +8,7 @@ The AnnotaCanvas engine. Framework-agnostic, zero runtime dependencies.
 > layer land in subsequent phases per the architecture plan.
 
 ```ts
-import { Stage } from '@annotacanvas/core'
+import { Stage } from '@veyrajs/core'
 
 const stage = new Stage({ container: document.getElementById('app')!, width: 800, height: 480 })
 // ...

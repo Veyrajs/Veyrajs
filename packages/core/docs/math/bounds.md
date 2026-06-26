@@ -54,7 +54,7 @@ filter before precise hit-testing (Phase 6).
 ## Example
 
 ```ts
-import { Bounds, Matrix } from '@annotacanvas/core'
+import { Bounds, Matrix } from '@veyrajs/core'
 
 Bounds.fromRect(0, 0, 10, 20).transform(Matrix.rotation(90))
 // → Bounds { x: -20, y: 0, width: 20, height: 10 }

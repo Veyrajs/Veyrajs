@@ -22,7 +22,7 @@ shape only draws what it is given.
 ## Conventions & gotchas
 
 - **Name shadowing.** This `Image` is the engine's shape, not the DOM `Image`
-  (`HTMLImageElement`) constructor. Import it as `import { Image } from '@annotacanvas/core'`;
+  (`HTMLImageElement`) constructor. Import it as `import { Image } from '@veyrajs/core'`;
   to construct a DOM image use `new globalThis.Image()`.
 - **Explicit size.** `width`/`height` default to `0`; set them (e.g. to the source's natural
   size) so the image is visible.

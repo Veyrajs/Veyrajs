@@ -1,4 +1,4 @@
-import { Image, Stage } from '@annotacanvas/core'
+import { Image, Stage } from '@veyrajs/core'
 import { buildFlatLayer, shapesOf } from '../scene-factory'
 import { SCENARIOS, type Scenario } from './scenarios'
 
@@ -32,7 +32,7 @@ root.innerHTML = `
   .host canvas { border: 1px solid #1e293b; border-radius: 8px; }
 </style>
 <header class="bar">
-  <strong>AnnotaCanvas · FPS</strong>
+  <strong>Veyrajs · FPS</strong>
   <span class="lbl">shapes</span><span class="group" id="counts"></span>
   <span class="lbl">scenario</span><span class="group" id="scenarios"></span>
   <span class="readout" id="readout"></span>

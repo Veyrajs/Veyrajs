@@ -7,5 +7,5 @@
   "access": "restricted",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@annotacanvas/demo", "@annotacanvas/docs", "@annotacanvas/benchmarks"]
+  "ignore": ["@veyrajs/demo", "@veyrajs/docs", "@veyrajs/benchmarks"]
 }

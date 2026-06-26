@@ -1,4 +1,4 @@
-import type { Container, Stage } from '@annotacanvas/core'
+import type { Container, Stage } from '@veyrajs/core'
 import { type ReactElement, act, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { describe, expect, it } from 'vitest'

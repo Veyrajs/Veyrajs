@@ -47,5 +47,5 @@ touches the DOM.
 
 - **Uses:** `Stage`, `SelectionController`, `History`, `SelectionManager` from core; Svelte
   (`$props`, `$bindable`, `$effect`, `onMount`); [context.ts](./context.md).
-- **Used by:** apps, as the root of any AnnotaCanvas scene. Provides the context consumed by
+- **Used by:** apps, as the root of any Veyrajs scene. Provides the context consumed by
   [Node.svelte](./node.md).

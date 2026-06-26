@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
-import { type Node, Polygon } from '@annotacanvas/core'
+import { type Node, Polygon } from '@veyrajs/core'
 import { AcShapeBase } from './ac-shape.base'
 import { SHAPE_KEYS } from './keys'
 

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
-import { Ellipse, type Node } from '@annotacanvas/core'
+import { Ellipse, type Node } from '@veyrajs/core'
 import { AcShapeBase } from './ac-shape.base'
 import { SHAPE_KEYS } from './keys'
 

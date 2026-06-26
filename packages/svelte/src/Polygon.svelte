@@ -1,5 +1,5 @@
 <script lang="ts">
-import { Polygon } from '@annotacanvas/core'
+import { Polygon } from '@veyrajs/core'
 import Node from './Node.svelte'
 import { SHAPE_KEYS } from './keys.js'
 import type { ShapeProps } from './types.js'

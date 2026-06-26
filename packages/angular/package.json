@@ -1,7 +1,7 @@
 {
-  "name": "@annotacanvas/angular",
+  "name": "@veyrajs/angular",
   "version": "0.0.0",
-  "description": "Angular adapter for AnnotaCanvas — declarative components over the engine.",
+  "description": "Angular adapter for Veyrajs — declarative components over the engine.",
   "license": "UNLICENSED",
   "private": true,
   "type": "module",
@@ -15,7 +15,7 @@
     "@angular/core": "^18.0.0"
   },
   "dependencies": {
-    "@annotacanvas/core": "workspace:*",
+    "@veyrajs/core": "workspace:*",
     "tslib": "^2.6.0"
   },
   "devDependencies": {

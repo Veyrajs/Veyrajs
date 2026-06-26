@@ -1,5 +1,5 @@
 /**
- * `@annotacanvas/tools` — reusable interaction tools for AnnotaCanvas
+ * `@veyrajs/tools` — reusable interaction tools for Veyrajs
  * (pan, select, transform, marquee).
  *
  * Placeholder. Built in a later phase on top of the core event and selection systems.

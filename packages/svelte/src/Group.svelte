@@ -1,5 +1,5 @@
 <script lang="ts">
-import { Group } from '@annotacanvas/core'
+import { Group } from '@veyrajs/core'
 import Node from './Node.svelte'
 import { COMMON_KEYS } from './keys.js'
 import type { ContainerProps } from './types.js'

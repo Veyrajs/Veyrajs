@@ -1,5 +1,5 @@
 <script lang="ts">
-import { Layer } from '@annotacanvas/core'
+import { Layer } from '@veyrajs/core'
 import Node from './Node.svelte'
 import { COMMON_KEYS } from './keys.js'
 import type { ContainerProps } from './types.js'

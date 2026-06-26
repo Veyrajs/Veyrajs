@@ -17,7 +17,7 @@ export default defineConfig({
   resolve: {
     alias: {
       // Consume the engine's source directly (no build step needed for tests).
-      '@annotacanvas/core': fileURLToPath(new URL('../core/src/index.ts', import.meta.url)),
+      '@veyrajs/core': fileURLToPath(new URL('../core/src/index.ts', import.meta.url)),
     },
   },
   test: {

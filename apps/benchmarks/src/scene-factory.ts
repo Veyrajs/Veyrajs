@@ -1,4 +1,4 @@
-import { Circle, Group, Layer, Polygon, Rect, Shape, type Vec2 } from '@annotacanvas/core'
+import { Circle, Group, Layer, Polygon, Rect, Shape, type Vec2 } from '@veyrajs/core'
 
 /** Deterministic PRNG (mulberry32) — reproducible scenes without `Math.random`. */
 export function makeRng(seed: number): () => number {

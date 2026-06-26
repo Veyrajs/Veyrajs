@@ -8,7 +8,7 @@ import {
   Polygon,
   Rect,
   Text,
-} from '@annotacanvas/core'
+} from '@veyrajs/core'
 import { defineNodeComponent } from './node-component'
 
 export const ACLayer = defineNodeComponent({ name: 'ACLayer', NodeClass: Layer, isContainer: true })

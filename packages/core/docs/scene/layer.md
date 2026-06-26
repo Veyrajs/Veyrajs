@@ -26,7 +26,7 @@ canvas for caching) is a later, opt-in optimization that fits behind the existin
 - **Stage children must be Layers.** `Stage.add()` throws on non-`Layer` children — use
   `stage.createLayer()`.
 - **Use layers sparingly.** They are partitions, not the grouping mechanism. Konva's
-  per-layer-canvas memory ceiling is the cautionary tale; AnnotaCanvas keeps layers logical
+  per-layer-canvas memory ceiling is the cautionary tale; Veyrajs keeps layers logical
   by default and only allocates a real canvas per layer when caching is explicitly enabled.
 
 ## Relationships

@@ -1,7 +1,7 @@
-# `@annotacanvas/react` — Adapter docs
+# `@veyrajs/react` — Adapter docs
 
 Per-module documentation for the React adapter. Like the Vue adapter, this package is
-intentionally thin: all engine behaviour lives in [`@annotacanvas/core`](../../core); this
+intentionally thin: all engine behaviour lives in [`@veyrajs/core`](../../core); this
 package only bridges it to React's component model and hooks.
 
 | Source | Doc | Concern |
@@ -14,8 +14,8 @@ package only bridges it to React's component model and hooks.
 
 ## Design principles
 
-- **Core stays framework-agnostic.** No React import appears in `@annotacanvas/core`; all
-  React-aware code is here. It is a parallel package to `@annotacanvas/vue`, not a core
+- **Core stays framework-agnostic.** No React import appears in `@veyrajs/core`; all
+  React-aware code is here. It is a parallel package to `@veyrajs/vue`, not a core
   change — the proof that the adapter boundary holds.
 - **Controlled by props.** Props drive the node; sync your state from events (`onDragmove`,
   etc.) if you let the user move things. The engine's guarded setters make the
@@ -50,7 +50,7 @@ direct analogue of Vue's `watch(context.parent, …, { immediate: true })`. See
 
 ## Building / testing
 
-Built with `tsup` (`react`, `react-dom`, `react/jsx-runtime`, and `@annotacanvas/core` are
+Built with `tsup` (`react`, `react-dom`, `react/jsx-runtime`, and `@veyrajs/core` are
 external). Source uses `createElement` (no JSX) so the build needs no JSX runtime; the test
 uses JSX via esbuild's automatic runtime. Tested with Vitest + `react-dom/client` + `act`
 under happy-dom, resolving the engine from source (no build step needed).

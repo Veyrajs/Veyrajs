@@ -1,5 +1,5 @@
-import { History, SelectionController, Stage } from '@annotacanvas/core'
-import type { SelectionManager } from '@annotacanvas/core'
+import { History, SelectionController, Stage } from '@veyrajs/core'
+import type { SelectionManager } from '@veyrajs/core'
 import {
   type CSSProperties,
   type ForwardRefExoticComponent,

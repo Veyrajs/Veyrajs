@@ -51,5 +51,5 @@ hatch. `selection`/`history` are non-null only when `selectable` is set.
 - **Uses:** `Stage`, `SelectionController`, `History`, `SelectionManager` from core; React
   (`forwardRef`, `useEffect`, `useImperativeHandle`, `useRef`, `useState`, `createElement`);
   [context.ts](./context.md).
-- **Used by:** apps, as the root of any AnnotaCanvas scene. Provides the context consumed by
+- **Used by:** apps, as the root of any Veyrajs scene. Provides the context consumed by
   [node-component.ts](./node-component.md) and the [hooks](./hooks.md).

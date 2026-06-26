@@ -6,7 +6,7 @@
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
     "paths": {
-      "@annotacanvas/core": ["../core/src/index.ts"]
+      "@veyrajs/core": ["../core/src/index.ts"]
     }
   },
   "include": ["src/**/*.ts"]

@@ -18,7 +18,7 @@ import {
   SelectionController,
   type SelectionManager,
   Stage,
-} from '@annotacanvas/core'
+} from '@veyrajs/core'
 import { NODE_CONTEXT, type NodeContext } from './context'
 
 /**

@@ -4,7 +4,7 @@ import {
   type Node,
   type SceneEvent,
   type SceneEventType,
-} from '@annotacanvas/core'
+} from '@veyrajs/core'
 import { type Snippet, onMount, untrack } from 'svelte'
 import { getNodeContext, setNodeContext } from './context.js'
 

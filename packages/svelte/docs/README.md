@@ -1,8 +1,8 @@
-# `@annotacanvas/svelte` — Adapter docs
+# `@veyrajs/svelte` — Adapter docs
 
 Per-module documentation for the Svelte 5 adapter. Like the Vue and React adapters, this
 package is intentionally thin: all engine behaviour lives in
-[`@annotacanvas/core`](../../core); this package only bridges it to Svelte 5's runes and
+[`@veyrajs/core`](../../core); this package only bridges it to Svelte 5's runes and
 component model.
 
 | Source | Doc | Concern |
@@ -14,9 +14,9 @@ component model.
 
 ## Design principles
 
-- **Core stays framework-agnostic.** No Svelte import appears in `@annotacanvas/core`; all
-  Svelte-aware code is here. It is a parallel package to `@annotacanvas/vue` and
-  `@annotacanvas/react` — the proof, three times over, that the adapter boundary holds.
+- **Core stays framework-agnostic.** No Svelte import appears in `@veyrajs/core`; all
+  Svelte-aware code is here. It is a parallel package to `@veyrajs/vue` and
+  `@veyrajs/react` — the proof, three times over, that the adapter boundary holds.
 - **Controlled by props.** Props drive the node; sync your `$state` from events (`ondragmove`,
   …) if you let the user move things. The engine's guarded setters make the
   prop→node→event→prop round-trip a no-op rather than a loop, so no echo-suppression machinery

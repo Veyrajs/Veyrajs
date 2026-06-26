@@ -30,7 +30,7 @@ can't emit components).
 
 ```svelte
 <script lang="ts">
-import { Rect } from '@annotacanvas/core'
+import { Rect } from '@veyrajs/core'
 import Node from './Node.svelte'
 import { SHAPE_KEYS } from './keys.js'
 import type { ShapeProps } from './types.js'

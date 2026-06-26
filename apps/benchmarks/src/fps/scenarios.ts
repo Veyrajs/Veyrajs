@@ -1,4 +1,4 @@
-import type { Shape, Stage, Vec2 } from '@annotacanvas/core'
+import type { Shape, Stage, Vec2 } from '@veyrajs/core'
 
 export interface ScenarioContext {
   stage: Stage

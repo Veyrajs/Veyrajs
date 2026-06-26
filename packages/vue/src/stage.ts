@@ -1,5 +1,5 @@
-import { History, SelectionController, Stage } from '@annotacanvas/core'
-import type { Container, SelectionManager } from '@annotacanvas/core'
+import { History, SelectionController, Stage } from '@veyrajs/core'
+import type { Container, SelectionManager } from '@veyrajs/core'
 import {
   defineComponent,
   h,

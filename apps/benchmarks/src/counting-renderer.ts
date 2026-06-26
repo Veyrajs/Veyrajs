@@ -1,4 +1,4 @@
-import type { FrameInfo, Matrix, Renderable, Renderer } from '@annotacanvas/core'
+import type { FrameInfo, Matrix, Renderable, Renderer } from '@veyrajs/core'
 
 /**
  * A `Renderer` that does the engine-side per-node work a real backend does — it pulls each

@@ -1,8 +1,8 @@
-# `@annotacanvas/angular` — Adapter docs
+# `@veyrajs/angular` — Adapter docs
 
 Per-module documentation for the Angular adapter. Like the Vue, React, and Svelte adapters,
 this package is intentionally thin: all engine behaviour lives in
-[`@annotacanvas/core`](../../core); this package only bridges it to Angular's component model
+[`@veyrajs/core`](../../core); this package only bridges it to Angular's component model
 and hierarchical DI.
 
 | Source | Doc | Concern |
@@ -14,7 +14,7 @@ and hierarchical DI.
 
 ## Design principles
 
-- **Core stays framework-agnostic.** No Angular import appears in `@annotacanvas/core`; all
+- **Core stays framework-agnostic.** No Angular import appears in `@veyrajs/core`; all
   Angular-aware code is here. It is the fourth parallel adapter (Vue, React, Svelte, Angular)
   — the boundary holds, four times over.
 - **Controlled by inputs.** `@Input()`s drive the node; subscribe to the `@Output()` events
@@ -47,7 +47,7 @@ its *ancestor*, not itself (the standard hierarchical-DI pattern). See [node.md]
 ## Building / testing
 
 Built with **`ng-packagr`** (Ivy partial-compilation Angular Package Format → `dist`, with
-`@annotacanvas/core` allow-listed as a non-peer dependency). Type-checked with `tsc`. Tested
+`@veyrajs/core` allow-listed as a non-peer dependency). Type-checked with `tsc`. Tested
 with **Vitest** under happy-dom — no Angular build plugin: because the components use
 `inject()` / explicit `@Inject` (no decorator-metadata reflection), esbuild's legacy-decorator
 transform plus Angular's JIT compiler (loaded in the setup) are enough. The TestBed runs

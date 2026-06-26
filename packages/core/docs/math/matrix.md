@@ -80,7 +80,7 @@ scale happen around that local point. (Matches Konva's transform order.)
 ## Example
 
 ```ts
-import { Matrix } from '@annotacanvas/core'
+import { Matrix } from '@veyrajs/core'
 
 // scale by 2, then translate by (10, 0)
 const m = Matrix.translation(10, 0).multiply(Matrix.scaling(2, 2))

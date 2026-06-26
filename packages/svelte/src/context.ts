@@ -1,7 +1,7 @@
-import type { Container, History, SelectionManager, Stage } from '@annotacanvas/core'
+import type { Container, History, SelectionManager, Stage } from '@veyrajs/core'
 import { getContext, setContext } from 'svelte'
 
-const KEY = Symbol('annotacanvas:context')
+const KEY = Symbol('veyrajs:context')
 
 /**
  * The context carried down the component tree. The fields are exposed as getters by the

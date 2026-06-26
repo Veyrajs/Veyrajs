@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Exposes the current `@annotacanvas/core` version as a value that consumer code can read at
+Exposes the current `@veyrajs/core` version as a value that consumer code can read at
 runtime (e.g. to log which engine build is running, or to gate behaviour on a version).
 
 ## Exports

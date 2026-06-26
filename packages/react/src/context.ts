@@ -1,4 +1,4 @@
-import type { Container, History, SelectionManager, Stage } from '@annotacanvas/core'
+import type { Container, History, SelectionManager, Stage } from '@veyrajs/core'
 import { createContext, useContext } from 'react'
 
 /** Context passed from a stage/container down to its child components. */

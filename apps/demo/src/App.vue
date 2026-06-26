@@ -10,7 +10,7 @@ import {
   Stage,
   Text,
   VERSION,
-} from '@annotacanvas/core'
+} from '@veyrajs/core'
 import { onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 
 const host = ref<HTMLElement | null>(null)
@@ -97,7 +97,7 @@ onBeforeUnmount(() => {
 <template>
   <div class="app">
     <header class="app__header">
-      <strong>AnnotaCanvas</strong>
+      <strong>Veyrajs</strong>
       <span class="app__badge">demo</span>
       <span class="app__version">core v{{ VERSION }}</span>
     </header>

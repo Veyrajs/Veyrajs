@@ -1,4 +1,4 @@
-# @annotacanvas/demo
+# @veyrajs/demo
 
 Private Vite + Vue app that proves the engine works. Run from the repo root:
 
@@ -12,5 +12,5 @@ pnpm dev
 > performance test page (see the architecture plan). It is intentionally **not** a full
 > annotation app.
 
-The demo aliases `@annotacanvas/core` directly to the engine's source, so changes to the
+The demo aliases `@veyrajs/core` directly to the engine's source, so changes to the
 engine hot-reload here without a rebuild.

@@ -1,7 +1,7 @@
-# `@annotacanvas/vue` — Adapter docs
+# `@veyrajs/vue` — Adapter docs
 
 Per-module documentation for the Vue 3 adapter. The adapter is intentionally thin: all
-engine behaviour lives in [`@annotacanvas/core`](../../core); this package only bridges it
+engine behaviour lives in [`@veyrajs/core`](../../core); this package only bridges it
 to Vue's reactivity and component model.
 
 | Source | Doc | Concern |
@@ -14,7 +14,7 @@ to Vue's reactivity and component model.
 
 ## Design principles
 
-- **Core stays framework-agnostic.** No Vue import appears in `@annotacanvas/core`; all
+- **Core stays framework-agnostic.** No Vue import appears in `@veyrajs/core`; all
   Vue-aware code is here. A React adapter is a parallel package, not a core change.
 - **Controlled by props.** Props drive the node; sync your reactive state from events
   (`@dragmove`, etc.) if you let the user move things. The engine's guarded setters make the
@@ -35,5 +35,5 @@ the subtree assembles itself and snaps onto the stage the moment the root ref is
 
 ## Building / testing
 
-Built with `tsup` (`vue` and `@annotacanvas/core` are external). Tested with Vitest +
+Built with `tsup` (`vue` and `@veyrajs/core` are external). Tested with Vitest +
 `@vue/test-utils` under happy-dom, resolving the engine from source (no build step needed).

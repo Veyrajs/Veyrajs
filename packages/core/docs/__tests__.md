@@ -67,7 +67,7 @@ scene-graph, transform, and render tests have something concrete to exercise.
   invisible/transparent nodes, correct world matrix per node, `setSize` propagation.
 - **Scheduler** coalescing, cancel, and re-arm.
 
-Run with `pnpm --filter @annotacanvas/core test` (or `pnpm test` for the whole monorepo).
+Run with `pnpm --filter @veyrajs/core test` (or `pnpm test` for the whole monorepo).
 
 ## Future / not yet
 

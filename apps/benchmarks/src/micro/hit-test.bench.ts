@@ -1,4 +1,4 @@
-import { GeometricHitTester, type Vec2 } from '@annotacanvas/core'
+import { GeometricHitTester, type Vec2 } from '@veyrajs/core'
 import { bench, describe } from 'vitest'
 import { blackhole } from '../blackhole'
 import { buildFlatLayer } from '../scene-factory'

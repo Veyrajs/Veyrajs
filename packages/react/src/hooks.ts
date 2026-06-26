@@ -1,4 +1,4 @@
-import type { Camera, History, SelectionManager, Stage } from '@annotacanvas/core'
+import type { Camera, History, SelectionManager, Stage } from '@veyrajs/core'
 import { useNodeContext } from './context'
 
 /** The stage instance (null until `<ACStage>` has mounted). Used inside `<ACStage>`. */

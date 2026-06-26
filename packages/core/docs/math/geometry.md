@@ -44,7 +44,7 @@ the Phase 6 hit-testing engine. Kept in the math layer so they stay pure and uni
 ## Example
 
 ```ts
-import { pointInPolygon, distanceToSegment } from '@annotacanvas/core'
+import { pointInPolygon, distanceToSegment } from '@veyrajs/core'
 
 const tri = [{ x: 0, y: 0 }, { x: 20, y: 0 }, { x: 10, y: 20 }]
 pointInPolygon({ x: 10, y: 5 }, tri)                       // true

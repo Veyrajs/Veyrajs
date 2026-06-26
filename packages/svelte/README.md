@@ -1,13 +1,13 @@
-# @annotacanvas/svelte
+# @veyrajs/svelte
 
-Svelte 5 adapter for [`@annotacanvas/core`](../core) — declarative components over the
+Svelte 5 adapter for [`@veyrajs/core`](../core) — declarative components over the
 imperative engine, with an always-available escape hatch (`bind:node`) to the underlying nodes.
 
 ## Usage
 
 ```svelte
 <script lang="ts">
-  import { ACStage, ACLayer, ACRect, ACCircle } from '@annotacanvas/svelte'
+  import { ACStage, ACLayer, ACRect, ACCircle } from '@veyrajs/svelte'
 
   let x = $state(40)
 </script>
@@ -44,7 +44,7 @@ It's a thin layer over the engine: prop changes are mirrored onto the node (the 
 guarded setters make this loop-safe), events are re-emitted as callbacks, and the scene is
 assembled via a reactive cascade (a context getter over the stage's reactive state) so children
 attach as soon as the stage is ready. The core stays fully framework-agnostic; this package is
-the only Svelte-aware code, a parallel sibling to [`@annotacanvas/vue`](../vue) and
-[`@annotacanvas/react`](../react).
+the only Svelte-aware code, a parallel sibling to [`@veyrajs/vue`](../vue) and
+[`@veyrajs/react`](../react).
 
 See [docs/](./docs/README.md) for the per-module documentation.

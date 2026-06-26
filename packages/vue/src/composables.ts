@@ -1,4 +1,4 @@
-import type { Camera, History, SelectionManager, Stage } from '@annotacanvas/core'
+import type { Camera, History, SelectionManager, Stage } from '@veyrajs/core'
 import { type ComputedRef, type Ref, computed } from 'vue'
 import { useNodeContext } from './context'
 

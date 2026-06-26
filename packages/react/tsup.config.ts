@@ -8,5 +8,5 @@ export default defineConfig({
   sourcemap: true,
   treeshake: true,
   target: 'es2022',
-  external: ['react', 'react-dom', 'react/jsx-runtime', '@annotacanvas/core'],
+  external: ['react', 'react-dom', 'react/jsx-runtime', '@veyrajs/core'],
 })

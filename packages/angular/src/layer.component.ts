@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, forwardRef } from '@angular/core'
-import { type Container, Layer, type Node } from '@annotacanvas/core'
+import { type Container, Layer, type Node } from '@veyrajs/core'
 import { AcNodeBase } from './ac-node.base'
 import { NODE_CONTEXT } from './context'
 import { COMMON_KEYS } from './keys'

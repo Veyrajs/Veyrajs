@@ -44,7 +44,7 @@ The helper functions never mutate their inputs; they return new objects. The mer
 ## Example
 
 ```ts
-import { Vec2 } from '@annotacanvas/core'
+import { Vec2 } from '@veyrajs/core'
 
 const a = Vec2.of(1, 2)
 const b = Vec2.of(4, 6)

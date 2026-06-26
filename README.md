@@ -1,4 +1,4 @@
-# AnnotaCanvas
+# Veyrajs
 
 A framework-agnostic, TypeScript-first **2D canvas engine** — scene graph, renderer
 abstraction, camera, events, hit-testing, transforms, selection/controls, versioned
@@ -12,13 +12,13 @@ workflows as optional plugins, without baking annotation logic into the core.
 
 | Package | Status | Description |
 | --- | --- | --- |
-| `@annotacanvas/core` | ✅ MVP | The engine. Zero runtime dependencies. The product. |
-| `@annotacanvas/vue` | ✅ | Vue 3 adapter — declarative components + composables. |
-| `@annotacanvas/tools` | placeholder | Reusable interaction tools (pan/select/transform/marquee). |
-| `@annotacanvas/annotations` | placeholder | **Future only.** Annotation node types + controls. Intentionally empty. |
-| `@annotacanvas/demo` (`apps/`) | scaffold | Vite + Vue demo proving the engine. Private. |
-| `@annotacanvas/docs` (`apps/`) | placeholder | Docs site (VitePress), deferred to V1. |
-| `@annotacanvas/benchmarks` (`apps/`) | placeholder | Performance harness, deferred to V1. |
+| `@veyrajs/core` | ✅ MVP | The engine. Zero runtime dependencies. The product. |
+| `@veyrajs/vue` | ✅ | Vue 3 adapter — declarative components + composables. |
+| `@veyrajs/tools` | placeholder | Reusable interaction tools (pan/select/transform/marquee). |
+| `@veyrajs/annotations` | placeholder | **Future only.** Annotation node types + controls. Intentionally empty. |
+| `@veyrajs/demo` (`apps/`) | scaffold | Vite + Vue demo proving the engine. Private. |
+| `@veyrajs/docs` (`apps/`) | placeholder | Docs site (VitePress), deferred to V1. |
+| `@veyrajs/benchmarks` (`apps/`) | placeholder | Performance harness, deferred to V1. |
 
 ## Conventions (locked in Phase 0)
 

@@ -22,7 +22,7 @@ builds the bare node; the [`SceneSerializer`](./scene-serializer.md) recurses in
 
 - **Extensible.** Register custom shapes/nodes (e.g. annotation primitives) on a registry and
   pass it to the serializer — round-tripping works without touching core. This is exactly how
-  the future `@annotacanvas/annotations` plugin serializes its node types.
+  the future `@veyrajs/annotations` plugin serializes its node types.
 - **Unknown types throw** rather than silently dropping nodes, so a missing plugin is loud.
 
 ## Relationships

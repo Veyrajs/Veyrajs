@@ -86,7 +86,7 @@ future, a WebGL renderer. When injected, the `Canvas2DRenderer` is not created a
 ## Example
 
 ```ts
-import { Stage } from '@annotacanvas/core'
+import { Stage } from '@veyrajs/core'
 
 const stage = new Stage({ container: el, width: 800, height: 480, background: '#0b1220' })
 const layer = stage.createLayer()

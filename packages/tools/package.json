@@ -1,7 +1,7 @@
 {
-  "name": "@annotacanvas/tools",
+  "name": "@veyrajs/tools",
   "version": "0.0.0",
-  "description": "Reusable interaction tools for AnnotaCanvas (pan, select, transform, marquee). (Placeholder.)",
+  "description": "Reusable interaction tools for Veyrajs (pan, select, transform, marquee). (Placeholder.)",
   "license": "UNLICENSED",
   "private": true,
   "type": "module",

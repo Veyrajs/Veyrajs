@@ -1,4 +1,4 @@
-import type { Node as EngineNode } from '@annotacanvas/core'
+import type { Node as EngineNode } from '@veyrajs/core'
 import type { Snippet } from 'svelte'
 
 /** Props accepted by a leaf shape wrapper: engine props + `on*` callbacks + a bindable node. */

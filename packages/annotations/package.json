@@ -1,7 +1,7 @@
 {
-  "name": "@annotacanvas/annotations",
+  "name": "@veyrajs/annotations",
   "version": "0.0.0",
-  "description": "FUTURE ONLY — annotation node types and controls for AnnotaCanvas. Intentionally empty.",
+  "description": "FUTURE ONLY — annotation node types and controls for Veyrajs. Intentionally empty.",
   "license": "UNLICENSED",
   "private": true,
   "type": "module",

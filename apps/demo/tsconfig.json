@@ -4,7 +4,7 @@
     "baseUrl": ".",
     "noEmit": true,
     "paths": {
-      "@annotacanvas/core": ["../../packages/core/src/index.ts"]
+      "@veyrajs/core": ["../../packages/core/src/index.ts"]
     }
   },
   "include": ["src"]

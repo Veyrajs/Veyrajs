@@ -4,7 +4,7 @@ import {
   SelectionController,
   type SelectionManager,
   Stage,
-} from '@annotacanvas/core'
+} from '@veyrajs/core'
 import { type Snippet, onMount } from 'svelte'
 import { setNodeContext } from './context.js'
 

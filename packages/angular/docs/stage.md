@@ -41,5 +41,5 @@ itself as the `NODE_CONTEXT` for the tree below. It is the only component that t
 
 - **Uses:** `Stage`, `SelectionController`, `History`, `SelectionManager` from core; Angular
   (`@Component`, `ElementRef`, `EventEmitter`, `inject`, `forwardRef`); [context.ts](./context.md).
-- **Used by:** apps, as the root of any AnnotaCanvas scene. Provides the context consumed by the
+- **Used by:** apps, as the root of any Veyrajs scene. Provides the context consumed by the
   base directive in [node.md](./node.md).

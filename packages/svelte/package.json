@@ -1,7 +1,7 @@
 {
-  "name": "@annotacanvas/svelte",
+  "name": "@veyrajs/svelte",
   "version": "0.0.0",
-  "description": "Svelte 5 adapter for AnnotaCanvas — declarative components over the engine.",
+  "description": "Svelte 5 adapter for Veyrajs — declarative components over the engine.",
   "license": "UNLICENSED",
   "private": true,
   "type": "module",
@@ -26,7 +26,7 @@
     "svelte": "^5.0.0"
   },
   "dependencies": {
-    "@annotacanvas/core": "workspace:*"
+    "@veyrajs/core": "workspace:*"
   },
   "devDependencies": {
     "@sveltejs/package": "catalog:",

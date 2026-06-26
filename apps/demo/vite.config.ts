@@ -7,9 +7,7 @@ export default defineConfig({
   resolve: {
     alias: {
       // Consume the engine's source directly (HMR into core; no build-order coupling).
-      '@annotacanvas/core': fileURLToPath(
-        new URL('../../packages/core/src/index.ts', import.meta.url),
-      ),
+      '@veyrajs/core': fileURLToPath(new URL('../../packages/core/src/index.ts', import.meta.url)),
     },
   },
 })

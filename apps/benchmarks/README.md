@@ -1,6 +1,6 @@
-# @annotacanvas/benchmarks
+# @veyrajs/benchmarks
 
-Performance benchmarks for `@annotacanvas/core`. Two flavors:
+Performance benchmarks for `@veyrajs/core`. Two flavors:
 
 | Flavor | Command | What it measures |
 | --- | --- | --- |
@@ -13,7 +13,7 @@ Performance benchmarks for `@annotacanvas/core`. Two flavors:
 ## Micro-benchmarks
 
 ```bash
-pnpm --filter @annotacanvas/benchmarks bench
+pnpm --filter @veyrajs/benchmarks bench
 ```
 
 Suites live in `src/micro/*.bench.ts`. Each targets a ranked hotpath. Benches that touch the
@@ -24,7 +24,7 @@ is itself measured by the paired "cache hit" bench).
 ## FPS harness
 
 ```bash
-pnpm --filter @annotacanvas/benchmarks dev
+pnpm --filter @veyrajs/benchmarks dev
 ```
 
 Open the printed URL. Scenarios: static redraw, translate-all, rotate-all, zoom+pan (camera),

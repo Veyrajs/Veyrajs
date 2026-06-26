@@ -1,7 +1,7 @@
 {
-  "name": "@annotacanvas/vue",
+  "name": "@veyrajs/vue",
   "version": "0.0.0",
-  "description": "Vue 3 adapter for AnnotaCanvas — declarative components + composables over the engine.",
+  "description": "Vue 3 adapter for Veyrajs — declarative components + composables over the engine.",
   "license": "UNLICENSED",
   "private": true,
   "type": "module",
@@ -26,7 +26,7 @@
     "vue": "^3.4.0"
   },
   "dependencies": {
-    "@annotacanvas/core": "workspace:*"
+    "@veyrajs/core": "workspace:*"
   },
   "devDependencies": {
     "@vue/test-utils": "catalog:",

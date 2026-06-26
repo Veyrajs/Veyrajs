@@ -1,4 +1,4 @@
-# `@annotacanvas/core` — Architecture & Module Docs
+# `@veyrajs/core` — Architecture & Module Docs
 
 This folder documents **every source file** in `packages/core/src`, one markdown file per
 module, mirroring the source tree. The goal is to make the engine's context deeply

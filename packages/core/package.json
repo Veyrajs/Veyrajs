@@ -1,5 +1,5 @@
 {
-  "name": "@annotacanvas/core",
+  "name": "@veyrajs/core",
   "version": "0.0.0",
   "description": "Framework-agnostic 2D canvas engine: scene graph, renderer abstraction, camera, events, hit-testing, transforms, controls, serialization, and plugin system.",
   "license": "UNLICENSED",

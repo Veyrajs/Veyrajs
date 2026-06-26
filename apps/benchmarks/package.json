@@ -1,8 +1,8 @@
 {
-  "name": "@annotacanvas/benchmarks",
+  "name": "@veyrajs/benchmarks",
   "version": "0.0.0",
   "private": true,
-  "description": "AnnotaCanvas performance benchmarks: tinybench CPU micro-benchmarks + a manual canvas FPS harness.",
+  "description": "Veyrajs performance benchmarks: tinybench CPU micro-benchmarks + a manual canvas FPS harness.",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@annotacanvas/core": "workspace:*"
+    "@veyrajs/core": "workspace:*"
   },
   "devDependencies": {
     "happy-dom": "catalog:",

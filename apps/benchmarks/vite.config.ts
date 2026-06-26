@@ -6,9 +6,7 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   resolve: {
     alias: {
-      '@annotacanvas/core': fileURLToPath(
-        new URL('../../packages/core/src/index.ts', import.meta.url),
-      ),
+      '@veyrajs/core': fileURLToPath(new URL('../../packages/core/src/index.ts', import.meta.url)),
     },
   },
 })

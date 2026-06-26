@@ -1,5 +1,5 @@
 <script lang="ts">
-import { Circle } from '@annotacanvas/core'
+import { Circle } from '@veyrajs/core'
 import Node from './Node.svelte'
 import { SHAPE_KEYS } from './keys.js'
 import type { ShapeProps } from './types.js'

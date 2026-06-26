@@ -1,5 +1,5 @@
 <script lang="ts">
-import type { Stage } from '@annotacanvas/core'
+import type { Stage } from '@veyrajs/core'
 import ACLayer from '../src/Layer.svelte'
 import ACRect from '../src/Rect.svelte'
 import ACStage from '../src/Stage.svelte'

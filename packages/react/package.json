@@ -1,7 +1,7 @@
 {
-  "name": "@annotacanvas/react",
+  "name": "@veyrajs/react",
   "version": "0.0.0",
-  "description": "React adapter for AnnotaCanvas — declarative components + hooks over the engine.",
+  "description": "React adapter for Veyrajs — declarative components + hooks over the engine.",
   "license": "UNLICENSED",
   "private": true,
   "type": "module",
@@ -26,7 +26,7 @@
     "react": ">=18"
   },
   "dependencies": {
-    "@annotacanvas/core": "workspace:*"
+    "@veyrajs/core": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "catalog:",

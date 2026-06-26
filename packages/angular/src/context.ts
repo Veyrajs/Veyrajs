@@ -1,5 +1,5 @@
 import { InjectionToken } from '@angular/core'
-import type { Container, History, SelectionManager, Stage } from '@annotacanvas/core'
+import type { Container, History, SelectionManager, Stage } from '@veyrajs/core'
 
 /**
  * The context shared down the component tree via Angular's hierarchical DI. Each container
@@ -13,4 +13,4 @@ export interface NodeContext {
   readonly history: History | null
 }
 
-export const NODE_CONTEXT = new InjectionToken<NodeContext>('annotacanvas.NODE_CONTEXT')
+export const NODE_CONTEXT = new InjectionToken<NodeContext>('veyrajs.NODE_CONTEXT')
