@@ -53,3 +53,13 @@ export function distanceToPolyline(p: Vec2, points: readonly Vec2[], closed = fa
   }
   return min
 }
+
+/** The four corners of an axis-aligned rectangle at the local origin, clockwise. */
+export function rectCorners(width: number, height: number): Vec2[] {
+  return [
+    { x: 0, y: 0 },
+    { x: width, y: 0 },
+    { x: width, y: height },
+    { x: 0, y: height },
+  ]
+}

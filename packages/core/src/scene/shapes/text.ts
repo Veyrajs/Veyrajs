@@ -1,6 +1,6 @@
 import { Bounds, type Vec2 } from '../../math'
 import type { DrawOp } from '../../render/draw-ops'
-import { Shape, type ShapeConfig } from '../shape'
+import { Shape, type ShapeConfig, type ShapeHitKind, type ShapeHitOptions } from '../shape'
 
 export interface TextConfig extends ShapeConfig {
   text?: string
@@ -112,7 +112,8 @@ export class Text extends Shape {
     ]
   }
 
-  containsPoint(p: Vec2): boolean {
-    return this.getLocalBounds().contains(p)
+  hitTest(p: Vec2, options?: ShapeHitOptions): ShapeHitKind | null {
+    if ((options?.fill ?? true) && this.getLocalBounds().contains(p)) return 'fill'
+    return null
   }
 }

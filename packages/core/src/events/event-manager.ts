@@ -6,6 +6,7 @@ import { SceneEvent, type SceneEventType } from './event-types'
 
 const DRAG_THRESHOLD = 3 // screen pixels before a press becomes a drag
 const DBLCLICK_MS = 300
+const PICK_TOLERANCE = 4 // screen pixels of slop when picking a target (zoom-invariant)
 
 interface PressState {
   pointerId: number
@@ -80,7 +81,8 @@ export class EventManager {
     world: Vec2,
     fixedTarget?: Node,
   ): SceneEvent {
-    const target = fixedTarget ?? this.stage.getIntersection(world) ?? this.stage
+    const target =
+      fixedTarget ?? this.stage.getIntersection(world, { tolerance: PICK_TOLERANCE }) ?? this.stage
     const event = new SceneEvent({
       type,
       target,
@@ -121,7 +123,7 @@ export class EventManager {
   }
 
   private updateHover(native: PointerEvent, screen: Vec2, world: Vec2): void {
-    const hit = this.stage.getIntersection(world)
+    const hit = this.stage.getIntersection(world, { tolerance: PICK_TOLERANCE })
     if (hit === this.hover) return
     if (this.hover !== null) this.emitHover('pointerleave', native, screen, world, this.hover)
     if (hit !== null) this.emitHover('pointerenter', native, screen, world, hit)

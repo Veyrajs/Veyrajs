@@ -1,6 +1,6 @@
-import { Bounds, type Vec2 } from '../../math'
+import { Bounds, type Vec2, rectCorners } from '../../math'
 import type { DrawOp } from '../../render/draw-ops'
-import { Shape, type ShapeConfig } from '../shape'
+import { Shape, type ShapeConfig, type ShapeHitKind, type ShapeHitOptions } from '../shape'
 
 export interface ImageConfig extends ShapeConfig {
   image?: CanvasImageSource | null
@@ -65,7 +65,20 @@ export class Image extends Shape {
     ]
   }
 
-  containsPoint(p: Vec2): boolean {
-    return p.x >= 0 && p.y >= 0 && p.x <= this._width && p.y <= this._height
+  override getVertices(): Vec2[] {
+    return rectCorners(this._width, this._height)
+  }
+
+  hitTest(p: Vec2, options?: ShapeHitOptions): ShapeHitKind | null {
+    if (
+      (options?.fill ?? true) &&
+      p.x >= 0 &&
+      p.y >= 0 &&
+      p.x <= this._width &&
+      p.y <= this._height
+    ) {
+      return 'fill'
+    }
+    return null
   }
 }

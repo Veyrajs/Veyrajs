@@ -19,6 +19,8 @@ starting from this file, so it also determines what ends up in `dist`.
   shape's `*Config`).
 - **Events:** `SceneEvent`, `dispatchEvent`, `EventManager`, and the types `SceneEventType`,
   `SceneEventPhase`, `SceneEventListener`.
+- **Hit testing:** `GeometricHitTester` and the types `HitTester`, `HitResult`, `HitType`,
+  `HitTestOptions`; plus `ShapeHitKind` / `ShapeHitOptions` (from the scene graph).
 - **Rendering:** `Canvas2DRenderer` (+ `Canvas2DRendererOptions`); the types `Renderer`,
   `Renderable`, `FrameInfo`; and the draw-op types `DrawOp`, `RectOp`, `EllipseOp`,
   `PolygonOp`, `ImageOp`, `TextOp`, `FillStrokeStyle`.

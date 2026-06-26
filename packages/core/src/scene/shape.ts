@@ -12,6 +12,18 @@ export interface ShapeConfig extends NodeConfig {
   lineJoin?: CanvasLineJoin
 }
 
+/** Which part of a shape a hit landed on. */
+export type ShapeHitKind = 'fill' | 'stroke'
+
+export interface ShapeHitOptions {
+  /** Extra hit radius in local units, additive to the natural geometry (e.g. stroke width). */
+  tolerance?: number
+  /** Test the filled interior. Default true. */
+  fill?: boolean
+  /** Test near the stroke/outline. Default true. */
+  stroke?: boolean
+}
+
 /**
  * Base class for drawable leaf nodes. A shape describes itself as backend-neutral
  * {@link DrawOp}s and answers point queries via {@link containsPoint}; it never touches a
@@ -104,6 +116,20 @@ export abstract class Shape extends Node implements Renderable {
 
   abstract override getLocalBounds(): Bounds
   abstract drawOps(): DrawOp[]
-  /** Local-space hit test. Phase 6 extends this with options + tolerance. */
-  abstract containsPoint(localPoint: Vec2): boolean
+
+  /**
+   * Local-space hit test. Returns which part was hit (`'fill'` or `'stroke'`) or `null`.
+   * `tolerance` is in local units and is additive to the natural geometry (e.g. stroke width).
+   */
+  abstract hitTest(localPoint: Vec2, options?: ShapeHitOptions): ShapeHitKind | null
+
+  /** Convenience boolean hit test (fill or stroke) with an optional local tolerance. */
+  containsPoint(localPoint: Vec2, tolerance = 0): boolean {
+    return this.hitTest(localPoint, { tolerance }) !== null
+  }
+
+  /** Local-space vertices for vertex hit-testing (corners/points), or `null` if none. */
+  getVertices(): readonly Vec2[] | null {
+    return null
+  }
 }

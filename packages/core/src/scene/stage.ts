@@ -1,4 +1,6 @@
 import { EventManager } from '../events/event-manager'
+import { GeometricHitTester } from '../hit/geometric-hit-tester'
+import type { HitResult, HitTestOptions, HitTester } from '../hit/hit-tester'
 import type { Matrix, Vec2 } from '../math'
 import { Canvas2DRenderer } from '../render/canvas2d-renderer'
 import type { FrameInfo, Renderer } from '../render/renderer'
@@ -22,6 +24,8 @@ export interface StageOptions {
   renderer?: Renderer
   /** Initial camera (zoom/pan) configuration. */
   camera?: CameraOptions
+  /** Custom hit-testing strategy. Defaults to a `GeometricHitTester`. */
+  hitTester?: HitTester
 }
 
 /**
@@ -34,6 +38,7 @@ export class Stage extends Container {
   readonly container: HTMLElement
   readonly renderer: Renderer
   readonly camera: Camera
+  readonly hitTester: HitTester
 
   private _width: number
   private _height: number
@@ -53,6 +58,7 @@ export class Stage extends Container {
     this.scheduler = new FrameScheduler(() => this.render())
     this.camera = new Camera(options.camera)
     this.camera.onChange = () => this.requestRender()
+    this.hitTester = options.hitTester ?? new GeometricHitTester()
 
     this.renderer.setSize(this._width, this._height, this._pixelRatio)
     this.render()
@@ -86,13 +92,14 @@ export class Stage extends Container {
     return this.camera.worldToScreen(point)
   }
 
-  /**
-   * Topmost listening shape whose geometry contains the given world point, or `null`.
-   * Basic geometric hit test; Phase 6 generalizes this into a pluggable, options-aware
-   * hit-testing engine.
-   */
-  getIntersection(worldPoint: Vec2): Node | null {
-    return hitTestSubtree(this, worldPoint)
+  /** Hit-test the scene at a world point, returning the topmost result (or `null`). */
+  hitTest(worldPoint: Vec2, options?: HitTestOptions): HitResult | null {
+    return this.hitTester.hitTest(this, worldPoint, 1 / this.camera.zoom, options)
+  }
+
+  /** Topmost listening node at the given world point, or `null`. Convenience over `hitTest`. */
+  getIntersection(worldPoint: Vec2, options?: HitTestOptions): Node | null {
+    return this.hitTest(worldPoint, options)?.node ?? null
   }
 
   override add(...layers: Layer[]): this {
@@ -173,25 +180,4 @@ function resolveDevicePixelRatio(): number {
     return window.devicePixelRatio || 1
   }
   return 1
-}
-
-function hitTestSubtree(node: Node, worldPoint: Vec2): Node | null {
-  if (!node.visible || !node.listening) return null
-
-  if (node instanceof Container) {
-    const children = node.children
-    for (let i = children.length - 1; i >= 0; i--) {
-      const child = children[i]
-      if (child === undefined) continue
-      const hit = hitTestSubtree(child, worldPoint)
-      if (hit !== null) return hit
-    }
-  }
-
-  if (node instanceof Shape) {
-    const local = node.worldMatrix().invert().applyToPoint(worldPoint)
-    if (node.containsPoint(local)) return node
-  }
-
-  return null
 }

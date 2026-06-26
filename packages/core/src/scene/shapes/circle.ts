@@ -1,6 +1,6 @@
 import { Bounds, type Vec2 } from '../../math'
 import type { DrawOp } from '../../render/draw-ops'
-import { Shape, type ShapeConfig } from '../shape'
+import { Shape, type ShapeConfig, type ShapeHitKind, type ShapeHitOptions } from '../shape'
 
 export interface CircleConfig extends ShapeConfig {
   radius?: number
@@ -44,7 +44,14 @@ export class Circle extends Shape {
     ]
   }
 
-  containsPoint(p: Vec2): boolean {
-    return p.x * p.x + p.y * p.y <= this._radius * this._radius
+  hitTest(p: Vec2, options?: ShapeHitOptions): ShapeHitKind | null {
+    const r = this._radius
+    const dist = Math.hypot(p.x, p.y)
+    if ((options?.fill ?? true) && dist <= r) return 'fill'
+    if (options?.stroke ?? true) {
+      const band = (options?.tolerance ?? 0) + (this.stroke !== null ? this.strokeWidth / 2 : 0)
+      if (Math.abs(dist - r) <= band) return 'stroke'
+    }
+    return null
   }
 }

@@ -15,10 +15,14 @@ the rendering/hit-testing contract, and it implements the
 
 - `interface ShapeConfig extends NodeConfig` — adds paint props (`fill`, `stroke`,
   `strokeWidth`, `lineDash`, `lineCap`, `lineJoin`).
+- `type ShapeHitKind` (`'fill' | 'stroke'`) and `interface ShapeHitOptions`
+  (`tolerance`, `fill`, `stroke`).
 - `abstract class Shape extends Node implements Renderable`:
   - typed accessors for the paint properties,
   - `protected get fillStrokeStyle` — the style bundle subclasses spread into their ops,
-  - `abstract getLocalBounds()`, `abstract drawOps()`, `abstract containsPoint(localPoint)`.
+  - `abstract getLocalBounds()`, `abstract drawOps()`,
+  - `abstract hitTest(localPoint, options?)` → `ShapeHitKind | null`,
+  - concrete `containsPoint(localPoint, tolerance?)` and `getVertices()` (default `null`).
 
 ## How it works
 
@@ -28,8 +32,10 @@ A concrete shape implements three methods:
   hit-test broad phase).
 - **`drawOps()`** — returns backend-neutral [`DrawOp`s](../render/draw-ops.md) in local
   coordinates, usually spreading `this.fillStrokeStyle` for paint.
-- **`containsPoint(localPoint)`** — a local-space hit test (Phase 6 extends this with
-  options + tolerance).
+- **`hitTest(localPoint, options?)`** — local-space hit test returning which part was hit
+  (`'fill'`/`'stroke'`) or `null`; `tolerance` (local units) is additive to the geometry
+  (e.g. stroke width). `containsPoint` is the boolean convenience and `getVertices()`
+  exposes local corners/points for vertex hit-testing.
 
 Setting a paint property calls `markDirty()` (a visual change) but does **not** invalidate
 the transform — paint doesn't move geometry.
@@ -62,6 +68,6 @@ class Rect extends Shape {
   width = 0; height = 0
   getLocalBounds() { return Bounds.fromRect(0, 0, this.width, this.height) }
   drawOps() { return [{ type: 'rect', x: 0, y: 0, width: this.width, height: this.height, ...this.fillStrokeStyle }] }
-  containsPoint(p) { return p.x >= 0 && p.y >= 0 && p.x <= this.width && p.y <= this.height }
+  hitTest(p) { return p.x >= 0 && p.y >= 0 && p.x <= this.width && p.y <= this.height ? 'fill' : null }
 }
 ```

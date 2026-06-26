@@ -1,6 +1,6 @@
 import { Bounds, type Vec2 } from '../../math'
 import type { DrawOp } from '../../render/draw-ops'
-import { Shape, type ShapeConfig } from '../../scene/shape'
+import { Shape, type ShapeConfig, type ShapeHitKind, type ShapeHitOptions } from '../../scene/shape'
 
 export interface TestRectConfig extends ShapeConfig {
   width?: number
@@ -32,7 +32,16 @@ export class TestRect extends Shape {
     ]
   }
 
-  containsPoint(p: Vec2): boolean {
-    return p.x >= 0 && p.y >= 0 && p.x <= this.width && p.y <= this.height
+  hitTest(p: Vec2, options?: ShapeHitOptions): ShapeHitKind | null {
+    if (
+      (options?.fill ?? true) &&
+      p.x >= 0 &&
+      p.y >= 0 &&
+      p.x <= this.width &&
+      p.y <= this.height
+    ) {
+      return 'fill'
+    }
+    return null
   }
 }

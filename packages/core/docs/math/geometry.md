@@ -15,6 +15,7 @@ the Phase 6 hit-testing engine. Kept in the math layer so they stay pure and uni
   projecting and clamping to the endpoints.
 - `distanceToPolyline(p, points, closed = false): number` — shortest distance to a
   polyline; when `closed`, also considers the closing edge.
+- `rectCorners(width, height): Vec2[]` — the four corners of a local-origin rectangle.
 
 ## How it works
 

@@ -54,7 +54,9 @@ export class Bounds {
   }
 
   get isEmpty(): boolean {
-    return this.width <= 0 || this.height <= 0
+    // Only the sentinel (negative extent) is empty. A degenerate-but-real box — e.g. a
+    // horizontal line with height 0 — still has position/extent and participates normally.
+    return this.width < 0 || this.height < 0
   }
 
   /** The four corners, clockwise from top-left. */
@@ -86,6 +88,17 @@ export class Bounds {
     return new Bounds(minX, minY, maxX - minX, maxY - minY)
   }
 
+  /** Grow the box by `amount` on every side (negative shrinks it). */
+  expand(amount: number): Bounds {
+    if (this.isEmpty) return this
+    return new Bounds(
+      this.x - amount,
+      this.y - amount,
+      this.width + amount * 2,
+      this.height + amount * 2,
+    )
+  }
+
   /** AABB of this box after transforming its corners by `m`. */
   transform(m: Matrix): Bounds {
     if (this.isEmpty) return EMPTY
@@ -93,4 +106,4 @@ export class Bounds {
   }
 }
 
-const EMPTY = new Bounds(0, 0, 0, 0)
+const EMPTY = new Bounds(0, 0, -1, -1)

@@ -9,7 +9,8 @@ Every concrete shape extends [`Shape`](../shape.md) and implements three methods
 - **`getLocalBounds(): Bounds`** — its extent in local space.
 - **`drawOps(): DrawOp[]`** — backend-neutral [draw ops](../../render/draw-ops.md) in local
   coordinates (usually spreading `this.fillStrokeStyle`).
-- **`containsPoint(localPoint): boolean`** — a local-space hit test.
+- **`hitTest(localPoint, options?)`** → `'fill' | 'stroke' | null` — local-space hit test
+  (`containsPoint` is the boolean convenience; `getVertices()` exposes corners/points).
 
 The node's transform (`x, y, scale, rotation, …`) places the shape; the geometry is always
 authored around the shape's **local origin**, which differs by shape:
@@ -36,8 +37,9 @@ Each shape and its config type: `Rect`/`RectConfig`, `Circle`/`CircleConfig`,
 - **Paint setters mark dirty, not transform.** Changing `fill`/`width`/`points` schedules a
   repaint but does **not** invalidate the world matrix (geometry doesn't move the node).
 - **Local coordinates only** in `drawOps()` — the renderer applies the world transform.
-- **Hit tests are geometric and coarse** for now (Phase 6 adds tolerance + options). Filled
-  polygons use point-in-polygon; strokes/lines use distance-to-polyline.
+- **Hit tests honor fill/stroke/tolerance.** Filled regions use interior tests
+  (point-in-polygon, radial); outlines use distance-to-polyline; the engine applies a
+  zoom-invariant tolerance. Rect/Image/Line/Polygon also expose `getVertices()` for corners.
 
 ## Future / not yet
 

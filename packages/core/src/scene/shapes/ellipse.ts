@@ -1,6 +1,6 @@
 import { Bounds, type Vec2 } from '../../math'
 import type { DrawOp } from '../../render/draw-ops'
-import { Shape, type ShapeConfig } from '../shape'
+import { Shape, type ShapeConfig, type ShapeHitKind, type ShapeHitOptions } from '../shape'
 
 export interface EllipseConfig extends ShapeConfig {
   radiusX?: number
@@ -56,11 +56,16 @@ export class Ellipse extends Shape {
     ]
   }
 
-  containsPoint(p: Vec2): boolean {
+  hitTest(p: Vec2, options?: ShapeHitOptions): ShapeHitKind | null {
     const { _radiusX: rx, _radiusY: ry } = this
-    if (rx <= 0 || ry <= 0) return false
-    const nx = p.x / rx
-    const ny = p.y / ry
-    return nx * nx + ny * ny <= 1
+    if (rx <= 0 || ry <= 0) return null
+    if ((options?.fill ?? true) && (p.x / rx) ** 2 + (p.y / ry) ** 2 <= 1) return 'fill'
+    if (options?.stroke ?? true) {
+      const band = (options?.tolerance ?? 0) + (this.stroke !== null ? this.strokeWidth / 2 : 0)
+      const outer = (p.x / (rx + band)) ** 2 + (p.y / (ry + band)) ** 2
+      const inner = (p.x / Math.max(rx - band, 1e-6)) ** 2 + (p.y / Math.max(ry - band, 1e-6)) ** 2
+      if (outer <= 1 && inner >= 1) return 'stroke'
+    }
+    return null
   }
 }

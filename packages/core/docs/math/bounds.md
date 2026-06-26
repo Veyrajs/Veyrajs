@@ -15,7 +15,7 @@ filter before precise hit-testing (Phase 6).
     `Bounds.fromPoints(points)`.
   - **Derived:** `right`, `bottom`, `isEmpty`, `corners()`.
   - **Queries:** `contains(point)`, `intersects(other)`.
-  - **Combinators:** `union(other)`, `transform(matrix)`.
+  - **Combinators:** `union(other)`, `expand(amount)`, `transform(matrix)`.
 
 ## How it works
 
@@ -33,8 +33,10 @@ filter before precise hit-testing (Phase 6).
 
 ## Conventions & gotchas
 
-- **"Empty" means non-positive area** (`width <= 0 || height <= 0`). `union` skips empty
-  operands and **returns the other operand by reference** (so `a.union(empty) === a`).
+- **"Empty" is the sentinel only** (negative extent — `Bounds.empty()` / `fromPoints([])`).
+  A degenerate-but-real box (e.g. a horizontal line, `height 0`) is **not** empty and
+  participates in `union`/`expand`/`transform`. `union` returns the other operand by
+  reference when one side is empty (so `a.union(empty) === a`).
 - **Immutable.** Every method returns a new `Bounds`.
 - `contains` is **inclusive of the edges** (a point exactly on the right/bottom edge counts
   as inside).

@@ -1,6 +1,6 @@
-import { Bounds, type Vec2 } from '../../math'
+import { Bounds, type Vec2, distanceToPolyline, rectCorners } from '../../math'
 import type { DrawOp } from '../../render/draw-ops'
-import { Shape, type ShapeConfig } from '../shape'
+import { Shape, type ShapeConfig, type ShapeHitKind, type ShapeHitOptions } from '../shape'
 
 export interface RectConfig extends ShapeConfig {
   width?: number
@@ -56,7 +56,25 @@ export class Rect extends Shape {
     ]
   }
 
-  containsPoint(p: Vec2): boolean {
-    return p.x >= 0 && p.y >= 0 && p.x <= this._width && p.y <= this._height
+  override getVertices(): Vec2[] {
+    return rectCorners(this._width, this._height)
+  }
+
+  hitTest(p: Vec2, options?: ShapeHitOptions): ShapeHitKind | null {
+    if (
+      (options?.fill ?? true) &&
+      p.x >= 0 &&
+      p.y >= 0 &&
+      p.x <= this._width &&
+      p.y <= this._height
+    ) {
+      return 'fill'
+    }
+    if (options?.stroke ?? true) {
+      const band = (options?.tolerance ?? 0) + (this.stroke !== null ? this.strokeWidth / 2 : 0)
+      if (distanceToPolyline(p, rectCorners(this._width, this._height), true) <= band)
+        return 'stroke'
+    }
+    return null
   }
 }
