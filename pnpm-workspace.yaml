@@ -15,3 +15,4 @@ catalog:
   vue-tsc: ^2.1.10
   '@biomejs/biome': 1.9.4
   '@changesets/cli': ^2.27.11
+  tinybench: ^2.9.0

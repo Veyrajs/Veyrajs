@@ -18,6 +18,9 @@ catalogs:
     happy-dom:
       specifier: ^15.11.7
       version: 15.11.7
+    tinybench:
+      specifier: ^2.9.0
+      version: 2.9.0
     tsup:
       specifier: ^8.3.5
       version: 8.5.1
@@ -48,7 +51,27 @@ importers:
         specifier: 'catalog:'
         version: 2.31.0
 
-  apps/benchmarks: {}
+  apps/benchmarks:
+    dependencies:
+      '@annotacanvas/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+    devDependencies:
+      happy-dom:
+        specifier: 'catalog:'
+        version: 15.11.7
+      tinybench:
+        specifier: 'catalog:'
+        version: 2.9.0
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vite:
+        specifier: 'catalog:'
+        version: 6.4.3
+      vitest:
+        specifier: 'catalog:'
+        version: 2.1.9(happy-dom@15.11.7)
 
   apps/demo:
     dependencies:
