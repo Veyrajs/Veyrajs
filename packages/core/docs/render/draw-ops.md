@@ -18,7 +18,8 @@ backends (Canvas 2D now, WebGL/WebGPU later) from one scene graph.
   - `EllipseOp` — `{ type: 'ellipse', x, y, radiusX, radiusY, ...style }`
   - `PolygonOp` — `{ type: 'polygon', points, closed?, ...style }`
   - `ImageOp` — `{ type: 'image', image, x, y, width?, height? }`
-- `type DrawOp = RectOp | EllipseOp | PolygonOp | ImageOp`.
+  - `TextOp` — `{ type: 'text', x, y, text, font, textAlign?, textBaseline?, fill?, stroke?, strokeWidth? }`
+- `type DrawOp = RectOp | EllipseOp | PolygonOp | ImageOp | TextOp`.
 
 ## How it works
 

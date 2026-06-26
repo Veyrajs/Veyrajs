@@ -5,9 +5,10 @@
 
 ## Purpose
 
-`Shape` is the abstract base for drawable leaf nodes (the concrete `Rect`, `Ellipse`,
-`Line`, `Path`, `Text`, `Image` arrive in Phase 3). It extends [`Node`](./node.md) with
-paint style and the rendering/hit-testing contract, and it implements the
+`Shape` is the abstract base for drawable leaf nodes. The concrete shapes — `Rect`,
+`Circle`, `Ellipse`, `Line`, `Polygon`, `Image`, `Text` — live in
+[`scene/shapes/`](./shapes/index.md). It extends [`Node`](./node.md) with paint style and
+the rendering/hit-testing contract, and it implements the
 [`Renderable`](../render/renderer.md) interface the renderer consumes.
 
 ## Exports

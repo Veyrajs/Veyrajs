@@ -137,6 +137,20 @@ export class Canvas2DRenderer implements Renderer {
         }
         break
       }
+      case 'text': {
+        ctx.font = op.font
+        ctx.textAlign = op.textAlign ?? 'start'
+        ctx.textBaseline = op.textBaseline ?? 'alphabetic'
+        if (op.fill != null) {
+          ctx.fillStyle = op.fill
+          ctx.fillText(op.text, op.x, op.y)
+        }
+        if (op.stroke != null) {
+          applyStroke(ctx, { stroke: op.stroke, strokeWidth: op.strokeWidth })
+          ctx.strokeText(op.text, op.x, op.y)
+        }
+        break
+      }
     }
   }
 }

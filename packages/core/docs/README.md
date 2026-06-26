@@ -4,9 +4,9 @@ This folder documents **every source file** in `packages/core/src`, one markdown
 module, mirroring the source tree. The goal is to make the engine's context deeply
 understandable without reverse-engineering it from code.
 
-> Status: Phases 1–2 complete (math, scene graph, transforms, renderer abstraction,
-> scheduler). Camera, events, hit-testing, controls, serialization, undo and the Vue
-> adapter are future phases — each module doc notes where those plug in.
+> Status: Phases 1–3 complete (math, scene graph, transforms, renderer abstraction,
+> scheduler, concrete shapes). Camera, events, hit-testing, controls, serialization, undo
+> and the Vue adapter are future phases — each module doc notes where those plug in.
 
 ---
 
@@ -63,6 +63,7 @@ plugins that attach through the engine's extension points — with no changes to
 | `src/math/vec2.ts` | [math/vec2.md](./math/vec2.md) | 2D point/vector + helpers |
 | `src/math/matrix.ts` | [math/matrix.md](./math/matrix.md) | 2×3 affine transform |
 | `src/math/bounds.ts` | [math/bounds.md](./math/bounds.md) | Axis-aligned bounding box |
+| `src/math/geometry.ts` | [math/geometry.md](./math/geometry.md) | Hit-test geometry helpers |
 | `src/math/index.ts` | [math/index.md](./math/index.md) | Math barrel |
 | `src/render/draw-ops.ts` | [render/draw-ops.md](./render/draw-ops.md) | Backend-neutral draw vocabulary |
 | `src/render/renderer.ts` | [render/renderer.md](./render/renderer.md) | `Renderer`/`Renderable` contracts |
@@ -73,6 +74,7 @@ plugins that attach through the engine's extension points — with no changes to
 | `src/scene/layer.ts` | [scene/layer.md](./scene/layer.md) | Render partition under the stage |
 | `src/scene/shape.ts` | [scene/shape.md](./scene/shape.md) | Drawable leaf base class |
 | `src/scene/stage.ts` | [scene/stage.md](./scene/stage.md) | Root + renderer + frame loop |
+| `src/scene/shapes/**` | [scene/shapes/index.md](./scene/shapes/index.md) | Concrete shapes (Rect, Circle, Ellipse, Line, Polygon, Image, Text) |
 | `src/__tests__/**` | [__tests__.md](./__tests__.md) | Test strategy & helpers |
 
 ---

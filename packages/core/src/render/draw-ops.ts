@@ -41,9 +41,23 @@ export interface ImageOp {
   height?: number
 }
 
+export interface TextOp {
+  type: 'text'
+  x: number
+  y: number
+  text: string
+  /** CSS font shorthand, e.g. `"16px sans-serif"`. */
+  font: string
+  textAlign?: CanvasTextAlign
+  textBaseline?: CanvasTextBaseline
+  fill?: string | null
+  stroke?: string | null
+  strokeWidth?: number
+}
+
 /**
  * Backend-neutral drawing primitive emitted by shapes. The renderer (Canvas 2D today,
  * WebGL later) is responsible for turning these into actual draw calls — shapes never
- * issue canvas calls themselves. This list grows as concrete shapes arrive in Phase 3.
+ * issue canvas calls themselves.
  */
-export type DrawOp = RectOp | EllipseOp | PolygonOp | ImageOp
+export type DrawOp = RectOp | EllipseOp | PolygonOp | ImageOp | TextOp

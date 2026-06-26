@@ -1,0 +1,7 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - strong [ref=e5]: AnnotaCanvas
+    - generic [ref=e6]: demo
+    - generic [ref=e7]: core v0.0.0
+  - main [ref=e8]
+  - contentinfo [ref=e10]: Phase 3 — concrete shapes rendered through the scene graph and Canvas 2D renderer. Camera (zoom/pan), events, selection & serialization arrive in later phases.

@@ -12,6 +12,7 @@ A small barrel that gathers the math primitives so the rest of the engine can
 - `Vec2` — see [vec2.md](./vec2.md)
 - `Matrix` + type `MatrixComponents` — see [matrix.md](./matrix.md)
 - `Bounds` — see [bounds.md](./bounds.md)
+- `pointInPolygon`, `distanceToSegment`, `distanceToPolyline` — see [geometry.md](./geometry.md)
 
 ## How it works
 
