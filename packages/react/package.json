@@ -1,9 +1,20 @@
 {
   "name": "@veyrajs/react",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "React adapter for Veyrajs — declarative components + hooks over the engine.",
-  "license": "UNLICENSED",
-  "private": true,
+  "license": "MIT",
+  "author": "Veyrajs",
+  "homepage": "https://github.com/Samandar0021305/AnnotaCanvas/tree/main/packages/react#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Samandar0021305/AnnotaCanvas.git",
+    "directory": "packages/react"
+  },
+  "bugs": "https://github.com/Samandar0021305/AnnotaCanvas/issues",
+  "keywords": ["canvas", "2d", "scene-graph", "react", "graphics", "typescript"],
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "sideEffects": false,
   "files": ["dist"],

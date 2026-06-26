@@ -1,9 +1,20 @@
 {
   "name": "@veyrajs/svelte",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Svelte 5 adapter for Veyrajs — declarative components over the engine.",
-  "license": "UNLICENSED",
-  "private": true,
+  "license": "MIT",
+  "author": "Veyrajs",
+  "homepage": "https://github.com/Samandar0021305/AnnotaCanvas/tree/main/packages/svelte#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Samandar0021305/AnnotaCanvas.git",
+    "directory": "packages/svelte"
+  },
+  "bugs": "https://github.com/Samandar0021305/AnnotaCanvas/issues",
+  "keywords": ["canvas", "2d", "scene-graph", "svelte", "svelte5", "graphics", "typescript"],
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "sideEffects": ["**/*.svelte"],
   "files": ["dist"],

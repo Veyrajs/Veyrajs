@@ -1,9 +1,21 @@
 {
   "name": "@veyrajs/angular",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Angular adapter for Veyrajs — declarative components over the engine.",
-  "license": "UNLICENSED",
-  "private": true,
+  "license": "MIT",
+  "author": "Veyrajs",
+  "homepage": "https://github.com/Samandar0021305/AnnotaCanvas/tree/main/packages/angular#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Samandar0021305/AnnotaCanvas.git",
+    "directory": "packages/angular"
+  },
+  "bugs": "https://github.com/Samandar0021305/AnnotaCanvas/issues",
+  "keywords": ["canvas", "2d", "scene-graph", "angular", "graphics", "typescript"],
+  "publishConfig": {
+    "access": "public",
+    "directory": "dist"
+  },
   "type": "module",
   "scripts": {
     "build": "ng-packagr -p ng-package.json -c tsconfig.lib.json",
