@@ -1,0 +1,4 @@
+export { Vec2 } from './vec2'
+export { Matrix } from './matrix'
+export type { MatrixComponents } from './matrix'
+export { Bounds } from './bounds'
