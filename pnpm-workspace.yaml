@@ -17,3 +17,16 @@ catalog:
   '@biomejs/biome': 1.9.4
   '@changesets/cli': ^2.27.11
   tinybench: ^2.9.0
+  react: ^18.3.1
+  react-dom: ^18.3.1
+  '@types/react': ^18.3.12
+  '@types/react-dom': ^18.3.1
+  svelte: ^5.19.0
+  '@sveltejs/package': ^2.3.7
+  '@testing-library/svelte': ^5.2.6
+  '@angular/core': ^18.2.13
+  '@angular/common': ^18.2.13
+  '@angular/compiler': ^18.2.13
+  '@angular/platform-browser': ^18.2.13
+  '@angular/platform-browser-dynamic': ^18.2.13
+  zone.js: ^0.14.10
