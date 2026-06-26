@@ -1,0 +1,35 @@
+{
+  "name": "@annotacanvas/angular",
+  "version": "0.0.0",
+  "description": "Angular adapter for AnnotaCanvas — declarative components over the engine.",
+  "license": "UNLICENSED",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "ng-packagr -p ng-package.json -c tsconfig.lib.json",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@angular/common": "^18.0.0",
+    "@angular/core": "^18.0.0"
+  },
+  "dependencies": {
+    "@annotacanvas/core": "workspace:*",
+    "tslib": "^2.6.0"
+  },
+  "devDependencies": {
+    "@angular/common": "catalog:",
+    "@angular/compiler": "catalog:",
+    "@angular/compiler-cli": "catalog:",
+    "@angular/core": "catalog:",
+    "@angular/platform-browser": "catalog:",
+    "@angular/platform-browser-dynamic": "catalog:",
+    "happy-dom": "catalog:",
+    "ng-packagr": "catalog:",
+    "typescript": "5.5.4",
+    "vite": "catalog:",
+    "vitest": "catalog:",
+    "zone.js": "catalog:"
+  }
+}
