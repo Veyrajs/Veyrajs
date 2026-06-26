@@ -1,0 +1,6 @@
+{
+  "name": "@annotacanvas/docs",
+  "version": "0.0.0",
+  "private": true,
+  "description": "AnnotaCanvas documentation site (VitePress). Scaffolding deferred to V1."
+}

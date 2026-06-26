@@ -1,0 +1,6 @@
+{
+  "name": "@annotacanvas/benchmarks",
+  "version": "0.0.0",
+  "private": true,
+  "description": "AnnotaCanvas performance benchmarks (tinybench + Playwright FPS harness). Deferred to V1."
+}
