@@ -6,6 +6,7 @@ coverage/
 .turbo/
 *.tsbuildinfo
 .vite/
+.playwright-mcp/
 .idea/
 .vscode/*
 !.vscode/extensions.json
