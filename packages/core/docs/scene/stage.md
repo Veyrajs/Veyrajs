@@ -19,6 +19,7 @@ It extends [`Container`](./container.md) and additionally owns:
 - `class Stage extends Container`:
   - getters `width`, `height`, `pixelRatio`, `canvas`; the `camera` ([Camera](./camera.md)),
   - `screenToWorld(point)`, `worldToScreen(point)` (delegate to the camera),
+  - `getIntersection(worldPoint)` — basic geometric hit test (Phase 6 generalizes it),
   - `add(...layers)` (Layer-only), `createLayer(config?)`,
   - `setSize(w, h)`, `setPixelRatio(dpr)`,
   - `requestRender()` (coalesced), `render()` (synchronous),
@@ -74,8 +75,8 @@ future, a WebGL renderer. When injected, the `Canvas2DRenderer` is not created a
 ## Relationships
 
 - **Extends:** [`Container`](./container.md). **Owns:** [`Camera`](./camera.md),
-  [`Renderer`](../render/renderer.md), [`FrameScheduler`](../scheduler.md). **Draws:**
-  [`Shape`](./shape.md) nodes.
+  [`Renderer`](../render/renderer.md), [`FrameScheduler`](../scheduler.md), an
+  [`EventManager`](../events/event-manager.md). **Draws:** [`Shape`](./shape.md) nodes.
 - **Used by:** the demo app and (future) the Vue adapter.
 
 ## Example

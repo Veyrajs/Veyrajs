@@ -17,6 +17,8 @@ starting from this file, so it also determines what ends up in `dist`.
   the concrete shapes (`Rect`, `Circle`, `Ellipse`, `Line`, `Polygon`, `Image`, `Text`),
   plus config types (`NodeConfig`, `ShapeConfig`, `StageOptions`, `CameraOptions`, and each
   shape's `*Config`).
+- **Events:** `SceneEvent`, `dispatchEvent`, `EventManager`, and the types `SceneEventType`,
+  `SceneEventPhase`, `SceneEventListener`.
 - **Rendering:** `Canvas2DRenderer` (+ `Canvas2DRendererOptions`); the types `Renderer`,
   `Renderable`, `FrameInfo`; and the draw-op types `DrawOp`, `RectOp`, `EllipseOp`,
   `PolygonOp`, `ImageOp`, `TextOp`, `FillStrokeStyle`.

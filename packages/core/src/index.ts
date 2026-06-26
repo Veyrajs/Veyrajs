@@ -18,6 +18,16 @@ export type { StageOptions } from './scene/stage'
 export { Camera } from './scene/camera'
 export type { CameraOptions } from './scene/camera'
 
+// Events
+export { SceneEvent } from './events/event-types'
+export type {
+  SceneEventType,
+  SceneEventPhase,
+  SceneEventListener,
+} from './events/event-types'
+export { dispatchEvent } from './events/dispatch'
+export { EventManager } from './events/event-manager'
+
 // Concrete shapes
 export { Rect, Circle, Ellipse, Line, Polygon, Image, Text } from './scene/shapes'
 export type {

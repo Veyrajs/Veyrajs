@@ -98,6 +98,20 @@ body {
   background: #334155;
 }
 
+.app__log-title {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px solid #1e293b;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 10px;
+  color: #64748b;
+}
+
+.app__log {
+  color: #cbd5e1;
+}
+
 .app__footer {
   padding: 8px 16px;
   border-top: 1px solid #1e293b;

@@ -4,8 +4,8 @@ This folder documents **every source file** in `packages/core/src`, one markdown
 module, mirroring the source tree. The goal is to make the engine's context deeply
 understandable without reverse-engineering it from code.
 
-> Status: Phases 1–4 complete (math, scene graph, transforms, renderer abstraction,
-> scheduler, concrete shapes, camera). Events, hit-testing, controls, serialization, undo
+> Status: Phases 1–5 complete (math, scene graph, transforms, renderer abstraction,
+> scheduler, concrete shapes, camera, events). Hit-testing, controls, serialization, undo
 > and the Vue adapter are future phases — each module doc notes where those plug in.
 
 ---
@@ -76,6 +76,9 @@ plugins that attach through the engine's extension points — with no changes to
 | `src/scene/stage.ts` | [scene/stage.md](./scene/stage.md) | Root + renderer + frame loop |
 | `src/scene/camera.ts` | [scene/camera.md](./scene/camera.md) | Camera (zoom/pan, screen↔world) |
 | `src/scene/shapes/**` | [scene/shapes/index.md](./scene/shapes/index.md) | Concrete shapes (Rect, Circle, Ellipse, Line, Polygon, Image, Text) |
+| `src/events/event-types.ts` | [events/event-types.md](./events/event-types.md) | `SceneEvent` + event types |
+| `src/events/dispatch.ts` | [events/dispatch.md](./events/dispatch.md) | Pure capture/target/bubble dispatch |
+| `src/events/event-manager.ts` | [events/event-manager.md](./events/event-manager.md) | Native binding + derived events |
 | `src/__tests__/**` | [__tests__.md](./__tests__.md) | Test strategy & helpers |
 
 ---

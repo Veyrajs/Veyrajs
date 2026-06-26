@@ -1,3 +1,4 @@
+import { EventManager } from '../events/event-manager'
 import type { Matrix, Vec2 } from '../math'
 import { Canvas2DRenderer } from '../render/canvas2d-renderer'
 import type { FrameInfo, Renderer } from '../render/renderer'
@@ -38,6 +39,7 @@ export class Stage extends Container {
   private _height: number
   private _pixelRatio: number
   private readonly scheduler: FrameScheduler
+  private events: EventManager | null = null
 
   constructor(options: StageOptions) {
     super()
@@ -54,6 +56,7 @@ export class Stage extends Container {
 
     this.renderer.setSize(this._width, this._height, this._pixelRatio)
     this.render()
+    this.events = new EventManager(this)
   }
 
   get width(): number {
@@ -81,6 +84,15 @@ export class Stage extends Container {
   /** Convert a world-space point to stage/screen pixels (via the camera). */
   worldToScreen(point: Vec2): Vec2 {
     return this.camera.worldToScreen(point)
+  }
+
+  /**
+   * Topmost listening shape whose geometry contains the given world point, or `null`.
+   * Basic geometric hit test; Phase 6 generalizes this into a pluggable, options-aware
+   * hit-testing engine.
+   */
+  getIntersection(worldPoint: Vec2): Node | null {
+    return hitTestSubtree(this, worldPoint)
   }
 
   override add(...layers: Layer[]): this {
@@ -134,6 +146,7 @@ export class Stage extends Container {
   }
 
   override destroy(): void {
+    this.events?.destroy()
     this.scheduler.cancel()
     this.removeChildren()
     this.renderer.destroy()
@@ -160,4 +173,25 @@ function resolveDevicePixelRatio(): number {
     return window.devicePixelRatio || 1
   }
   return 1
+}
+
+function hitTestSubtree(node: Node, worldPoint: Vec2): Node | null {
+  if (!node.visible || !node.listening) return null
+
+  if (node instanceof Container) {
+    const children = node.children
+    for (let i = children.length - 1; i >= 0; i--) {
+      const child = children[i]
+      if (child === undefined) continue
+      const hit = hitTestSubtree(child, worldPoint)
+      if (hit !== null) return hit
+    }
+  }
+
+  if (node instanceof Shape) {
+    const local = node.worldMatrix().invert().applyToPoint(worldPoint)
+    if (node.containsPoint(local)) return node
+  }
+
+  return null
 }

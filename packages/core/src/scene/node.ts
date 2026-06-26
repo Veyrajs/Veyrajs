@@ -1,3 +1,4 @@
+import type { SceneEvent, SceneEventListener, SceneEventType } from '../events/event-types'
 import { nextId } from '../id'
 import { type Bounds, Matrix } from '../math'
 import type { Container } from './container'
@@ -18,6 +19,12 @@ export interface NodeConfig {
   opacity?: number
   visible?: boolean
   listening?: boolean
+}
+
+interface NodeListenerEntry {
+  handler: SceneEventListener
+  capture: boolean
+  once: boolean
 }
 
 /**
@@ -55,6 +62,8 @@ export abstract class Node {
   private _worldVersion = 0
   private _parentVersionSeen = -1
   private _worldDirty = true
+
+  private _listeners: Map<SceneEventType, NodeListenerEntry[]> | null = null
 
   constructor(config: NodeConfig = {}) {
     this.id = config.id ?? nextId()
@@ -274,6 +283,61 @@ export abstract class Node {
 
   destroy(): void {
     this.remove()
+  }
+
+  /** Add an event listener. Returns `this` for chaining. */
+  on(
+    type: SceneEventType,
+    handler: SceneEventListener,
+    options?: { capture?: boolean; once?: boolean },
+  ): this {
+    if (this._listeners === null) this._listeners = new Map()
+    let entries = this._listeners.get(type)
+    if (entries === undefined) {
+      entries = []
+      this._listeners.set(type, entries)
+    }
+    entries.push({ handler, capture: options?.capture ?? false, once: options?.once ?? false })
+    return this
+  }
+
+  /** Add a one-shot listener that removes itself after firing once. */
+  once(type: SceneEventType, handler: SceneEventListener, options?: { capture?: boolean }): this {
+    return this.on(type, handler, { capture: options?.capture ?? false, once: true })
+  }
+
+  /** Remove a listener, or all listeners of a type when no handler is given. */
+  off(type: SceneEventType, handler?: SceneEventListener): this {
+    if (this._listeners === null) return this
+    if (handler === undefined) {
+      this._listeners.delete(type)
+      return this
+    }
+    const entries = this._listeners.get(type)
+    if (entries !== undefined) {
+      const next = entries.filter((entry) => entry.handler !== handler)
+      if (next.length > 0) this._listeners.set(type, next)
+      else this._listeners.delete(type)
+    }
+    return this
+  }
+
+  /** Whether this node has any listener for the given type. */
+  hasListeners(type: SceneEventType): boolean {
+    return (this._listeners?.get(type)?.length ?? 0) > 0
+  }
+
+  /** Internal: invoke this node's listeners for the given phase (capture or bubble). */
+  _emit(event: SceneEvent, capture: boolean): void {
+    if (event.immediatePropagationStopped) return
+    const entries = this._listeners?.get(event.type)
+    if (entries === undefined || entries.length === 0) return
+    for (const entry of entries.slice()) {
+      if (entry.capture !== capture) continue
+      entry.handler(event)
+      if (entry.once) this.off(event.type, entry.handler)
+      if (event.immediatePropagationStopped) return
+    }
   }
 
   /** Internal: called by a container when this node is (re)parented. */

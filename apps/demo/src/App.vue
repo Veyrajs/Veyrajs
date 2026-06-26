@@ -5,6 +5,8 @@ import {
   Line,
   Polygon,
   Rect,
+  type SceneEventType,
+  type Shape,
   Stage,
   Text,
   VERSION,
@@ -14,36 +16,53 @@ import { onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 const host = ref<HTMLElement | null>(null)
 let stage: Stage | null = null
 
-const hud = reactive({
-  zoom: 1,
-  screen: { x: 0, y: 0 },
-  world: { x: 0, y: 0 },
-})
+const hud = reactive({ zoom: 1, screen: { x: 0, y: 0 }, world: { x: 0, y: 0 } })
+const log = ref<string[]>([])
+let panLast: { x: number; y: number } | null = null
 
-let panning = false
-let last = { x: 0, y: 0 }
+function pushLog(entry: string) {
+  log.value = [entry, ...log.value].slice(0, 8)
+}
+
+function makeInteractive(shape: Shape) {
+  let offset = { x: 0, y: 0 }
+  shape.on('dragstart', (e) => {
+    offset = { x: shape.x - e.worldPoint.x, y: shape.y - e.worldPoint.y }
+    e.stopPropagation()
+  })
+  shape.on('dragmove', (e) => {
+    shape.x = e.worldPoint.x + offset.x
+    shape.y = e.worldPoint.y + offset.y
+    e.stopPropagation()
+  })
+  shape.on('pointerenter', () => {
+    shape.opacity = 0.7
+  })
+  shape.on('pointerleave', () => {
+    shape.opacity = 1
+  })
+}
 
 function buildScene(s: Stage) {
   const layer = s.createLayer()
-  layer.add(
-    new Rect({ x: 40, y: 40, width: 150, height: 90, fill: '#38bdf8', stroke: '#0ea5e9', strokeWidth: 2 }),
-    new Circle({ x: 300, y: 95, radius: 52, fill: '#f472b6' }),
-    new Ellipse({ x: 480, y: 95, radiusX: 80, radiusY: 48, fill: '#a78bfa' }),
+  const shapes: Shape[] = [
+    new Rect({ x: 60, y: 60, width: 150, height: 90, fill: '#38bdf8', stroke: '#0ea5e9', strokeWidth: 2 }),
+    new Circle({ x: 320, y: 110, radius: 52, fill: '#f472b6' }),
+    new Ellipse({ x: 520, y: 110, radiusX: 80, radiusY: 48, fill: '#a78bfa' }),
     new Line({
-      x: 40,
-      y: 230,
+      x: 60,
+      y: 220,
       points: [
         { x: 0, y: 0 },
         { x: 110, y: 50 },
         { x: 220, y: 0 },
-        { x: 330, y: 50 },
       ],
       stroke: '#fbbf24',
-      strokeWidth: 3,
+      strokeWidth: 4,
     }),
     new Polygon({
-      x: 470,
-      y: 205,
+      x: 360,
+      y: 235,
       points: [
         { x: 0, y: -48 },
         { x: 46, y: 34 },
@@ -53,54 +72,41 @@ function buildScene(s: Stage) {
       stroke: '#059669',
       strokeWidth: 2,
     }),
-    new Text({
-      x: 40,
-      y: 320,
-      text: 'Scroll to zoom · drag to pan',
-      fontSize: 20,
-      fill: '#e2e8f0',
-    }),
-  )
-}
-
-function localPoint(e: PointerEvent | WheelEvent) {
-  const rect = host.value?.getBoundingClientRect()
-  return { x: e.clientX - (rect?.left ?? 0), y: e.clientY - (rect?.top ?? 0) }
-}
-
-function updateHud(p: { x: number; y: number }) {
-  if (!stage) return
-  hud.screen = { x: Math.round(p.x), y: Math.round(p.y) }
-  const w = stage.screenToWorld(p)
-  hud.world = { x: Math.round(w.x), y: Math.round(w.y) }
-  hud.zoom = stage.camera.zoom
-}
-
-function onWheel(e: WheelEvent) {
-  e.preventDefault()
-  const p = localPoint(e)
-  stage?.camera.zoomAt(p, e.deltaY < 0 ? 1.1 : 1 / 1.1)
-  updateHud(p)
-}
-
-function onPointerDown(e: PointerEvent) {
-  panning = true
-  last = localPoint(e)
-  host.value?.setPointerCapture(e.pointerId)
-}
-
-function onPointerMove(e: PointerEvent) {
-  const p = localPoint(e)
-  if (panning && stage) {
-    stage.camera.panBy(p.x - last.x, p.y - last.y)
-    last = p
+    new Text({ x: 60, y: 320, text: 'Drag shapes · drag empty space to pan · scroll to zoom', fontSize: 18, fill: '#e2e8f0' }),
+  ]
+  for (const shape of shapes) {
+    makeInteractive(shape)
+    layer.add(shape)
   }
-  updateHud(p)
 }
 
-function onPointerUp(e: PointerEvent) {
-  panning = false
-  host.value?.releasePointerCapture(e.pointerId)
+function wireStage(s: Stage) {
+  s.on('wheel', (e) => {
+    e.preventDefault()
+    s.camera.zoomAt(e.screenPoint, e.deltaY < 0 ? 1.1 : 1 / 1.1)
+    hud.zoom = s.camera.zoom
+  })
+  s.on('dragstart', (e) => {
+    if (e.target === s) panLast = { ...e.screenPoint }
+  })
+  s.on('dragmove', (e) => {
+    if (e.target === s && panLast) {
+      s.camera.panBy(e.screenPoint.x - panLast.x, e.screenPoint.y - panLast.y)
+      panLast = { ...e.screenPoint }
+    }
+  })
+  s.on('dragend', () => {
+    panLast = null
+  })
+  s.on('pointermove', (e) => {
+    hud.screen = { x: Math.round(e.screenPoint.x), y: Math.round(e.screenPoint.y) }
+    hud.world = { x: Math.round(e.worldPoint.x), y: Math.round(e.worldPoint.y) }
+  })
+
+  const logged: SceneEventType[] = ['pointerdown', 'click', 'dblclick', 'dragstart', 'dragend', 'pointerenter', 'pointerleave']
+  for (const type of logged) {
+    s.on(type, (e) => pushLog(`${e.type} · ${e.target.type}`), { capture: true })
+  }
 }
 
 function resetView() {
@@ -109,35 +115,19 @@ function resetView() {
 }
 
 function syncSize() {
-  if (stage && host.value) {
-    stage.setSize(host.value.clientWidth, host.value.clientHeight)
-  }
+  if (stage && host.value) stage.setSize(host.value.clientWidth, host.value.clientHeight)
 }
 
 onMounted(() => {
   const el = host.value
   if (!el) return
-  stage = new Stage({
-    container: el,
-    width: el.clientWidth,
-    height: el.clientHeight,
-    background: '#0b1220',
-  })
+  stage = new Stage({ container: el, width: el.clientWidth, height: el.clientHeight, background: '#0b1220' })
+  wireStage(stage)
   buildScene(stage)
-
-  el.addEventListener('wheel', onWheel, { passive: false })
-  el.addEventListener('pointerdown', onPointerDown)
-  el.addEventListener('pointermove', onPointerMove)
-  el.addEventListener('pointerup', onPointerUp)
   window.addEventListener('resize', syncSize)
 })
 
 onBeforeUnmount(() => {
-  const el = host.value
-  el?.removeEventListener('wheel', onWheel)
-  el?.removeEventListener('pointerdown', onPointerDown)
-  el?.removeEventListener('pointermove', onPointerMove)
-  el?.removeEventListener('pointerup', onPointerUp)
   window.removeEventListener('resize', syncSize)
   stage?.destroy()
   stage = null
@@ -158,11 +148,13 @@ onBeforeUnmount(() => {
         <div>zoom: {{ hud.zoom.toFixed(2) }}×</div>
         <div>screen: ({{ hud.screen.x }}, {{ hud.screen.y }})</div>
         <div>world: ({{ hud.world.x }}, {{ hud.world.y }})</div>
+        <div class="app__log-title">events</div>
+        <div v-for="(entry, i) in log" :key="i" class="app__log">{{ entry }}</div>
       </div>
     </main>
     <footer class="app__footer">
-      Phase 4 — camera (zoom/pan) with screen↔world coordinate conversion. Events,
-      hit-testing, selection &amp; serialization arrive in later phases.
+      Phase 5 — event system: pointer/click/dblclick/drag/hover with capture→target→bubble
+      propagation. Hit-testing, selection &amp; serialization arrive in later phases.
     </footer>
   </div>
 </template>

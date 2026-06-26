@@ -24,7 +24,8 @@ leaves are [`Shape`](./shape.md); containers are [`Container`](./container.md).
   - `localMatrix()`, `worldMatrix()`,
   - `abstract getLocalBounds()`, `getWorldBounds()`,
   - `markDirty()`, `remove()`, `destroy()`,
-  - internal `_reparented()` and the overridable hook `onSubtreeDirty()`.
+  - **events:** `on(type, handler, options?)`, `once(...)`, `off(type, handler?)`, `hasListeners(type)`,
+  - internal `_reparented()`, `_emit(event, capture)`, and the overridable hook `onSubtreeDirty()`.
 
 ## How it works
 
@@ -61,6 +62,14 @@ A visual or transform change calls `markDirty()`, which walks up to the root and
 `onSubtreeDirty()`. The base hook is a no-op; the [`Stage`](./stage.md) overrides it to
 schedule a coalesced render. So a property change anywhere ends as exactly one queued
 frame.
+
+### Events
+
+`Node` is also the listener store. `on`/`once`/`off` register handlers (with an optional
+`{ capture }` phase), `hasListeners` queries them, and the internal `_emit(event, capture)`
+invokes the matching listeners for a phase (applying `stopImmediatePropagation`). The phase
+*ordering across nodes* lives in [`dispatchEvent`](../events/dispatch.md); see the
+[event system](../events/README.md).
 
 ## Conventions & gotchas
 
