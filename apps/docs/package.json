@@ -1,6 +1,23 @@
 {
   "name": "@veyrajs/docs",
   "version": "0.0.0",
+  "description": "Veyrajs documentation & demo site (Astro + Starlight). Private.",
+  "license": "UNLICENSED",
   "private": true,
-  "description": "Veyrajs documentation site (VitePress). Scaffolding deferred to V1."
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "typecheck": "astro check"
+  },
+  "dependencies": {
+    "@veyrajs/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@astrojs/check": "catalog:",
+    "@astrojs/starlight": "catalog:",
+    "astro": "catalog:",
+    "typescript": "catalog:"
+  }
 }

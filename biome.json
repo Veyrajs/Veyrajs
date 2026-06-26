@@ -13,8 +13,11 @@
       "**/node_modules/**",
       "**/coverage/**",
       "**/.changeset/**",
+      "**/.astro/**",
       "**/*.vue",
-      "**/*.svelte"
+      "**/*.svelte",
+      "**/*.astro",
+      "**/*.mdx"
     ]
   },
   "organizeImports": {

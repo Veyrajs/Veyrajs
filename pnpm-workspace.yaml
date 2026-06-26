@@ -34,3 +34,6 @@ catalog:
   '@angular/platform-browser-dynamic': ^18.2.13
   zone.js: ^0.14.10
   ng-packagr: ^18.2.1
+  astro: ^7.0.3
+  '@astrojs/starlight': ^0.41.1
+  '@astrojs/check': ^0.9.4

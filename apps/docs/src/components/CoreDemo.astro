@@ -1,0 +1,90 @@
+---
+// A purely client-side interactive demo of the engine. No server props.
+// The script below is bundled by Astro and runs in the browser; `@veyrajs/core` resolves to
+// the engine source via the Vite alias in astro.config.mjs.
+---
+
+<div class="veyrajs-demo">
+  <div class="veyrajs-demo__toolbar">
+    <button type="button" data-veyrajs="add-rect">+ Rect</button>
+    <button type="button" data-veyrajs="add-circle">+ Circle</button>
+    <span class="veyrajs-demo__sep" aria-hidden="true"></span>
+    <button type="button" data-veyrajs="undo" disabled>Undo</button>
+    <button type="button" data-veyrajs="redo" disabled>Redo</button>
+    <button type="button" data-veyrajs="reset">Reset view</button>
+    <span class="veyrajs-demo__hint">Click a shape · drag the handles · scroll to zoom</span>
+  </div>
+  <div class="veyrajs-demo__stage" data-veyrajs="stage"></div>
+</div>
+
+<script>
+  import { Circle, History, Layer, Rect, SelectionController, Stage } from '@veyrajs/core'
+
+  const PALETTE = ['#38bdf8', '#f472b6', '#a78bfa', '#34d399', '#fbbf24', '#fb7185']
+
+  function initDemo(root: HTMLElement): void {
+    const host = root.querySelector<HTMLElement>('[data-veyrajs="stage"]')
+    if (!host) return
+
+    const width = host.clientWidth || 760
+    const height = host.clientHeight || 380
+    const stage = new Stage({ container: host, width, height, background: '#0b1220' })
+    const layer = new Layer()
+    stage.add(layer)
+
+    const history = new History()
+    // SelectionController wires click-to-select, drag, and transform handles — every drag
+    // becomes an undoable command.
+    new SelectionController(stage, { history })
+
+    layer.add(
+      new Rect({ x: 90, y: 80, width: 160, height: 96, fill: '#38bdf8', stroke: '#0ea5e9', strokeWidth: 2 }),
+      new Circle({ x: 360, y: 150, radius: 56, fill: '#f472b6' }),
+    )
+
+    let colorIndex = 0
+    const nextColor = (): string => PALETTE[colorIndex++ % PALETTE.length] as string
+
+    const button = (action: string): HTMLButtonElement | null =>
+      root.querySelector<HTMLButtonElement>(`[data-veyrajs="${action}"]`)
+
+    button('add-rect')?.addEventListener('click', () => {
+      const w = 70 + Math.random() * 130
+      const h = 50 + Math.random() * 90
+      const x = 30 + Math.random() * Math.max(1, width - w - 60)
+      const y = 30 + Math.random() * Math.max(1, height - h - 60)
+      layer.add(new Rect({ x, y, width: w, height: h, fill: nextColor() }))
+    })
+
+    button('add-circle')?.addEventListener('click', () => {
+      const r = 28 + Math.random() * 44
+      const x = 30 + r + Math.random() * Math.max(1, width - 2 * r - 60)
+      const y = 30 + r + Math.random() * Math.max(1, height - 2 * r - 60)
+      layer.add(new Circle({ x, y, radius: r, fill: nextColor() }))
+    })
+
+    button('undo')?.addEventListener('click', () => history.undo())
+    button('redo')?.addEventListener('click', () => history.redo())
+    button('reset')?.addEventListener('click', () => stage.camera.reset())
+
+    // Wheel-zoom about the cursor.
+    stage.on('wheel', (event) => {
+      event.preventDefault()
+      stage.camera.zoomAt(event.screenPoint, event.deltaY < 0 ? 1.1 : 1 / 1.1)
+    })
+
+    // Keep undo/redo enabled state in sync with the stack.
+    const undoBtn = button('undo')
+    const redoBtn = button('redo')
+    const syncButtons = (): void => {
+      if (undoBtn) undoBtn.disabled = !history.canUndo
+      if (redoBtn) redoBtn.disabled = !history.canRedo
+    }
+    history.onChange(syncButtons)
+    syncButtons()
+  }
+
+  for (const root of document.querySelectorAll<HTMLElement>('.veyrajs-demo')) {
+    initDemo(root)
+  }
+</script>

@@ -1,0 +1,60 @@
+---
+title: Veyrajs
+description: A framework-agnostic, TypeScript-first 2D canvas engine for Vue, React, Svelte & Angular.
+template: splash
+hero:
+  tagline: >-
+    A typed, mutable 2D canvas engine — scene graph, camera, federated events,
+    hit-testing, transforms, versioned serialization, and day-one undo. One
+    engine, four framework adapters.
+  actions:
+    - text: Get started
+      link: guides/getting-started/
+      icon: right-arrow
+    - text: GitHub
+      link: https://github.com/Veyrajs/Veyrajs
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+import CoreDemo from '../../components/CoreDemo.astro';
+
+## Try it live
+
+<CoreDemo />
+
+## Why Veyrajs
+
+<CardGrid>
+  <Card title="Typed scene graph" icon="puzzle">
+    `Stage → Layer → Group/Shape → Node`. Real classes you mutate, with guarded setters and
+    lazy, **version-counted** world transforms.
+  </Card>
+  <Card title="Renderer abstraction" icon="laptop">
+    Nodes emit backend-neutral draw ops — Canvas 2D today, a WebGL/WebGPU seam reserved for
+    tomorrow. No node ever touches a raw 2D context.
+  </Card>
+  <Card title="Federated events" icon="random">
+    DOM-style **capture → target → bubble**, plus derived `click` / `drag*` / `pointerenter|leave`
+    / `wheel` gestures.
+  </Card>
+  <Card title="Zoom-aware hit-testing" icon="magnifier">
+    Geometric picking with an AABB prefilter and a grab tolerance that stays constant in
+    **screen pixels** at any zoom.
+  </Card>
+  <Card title="Undo from day one" icon="star">
+    Every meaningful mutation is a reversible, serializable command. Selection drags are
+    undoable transactions.
+  </Card>
+  <Card title="Four adapters" icon="rocket">
+    **Vue, React, Svelte & Angular** — declarative components over the same engine, with
+    **zero core changes**.
+  </Card>
+</CardGrid>
+
+## One engine, four frameworks
+
+The demo above is the raw imperative engine. The same scene can be built declaratively in any of
+the four supported frameworks — see [Adapters](/Veyrajs/adapters/overview/). Veyrajs's core is fully
+framework-agnostic; each adapter is a thin, parallel sibling that wraps it.

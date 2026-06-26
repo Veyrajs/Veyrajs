@@ -1,0 +1,38 @@
+---
+title: Playground
+description: An interactive scene built on the raw imperative engine.
+---
+
+import CoreDemo from '../../../components/CoreDemo.astro';
+
+This is the **raw imperative engine** — no framework — wired up exactly like the snippet below.
+Add shapes, click to select, drag the transform handles, scroll to zoom, and undo/redo.
+
+<CoreDemo />
+
+## How it's built
+
+```ts
+import { Stage, Layer, Rect, Circle, History, SelectionController } from '@veyrajs/core'
+
+const stage = new Stage({ container: host, width, height, background: '#0b1220' })
+const layer = new Layer()
+stage.add(layer)
+
+const history = new History()
+new SelectionController(stage, { history })   // select + transform handles + undoable drags
+
+layer.add(
+  new Rect({ x: 90, y: 80, width: 160, height: 96, fill: '#38bdf8', stroke: '#0ea5e9', strokeWidth: 2 }),
+  new Circle({ x: 360, y: 150, radius: 56, fill: '#f472b6' }),
+)
+
+stage.on('wheel', (e) => {
+  e.preventDefault()
+  stage.camera.zoomAt(e.screenPoint, e.deltaY < 0 ? 1.1 : 1 / 1.1)
+})
+```
+
+That's the whole demo. Every drag of a handle is an undoable command, zoom lives in the camera,
+and adding a shape schedules a single coalesced redraw. The same scene declaratively lives in the
+[Adapters](/Veyrajs/adapters/overview/) section.
