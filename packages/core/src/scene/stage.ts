@@ -1,6 +1,8 @@
+import type { Matrix, Vec2 } from '../math'
 import { Canvas2DRenderer } from '../render/canvas2d-renderer'
 import type { FrameInfo, Renderer } from '../render/renderer'
 import { FrameScheduler } from '../scheduler'
+import { Camera, type CameraOptions } from './camera'
 import { Container } from './container'
 import { Layer } from './layer'
 import type { Node } from './node'
@@ -17,6 +19,8 @@ export interface StageOptions {
   background?: string | null
   /** Inject a custom renderer (e.g. a mock in tests, or a future WebGL backend). */
   renderer?: Renderer
+  /** Initial camera (zoom/pan) configuration. */
+  camera?: CameraOptions
 }
 
 /**
@@ -28,6 +32,7 @@ export class Stage extends Container {
   readonly type = 'Stage'
   readonly container: HTMLElement
   readonly renderer: Renderer
+  readonly camera: Camera
 
   private _width: number
   private _height: number
@@ -44,6 +49,8 @@ export class Stage extends Container {
       options.renderer ??
       new Canvas2DRenderer({ container: this.container, background: options.background ?? null })
     this.scheduler = new FrameScheduler(() => this.render())
+    this.camera = new Camera(options.camera)
+    this.camera.onChange = () => this.requestRender()
 
     this.renderer.setSize(this._width, this._height, this._pixelRatio)
     this.render()
@@ -64,6 +71,16 @@ export class Stage extends Container {
   /** The renderer's DOM canvas, if it is canvas-based. */
   get canvas(): HTMLCanvasElement | undefined {
     return this.renderer.canvas
+  }
+
+  /** Convert a point in stage/screen pixels to world coordinates (via the camera). */
+  screenToWorld(point: Vec2): Vec2 {
+    return this.camera.screenToWorld(point)
+  }
+
+  /** Convert a world-space point to stage/screen pixels (via the camera). */
+  worldToScreen(point: Vec2): Vec2 {
+    return this.camera.worldToScreen(point)
   }
 
   override add(...layers: Layer[]): this {
@@ -111,7 +128,7 @@ export class Stage extends Container {
       pixelRatio: this._pixelRatio,
     }
     this.renderer.begin(frame)
-    this.renderSubtree(this)
+    this.renderSubtree(this, this.camera.viewMatrix())
     this.renderer.end()
     return this
   }
@@ -126,13 +143,13 @@ export class Stage extends Container {
     this.requestRender()
   }
 
-  private renderSubtree(node: Node): void {
+  private renderSubtree(node: Node, view: Matrix): void {
     if (!node.visible || node.opacity <= 0) return
     if (node instanceof Shape) {
-      this.renderer.renderNode(node, node.worldMatrix())
+      this.renderer.renderNode(node, view.multiply(node.worldMatrix()))
     }
     if (node instanceof Container) {
-      for (const child of node.children) this.renderSubtree(child)
+      for (const child of node.children) this.renderSubtree(child, view)
     }
     // Note: group opacity does not yet compound onto descendants (Phase 3 refinement).
   }

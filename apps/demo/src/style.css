@@ -51,8 +51,51 @@ body {
 }
 
 .app__stage {
+  position: relative;
   flex: 1 1 auto;
   min-height: 0;
+}
+
+.app__canvas {
+  position: absolute;
+  inset: 0;
+  cursor: grab;
+  touch-action: none;
+}
+
+.app__canvas:active {
+  cursor: grabbing;
+}
+
+.app__hud {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: rgba(2, 6, 23, 0.7);
+  border: 1px solid #1e293b;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: #94a3b8;
+}
+
+.app__reset {
+  margin-bottom: 2px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #334155;
+  background: #1e293b;
+  color: #e2e8f0;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.app__reset:hover {
+  background: #334155;
 }
 
 .app__footer {

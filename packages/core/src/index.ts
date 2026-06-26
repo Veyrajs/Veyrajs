@@ -15,6 +15,8 @@ export { Shape } from './scene/shape'
 export type { ShapeConfig } from './scene/shape'
 export { Stage } from './scene/stage'
 export type { StageOptions } from './scene/stage'
+export { Camera } from './scene/camera'
+export type { CameraOptions } from './scene/camera'
 
 // Concrete shapes
 export { Rect, Circle, Ellipse, Line, Polygon, Image, Text } from './scene/shapes'

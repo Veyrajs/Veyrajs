@@ -9,10 +9,19 @@ import {
   Text,
   VERSION,
 } from '@annotacanvas/core'
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 
 const host = ref<HTMLElement | null>(null)
 let stage: Stage | null = null
+
+const hud = reactive({
+  zoom: 1,
+  screen: { x: 0, y: 0 },
+  world: { x: 0, y: 0 },
+})
+
+let panning = false
+let last = { x: 0, y: 0 }
 
 function buildScene(s: Stage) {
   const layer = s.createLayer()
@@ -47,11 +56,56 @@ function buildScene(s: Stage) {
     new Text({
       x: 40,
       y: 320,
-      text: 'AnnotaCanvas — Phase 3: Rect · Circle · Ellipse · Line · Polygon · Text',
+      text: 'Scroll to zoom · drag to pan',
       fontSize: 20,
       fill: '#e2e8f0',
     }),
   )
+}
+
+function localPoint(e: PointerEvent | WheelEvent) {
+  const rect = host.value?.getBoundingClientRect()
+  return { x: e.clientX - (rect?.left ?? 0), y: e.clientY - (rect?.top ?? 0) }
+}
+
+function updateHud(p: { x: number; y: number }) {
+  if (!stage) return
+  hud.screen = { x: Math.round(p.x), y: Math.round(p.y) }
+  const w = stage.screenToWorld(p)
+  hud.world = { x: Math.round(w.x), y: Math.round(w.y) }
+  hud.zoom = stage.camera.zoom
+}
+
+function onWheel(e: WheelEvent) {
+  e.preventDefault()
+  const p = localPoint(e)
+  stage?.camera.zoomAt(p, e.deltaY < 0 ? 1.1 : 1 / 1.1)
+  updateHud(p)
+}
+
+function onPointerDown(e: PointerEvent) {
+  panning = true
+  last = localPoint(e)
+  host.value?.setPointerCapture(e.pointerId)
+}
+
+function onPointerMove(e: PointerEvent) {
+  const p = localPoint(e)
+  if (panning && stage) {
+    stage.camera.panBy(p.x - last.x, p.y - last.y)
+    last = p
+  }
+  updateHud(p)
+}
+
+function onPointerUp(e: PointerEvent) {
+  panning = false
+  host.value?.releasePointerCapture(e.pointerId)
+}
+
+function resetView() {
+  stage?.camera.reset()
+  hud.zoom = 1
 }
 
 function syncSize() {
@@ -61,18 +115,29 @@ function syncSize() {
 }
 
 onMounted(() => {
-  if (!host.value) return
+  const el = host.value
+  if (!el) return
   stage = new Stage({
-    container: host.value,
-    width: host.value.clientWidth,
-    height: host.value.clientHeight,
+    container: el,
+    width: el.clientWidth,
+    height: el.clientHeight,
     background: '#0b1220',
   })
   buildScene(stage)
+
+  el.addEventListener('wheel', onWheel, { passive: false })
+  el.addEventListener('pointerdown', onPointerDown)
+  el.addEventListener('pointermove', onPointerMove)
+  el.addEventListener('pointerup', onPointerUp)
   window.addEventListener('resize', syncSize)
 })
 
 onBeforeUnmount(() => {
+  const el = host.value
+  el?.removeEventListener('wheel', onWheel)
+  el?.removeEventListener('pointerdown', onPointerDown)
+  el?.removeEventListener('pointermove', onPointerMove)
+  el?.removeEventListener('pointerup', onPointerUp)
   window.removeEventListener('resize', syncSize)
   stage?.destroy()
   stage = null
@@ -86,10 +151,18 @@ onBeforeUnmount(() => {
       <span class="app__badge">demo</span>
       <span class="app__version">core v{{ VERSION }}</span>
     </header>
-    <main ref="host" class="app__stage"></main>
+    <main class="app__stage">
+      <div ref="host" class="app__canvas"></div>
+      <div class="app__hud">
+        <button type="button" class="app__reset" @click="resetView">reset view</button>
+        <div>zoom: {{ hud.zoom.toFixed(2) }}×</div>
+        <div>screen: ({{ hud.screen.x }}, {{ hud.screen.y }})</div>
+        <div>world: ({{ hud.world.x }}, {{ hud.world.y }})</div>
+      </div>
+    </main>
     <footer class="app__footer">
-      Phase 3 — concrete shapes rendered through the scene graph and Canvas 2D renderer.
-      Camera (zoom/pan), events, selection &amp; serialization arrive in later phases.
+      Phase 4 — camera (zoom/pan) with screen↔world coordinate conversion. Events,
+      hit-testing, selection &amp; serialization arrive in later phases.
     </footer>
   </div>
 </template>

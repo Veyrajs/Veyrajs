@@ -65,4 +65,16 @@ describe('stage render lifecycle', () => {
     expect(r.size).toEqual({ width: 400, height: 300, pixelRatio: 2 })
     expect(stage.width).toBe(400)
   })
+
+  it('applies the camera view to rendered matrices', () => {
+    const r = new MockRenderer()
+    const stage = makeStage(r)
+    stage.camera.setZoom(2)
+    stage.camera.panTo(100, 50)
+    const layer = stage.createLayer()
+    layer.add(new TestRect({ x: 10, y: 10, width: 5, height: 5 }))
+    stage.render()
+    // screen = view · world; rect world origin is (10,10); view maps 2·world + (100,50)
+    expect(r.calls[0]?.world.applyToPoint({ x: 0, y: 0 })).toEqual({ x: 120, y: 70 })
+  })
 })

@@ -4,8 +4,8 @@ This folder documents **every source file** in `packages/core/src`, one markdown
 module, mirroring the source tree. The goal is to make the engine's context deeply
 understandable without reverse-engineering it from code.
 
-> Status: Phases 1–3 complete (math, scene graph, transforms, renderer abstraction,
-> scheduler, concrete shapes). Camera, events, hit-testing, controls, serialization, undo
+> Status: Phases 1–4 complete (math, scene graph, transforms, renderer abstraction,
+> scheduler, concrete shapes, camera). Events, hit-testing, controls, serialization, undo
 > and the Vue adapter are future phases — each module doc notes where those plug in.
 
 ---
@@ -74,6 +74,7 @@ plugins that attach through the engine's extension points — with no changes to
 | `src/scene/layer.ts` | [scene/layer.md](./scene/layer.md) | Render partition under the stage |
 | `src/scene/shape.ts` | [scene/shape.md](./scene/shape.md) | Drawable leaf base class |
 | `src/scene/stage.ts` | [scene/stage.md](./scene/stage.md) | Root + renderer + frame loop |
+| `src/scene/camera.ts` | [scene/camera.md](./scene/camera.md) | Camera (zoom/pan, screen↔world) |
 | `src/scene/shapes/**` | [scene/shapes/index.md](./scene/shapes/index.md) | Concrete shapes (Rect, Circle, Ellipse, Line, Polygon, Image, Text) |
 | `src/__tests__/**` | [__tests__.md](./__tests__.md) | Test strategy & helpers |
 
@@ -113,12 +114,12 @@ Two consequences worth internalizing:
 
 ## Coordinate spaces & the transform convention
 
-Three spaces today (a fourth — screen — arrives with the camera in Phase 4):
+Three active spaces (a media/image space arrives with the annotation plugins later):
 
 - **Local** — a node's own frame. `getLocalBounds()` and `containsPoint()` are local.
 - **World** — the shared scene space. `worldMatrix()` maps local → world.
-- **Screen** — *(future)* pixels in the host element; the camera's view matrix maps
-  world → screen.
+- **Screen** — pixels in the host element. The [`Camera`](./scene/camera.md)'s view matrix
+  maps world → screen; `stage.screenToWorld` / `worldToScreen` convert between them.
 
 The single rule that makes all of this consistent:
 

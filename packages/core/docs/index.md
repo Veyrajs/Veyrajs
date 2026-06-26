@@ -11,12 +11,15 @@ starting from this file, so it also determines what ends up in `dist`.
 ## Exports (grouped)
 
 - **Version:** `VERSION`.
-- **Math:** `Vec2`, `Matrix`, `Bounds`, and the type `MatrixComponents`.
-- **Scene graph:** `Node`, `Container`, `Group`, `Layer`, `Shape`, `Stage`, plus the
-  config types `NodeConfig`, `ShapeConfig`, `StageOptions`.
+- **Math:** `Vec2`, `Matrix`, `Bounds`, the type `MatrixComponents`, and the geometry
+  helpers `pointInPolygon`, `distanceToSegment`, `distanceToPolyline`.
+- **Scene graph:** `Node`, `Container`, `Group`, `Layer`, `Shape`, `Stage`, `Camera`, and
+  the concrete shapes (`Rect`, `Circle`, `Ellipse`, `Line`, `Polygon`, `Image`, `Text`),
+  plus config types (`NodeConfig`, `ShapeConfig`, `StageOptions`, `CameraOptions`, and each
+  shape's `*Config`).
 - **Rendering:** `Canvas2DRenderer` (+ `Canvas2DRendererOptions`); the types `Renderer`,
   `Renderable`, `FrameInfo`; and the draw-op types `DrawOp`, `RectOp`, `EllipseOp`,
-  `PolygonOp`, `ImageOp`, `FillStrokeStyle`.
+  `PolygonOp`, `ImageOp`, `TextOp`, `FillStrokeStyle`.
 - **Support:** `FrameScheduler`, `nextId`.
 
 ## How it works

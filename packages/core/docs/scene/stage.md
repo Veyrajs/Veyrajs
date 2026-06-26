@@ -15,9 +15,10 @@ It extends [`Container`](./container.md) and additionally owns:
 
 ## Exports
 
-- `interface StageOptions { container; width?; height?; pixelRatio?; background?; renderer? }`.
+- `interface StageOptions { container; width?; height?; pixelRatio?; background?; renderer?; camera? }`.
 - `class Stage extends Container`:
-  - getters `width`, `height`, `pixelRatio`, `canvas`,
+  - getters `width`, `height`, `pixelRatio`, `canvas`; the `camera` ([Camera](./camera.md)),
+  - `screenToWorld(point)`, `worldToScreen(point)` (delegate to the camera),
   - `add(...layers)` (Layer-only), `createLayer(config?)`,
   - `setSize(w, h)`, `setPixelRatio(dpr)`,
   - `requestRender()` (coalesced), `render()` (synchronous),
@@ -41,7 +42,8 @@ mutation → node.markDirty() → (root) Stage.onSubtreeDirty() → requestRende
 `renderer.end()`. `renderSubtree`:
 
 - skips a node if `!visible || opacity <= 0`,
-- if it's a [`Shape`](./shape.md), calls `renderer.renderNode(shape, shape.worldMatrix())`,
+- if it's a [`Shape`](./shape.md), calls `renderer.renderNode(shape, view · shape.worldMatrix())`
+  where `view = camera.viewMatrix()` — so `screen = view · world`,
 - if it's a `Container`, recurses into children in order (depth-first z-order).
 
 So shapes draw back-to-front, each under its own world transform.
@@ -65,13 +67,15 @@ future, a WebGL renderer. When injected, the `Canvas2DRenderer` is not created a
   `requestRender()`. That's how a deep node's change reaches the scheduler.
 - **`destroy()` order:** cancel the scheduler → remove children → destroy the renderer (so
   no frame fires mid-teardown).
-- **The stage's own transform is identity today.** The camera (zoom/pan) lands on the stage
-  in Phase 4 as a view matrix applied before the world walk.
+- **The camera is applied at render, not in node transforms.** Each shape is drawn under
+  `camera.viewMatrix() · worldMatrix()`, so `screen = view · world` and world coordinates
+  stay camera-independent.
 
 ## Relationships
 
-- **Extends:** [`Container`](./container.md). **Owns:** [`Renderer`](../render/renderer.md),
-  [`FrameScheduler`](../scheduler.md). **Draws:** [`Shape`](./shape.md) nodes.
+- **Extends:** [`Container`](./container.md). **Owns:** [`Camera`](./camera.md),
+  [`Renderer`](../render/renderer.md), [`FrameScheduler`](../scheduler.md). **Draws:**
+  [`Shape`](./shape.md) nodes.
 - **Used by:** the demo app and (future) the Vue adapter.
 
 ## Example
