@@ -21,6 +21,9 @@ starting from this file, so it also determines what ends up in `dist`.
   `SceneEventPhase`, `SceneEventListener`.
 - **Hit testing:** `GeometricHitTester` and the types `HitTester`, `HitResult`, `HitType`,
   `HitTestOptions`; plus `ShapeHitKind` / `ShapeHitOptions` (from the scene graph).
+- **Selection & controls:** `SelectionManager`, `SelectionController`, `DEFAULT_CONTROLS`,
+  and `computeResize` / `computeRotation` / `pointerAngle`, with their option/result/config
+  types; plus `Overlay` (from the stage) for custom screen-space overlays.
 - **Rendering:** `Canvas2DRenderer` (+ `Canvas2DRendererOptions`); the types `Renderer`,
   `Renderable`, `FrameInfo`; and the draw-op types `DrawOp`, `RectOp`, `EllipseOp`,
   `PolygonOp`, `ImageOp`, `TextOp`, `FillStrokeStyle`.

@@ -14,7 +14,7 @@ export { Layer } from './scene/layer'
 export { Shape } from './scene/shape'
 export type { ShapeConfig, ShapeHitKind, ShapeHitOptions } from './scene/shape'
 export { Stage } from './scene/stage'
-export type { StageOptions } from './scene/stage'
+export type { StageOptions, Overlay } from './scene/stage'
 export { Camera } from './scene/camera'
 export type { CameraOptions } from './scene/camera'
 
@@ -31,6 +31,21 @@ export { EventManager } from './events/event-manager'
 // Hit testing
 export { GeometricHitTester } from './hit/geometric-hit-tester'
 export type { HitTester, HitResult, HitType, HitTestOptions } from './hit/hit-tester'
+
+// Selection & controls
+export { SelectionManager } from './selection/selection-manager'
+export type { SelectionChangeListener } from './selection/selection-manager'
+export { SelectionController } from './controls/selection-controller'
+export type { SelectionControllerOptions } from './controls/selection-controller'
+export { DEFAULT_CONTROLS } from './controls/controls'
+export type { ControlDef, HandleKind } from './controls/controls'
+export { computeResize, computeRotation, pointerAngle } from './controls/transform-math'
+export type {
+  ResizeContext,
+  ResizeResult,
+  RotateContext,
+  RotateResult,
+} from './controls/transform-math'
 
 // Concrete shapes
 export { Rect, Circle, Ellipse, Line, Polygon, Image, Text } from './scene/shapes'

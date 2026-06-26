@@ -15,7 +15,8 @@ It extends [`Container`](./container.md) and additionally owns:
 
 ## Exports
 
-- `interface StageOptions { container; width?; height?; pixelRatio?; background?; renderer?; camera? }`.
+- `interface StageOptions { container; width?; height?; pixelRatio?; background?; renderer?; camera?; hitTester? }`.
+- `interface Overlay { drawOps(): DrawOp[] }` — a screen-space overlay drawn after the scene.
 - `class Stage extends Container`:
   - getters `width`, `height`, `pixelRatio`, `canvas`; the `camera` ([Camera](./camera.md)),
   - `screenToWorld(point)`, `worldToScreen(point)` (delegate to the camera),
@@ -24,6 +25,7 @@ It extends [`Container`](./container.md) and additionally owns:
   - `add(...layers)` (Layer-only), `createLayer(config?)`,
   - `setSize(w, h)`, `setPixelRatio(dpr)`,
   - `requestRender()` (coalesced), `render()` (synchronous),
+  - `addOverlay(overlay)` / `removeOverlay(overlay)` — screen-space overlays after the scene,
   - `destroy()`.
 
 ## How it works

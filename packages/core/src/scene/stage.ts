@@ -1,8 +1,9 @@
 import { EventManager } from '../events/event-manager'
 import { GeometricHitTester } from '../hit/geometric-hit-tester'
 import type { HitResult, HitTestOptions, HitTester } from '../hit/hit-tester'
-import type { Matrix, Vec2 } from '../math'
+import { Matrix, type Vec2 } from '../math'
 import { Canvas2DRenderer } from '../render/canvas2d-renderer'
+import type { DrawOp } from '../render/draw-ops'
 import type { FrameInfo, Renderer } from '../render/renderer'
 import { FrameScheduler } from '../scheduler'
 import { Camera, type CameraOptions } from './camera'
@@ -28,6 +29,11 @@ export interface StageOptions {
   hitTester?: HitTester
 }
 
+/** A screen-space overlay drawn after the scene (no camera transform applied). */
+export interface Overlay {
+  drawOps(): DrawOp[]
+}
+
 /**
  * Root of the scene graph and owner of the renderer, the frame scheduler, and the
  * viewport size/DPR. Children must be `Layer`s. Mutations anywhere in the tree schedule
@@ -45,6 +51,7 @@ export class Stage extends Container {
   private _pixelRatio: number
   private readonly scheduler: FrameScheduler
   private events: EventManager | null = null
+  private readonly overlays: Overlay[] = []
 
   constructor(options: StageOptions) {
     super()
@@ -139,6 +146,21 @@ export class Stage extends Container {
     return this
   }
 
+  /** Register a screen-space overlay (drawn after the scene). Returns an unregister fn. */
+  addOverlay(overlay: Overlay): () => void {
+    this.overlays.push(overlay)
+    this.requestRender()
+    return () => this.removeOverlay(overlay)
+  }
+
+  removeOverlay(overlay: Overlay): void {
+    const index = this.overlays.indexOf(overlay)
+    if (index >= 0) {
+      this.overlays.splice(index, 1)
+      this.requestRender()
+    }
+  }
+
   /** Render the scene immediately (synchronous). */
   render(): this {
     const frame: FrameInfo = {
@@ -148,6 +170,10 @@ export class Stage extends Container {
     }
     this.renderer.begin(frame)
     this.renderSubtree(this, this.camera.viewMatrix())
+    for (const overlay of this.overlays) {
+      // Overlays draw in screen space (identity world transform; the renderer still applies DPR).
+      this.renderer.renderNode({ opacity: 1, drawOps: () => overlay.drawOps() }, Matrix.identity())
+    }
     this.renderer.end()
     return this
   }

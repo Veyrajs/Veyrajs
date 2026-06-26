@@ -4,9 +4,10 @@ This folder documents **every source file** in `packages/core/src`, one markdown
 module, mirroring the source tree. The goal is to make the engine's context deeply
 understandable without reverse-engineering it from code.
 
-> Status: Phases 1–6 complete (math, scene graph, transforms, renderer abstraction,
-> scheduler, concrete shapes, camera, events, hit-testing). Controls, serialization, undo
-> and the Vue adapter are future phases — each module doc notes where those plug in.
+> Status: Phases 1–7 complete (math, scene graph, transforms, renderer abstraction,
+> scheduler, concrete shapes, camera, events, hit-testing, selection & controls).
+> Serialization, undo and the Vue adapter are future phases — each module doc notes where
+> those plug in.
 
 ---
 
@@ -81,6 +82,10 @@ plugins that attach through the engine's extension points — with no changes to
 | `src/events/event-manager.ts` | [events/event-manager.md](./events/event-manager.md) | Native binding + derived events |
 | `src/hit/hit-tester.ts` | [hit/hit-tester.md](./hit/hit-tester.md) | HitTester contract + options/result |
 | `src/hit/geometric-hit-tester.ts` | [hit/geometric-hit-tester.md](./hit/geometric-hit-tester.md) | Default geometric hit tester |
+| `src/selection/selection-manager.ts` | [selection/selection-manager.md](./selection/selection-manager.md) | Selection state + change events |
+| `src/controls/selection-controller.ts` | [controls/selection-controller.md](./controls/selection-controller.md) | Interactive select/move/resize/rotate + overlay |
+| `src/controls/controls.ts` | [controls/controls.md](./controls/controls.md) | Control handle definitions |
+| `src/controls/transform-math.ts` | [controls/transform-math.md](./controls/transform-math.md) | Pure resize/rotate math |
 | `src/__tests__/**` | [__tests__.md](./__tests__.md) | Test strategy & helpers |
 
 ---
