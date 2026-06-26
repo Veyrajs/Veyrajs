@@ -43,6 +43,10 @@ export class Ellipse extends Shape {
     return Bounds.fromRect(-this._radiusX, -this._radiusY, this._radiusX * 2, this._radiusY * 2)
   }
 
+  protected override serializedExtras(): Record<string, unknown> {
+    return { ...super.serializedExtras(), radiusX: this._radiusX, radiusY: this._radiusY }
+  }
+
   drawOps(): DrawOp[] {
     return [
       {

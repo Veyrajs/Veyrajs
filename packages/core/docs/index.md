@@ -24,6 +24,11 @@ starting from this file, so it also determines what ends up in `dist`.
 - **Selection & controls:** `SelectionManager`, `SelectionController`, `DEFAULT_CONTROLS`,
   and `computeResize` / `computeRotation` / `pointerAngle`, with their option/result/config
   types; plus `Overlay` (from the stage) for custom screen-space overlays.
+- **Serialization:** `SceneSerializer`, `ClassRegistry` / `createDefaultRegistry`,
+  `MigrationRunner`, `CURRENT_SCHEMA_VERSION`, and the `SceneDocument` / `SerializedNode` /
+  `Migration` types.
+- **Commands & history:** `History`, `SetPropsCommand` / `AddNodeCommand` /
+  `RemoveNodeCommand` / `CompositeCommand`, and the `Command` / `NodeProps` types.
 - **Rendering:** `Canvas2DRenderer` (+ `Canvas2DRendererOptions`); the types `Renderer`,
   `Renderable`, `FrameInfo`; and the draw-op types `DrawOp`, `RectOp`, `EllipseOp`,
   `PolygonOp`, `ImageOp`, `TextOp`, `FillStrokeStyle`.

@@ -1,3 +1,5 @@
+import { CompositeCommand, type NodeProps, SetPropsCommand } from '../commands/command'
+import type { History } from '../commands/history'
 import type { SceneEvent } from '../events/event-types'
 import { Bounds, Matrix, type Vec2 } from '../math'
 import type { DrawOp } from '../render/draw-ops'
@@ -20,6 +22,8 @@ export interface SelectionControllerOptions {
   boundBox?: (result: ResizeResult, node: Node) => ResizeResult
   /** Accent color for the box and handles. */
   color?: string
+  /** Record move/resize/rotate as undoable commands. */
+  history?: History
 }
 
 interface MoveState {
@@ -32,6 +36,7 @@ interface ResizeState {
   handleLocal: Vec2
   anchorLocal: Vec2
   anchorParent: Vec2
+  before: NodeProps
 }
 interface RotateState {
   mode: 'rotate'
@@ -40,6 +45,7 @@ interface RotateState {
   centerParent: Vec2
   startAngle: number
   startRotation: number
+  before: NodeProps
 }
 interface MarqueeState {
   mode: 'marquee'
@@ -61,6 +67,7 @@ export class SelectionController implements Overlay {
   private readonly rotateEnabled: boolean
   private readonly boundBox: ((result: ResizeResult, node: Node) => ResizeResult) | undefined
   private readonly color: string
+  private readonly history: History | undefined
   private drag: DragState = null
   private readonly disposers: (() => void)[] = []
 
@@ -71,6 +78,7 @@ export class SelectionController implements Overlay {
     this.rotateEnabled = options.rotateEnabled ?? true
     this.boundBox = options.boundBox
     this.color = options.color ?? '#3b82f6'
+    this.history = options.history
 
     this.disposers.push(this.stage.addOverlay(this))
     this.disposers.push(this.selection.onChange(() => this.stage.requestRender()))
@@ -151,7 +159,47 @@ export class SelectionController implements Overlay {
   private onPointerUp = (e: SceneEvent): void => {
     const drag = this.drag
     this.drag = null
-    if (drag !== null && drag.mode === 'marquee') this.commitMarquee(drag, e.shiftKey)
+    if (drag === null) return
+    if (drag.mode === 'marquee') {
+      this.commitMarquee(drag, e.shiftKey)
+      return
+    }
+    this.recordDrag(drag)
+  }
+
+  private recordDrag(drag: MoveState | ResizeState | RotateState): void {
+    const history = this.history
+    if (history === undefined) return
+    if (drag.mode === 'move') {
+      const commands = drag.items
+        .filter((item) => item.node.x !== item.startX || item.node.y !== item.startY)
+        .map(
+          (item) =>
+            new SetPropsCommand(
+              item.node,
+              { x: item.startX, y: item.startY },
+              { x: item.node.x, y: item.node.y },
+              'move',
+            ),
+        )
+      if (commands.length === 1 && commands[0] !== undefined) history.push(commands[0])
+      else if (commands.length > 1) history.push(new CompositeCommand(commands, 'move'))
+    } else if (drag.mode === 'resize') {
+      const after: NodeProps = {
+        x: drag.node.x,
+        y: drag.node.y,
+        scaleX: drag.node.scaleX,
+        scaleY: drag.node.scaleY,
+      }
+      if (propsChanged(drag.before, after)) {
+        history.push(new SetPropsCommand(drag.node, drag.before, after, 'resize'))
+      }
+    } else {
+      const after: NodeProps = { x: drag.node.x, y: drag.node.y, rotation: drag.node.rotation }
+      if (propsChanged(drag.before, after)) {
+        history.push(new SetPropsCommand(drag.node, drag.before, after, 'rotate'))
+      }
+    }
   }
 
   private beginMove(e: SceneEvent): void {
@@ -174,6 +222,7 @@ export class SelectionController implements Overlay {
         centerParent,
         startAngle: pointerAngle(node, centerParent, e.worldPoint),
         startRotation: node.rotation,
+        before: { x: node.x, y: node.y, rotation: node.rotation },
       }
       return
     }
@@ -188,6 +237,7 @@ export class SelectionController implements Overlay {
       handleLocal,
       anchorLocal,
       anchorParent: node.localMatrix().applyToPoint(anchorLocal),
+      before: { x: node.x, y: node.y, scaleX: node.scaleX, scaleY: node.scaleY },
     }
   }
 
@@ -327,6 +377,13 @@ export class SelectionController implements Overlay {
 
 function parentInverse(node: Node): Matrix {
   return (node.parent !== null ? node.parent.worldMatrix() : Matrix.identity()).invert()
+}
+
+function propsChanged(before: NodeProps, after: NodeProps): boolean {
+  for (const key of Object.keys(after) as (keyof NodeProps)[]) {
+    if (before[key] !== after[key]) return true
+  }
+  return false
 }
 
 function collectShapes(node: Node, visit: (shape: Shape) => void): void {

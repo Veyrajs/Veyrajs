@@ -24,6 +24,7 @@ leaves are [`Shape`](./shape.md); containers are [`Container`](./container.md).
   - `localMatrix()`, `worldMatrix()`,
   - `abstract getLocalBounds()`, `getWorldBounds()`,
   - `markDirty()`, `remove()`, `destroy()`,
+  - `toObject()` + the overridable `serializedExtras()` hook (serialization),
   - **events:** `on(type, handler, options?)`, `once(...)`, `off(type, handler?)`, `hasListeners(type)`,
   - internal `_reparented()`, `_emit(event, capture)`, and the overridable hook `onSubtreeDirty()`.
 

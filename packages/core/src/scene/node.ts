@@ -1,6 +1,7 @@
 import type { SceneEvent, SceneEventListener, SceneEventType } from '../events/event-types'
 import { nextId } from '../id'
 import { type Bounds, Matrix } from '../math'
+import type { SerializedNode } from '../serialization/types'
 import type { Container } from './container'
 
 export interface NodeConfig {
@@ -266,6 +267,34 @@ export abstract class Node {
   /** Axis-aligned bounds of this node in world space. */
   getWorldBounds(): Bounds {
     return this.getLocalBounds().transform(this.worldMatrix())
+  }
+
+  /** Serialize this node to a plain object. Subclasses extend via `serializedExtras`. */
+  toObject(): SerializedNode {
+    const data: SerializedNode = {
+      type: this.type,
+      id: this.id,
+      x: this._x,
+      y: this._y,
+      scaleX: this._scaleX,
+      scaleY: this._scaleY,
+      rotation: this._rotation,
+      skewX: this._skewX,
+      skewY: this._skewY,
+      offsetX: this._offsetX,
+      offsetY: this._offsetY,
+      opacity: this._opacity,
+      visible: this._visible,
+      listening: this._listening,
+      ...this.serializedExtras(),
+    }
+    if (this.name !== undefined) data.name = this.name
+    return data
+  }
+
+  /** Subclass hook adding type-specific serialized properties. */
+  protected serializedExtras(): Record<string, unknown> {
+    return {}
   }
 
   /** Request a redraw of the stage that owns this node (coalesced to one frame). */

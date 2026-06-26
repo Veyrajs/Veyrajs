@@ -132,4 +132,16 @@ export abstract class Shape extends Node implements Renderable {
   getVertices(): readonly Vec2[] | null {
     return null
   }
+
+  protected override serializedExtras(): Record<string, unknown> {
+    const extras: Record<string, unknown> = {
+      fill: this._fill,
+      stroke: this._stroke,
+      strokeWidth: this._strokeWidth,
+      lineCap: this._lineCap,
+      lineJoin: this._lineJoin,
+    }
+    if (this._lineDash !== null) extras.lineDash = [...this._lineDash]
+    return extras
+  }
 }

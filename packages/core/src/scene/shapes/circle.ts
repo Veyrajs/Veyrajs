@@ -31,6 +31,10 @@ export class Circle extends Shape {
     return Bounds.fromRect(-r, -r, r * 2, r * 2)
   }
 
+  protected override serializedExtras(): Record<string, unknown> {
+    return { ...super.serializedExtras(), radius: this._radius }
+  }
+
   drawOps(): DrawOp[] {
     return [
       {

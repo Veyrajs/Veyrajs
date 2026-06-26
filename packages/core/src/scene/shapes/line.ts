@@ -42,6 +42,14 @@ export class Line extends Shape {
     return Bounds.fromPoints(this._points)
   }
 
+  protected override serializedExtras(): Record<string, unknown> {
+    return {
+      ...super.serializedExtras(),
+      points: this._points.map((p) => ({ x: p.x, y: p.y })),
+      closed: this._closed,
+    }
+  }
+
   drawOps(): DrawOp[] {
     return [
       { type: 'polygon', points: this._points, closed: this._closed, ...this.fillStrokeStyle },

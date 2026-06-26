@@ -28,6 +28,10 @@ export class Polygon extends Shape {
     return Bounds.fromPoints(this._points)
   }
 
+  protected override serializedExtras(): Record<string, unknown> {
+    return { ...super.serializedExtras(), points: this._points.map((p) => ({ x: p.x, y: p.y })) }
+  }
+
   drawOps(): DrawOp[] {
     return [{ type: 'polygon', points: this._points, closed: true, ...this.fillStrokeStyle }]
   }

@@ -4,10 +4,10 @@ This folder documents **every source file** in `packages/core/src`, one markdown
 module, mirroring the source tree. The goal is to make the engine's context deeply
 understandable without reverse-engineering it from code.
 
-> Status: Phases 1–7 complete (math, scene graph, transforms, renderer abstraction,
-> scheduler, concrete shapes, camera, events, hit-testing, selection & controls).
-> Serialization, undo and the Vue adapter are future phases — each module doc notes where
-> those plug in.
+> Status: Phases 1–8 complete (math, scene graph, transforms, renderer abstraction,
+> scheduler, concrete shapes, camera, events, hit-testing, selection & controls,
+> serialization & undo). The Vue adapter is the next phase — each module doc notes where it
+> plugs in.
 
 ---
 
@@ -86,6 +86,12 @@ plugins that attach through the engine's extension points — with no changes to
 | `src/controls/selection-controller.ts` | [controls/selection-controller.md](./controls/selection-controller.md) | Interactive select/move/resize/rotate + overlay |
 | `src/controls/controls.ts` | [controls/controls.md](./controls/controls.md) | Control handle definitions |
 | `src/controls/transform-math.ts` | [controls/transform-math.md](./controls/transform-math.md) | Pure resize/rotate math |
+| `src/serialization/scene-serializer.ts` | [serialization/scene-serializer.md](./serialization/scene-serializer.md) | Versioned JSON save/load |
+| `src/serialization/class-registry.ts` | [serialization/class-registry.md](./serialization/class-registry.md) | type → factory registry |
+| `src/serialization/migration-runner.ts` | [serialization/migration-runner.md](./serialization/migration-runner.md) | Document migrations |
+| `src/serialization/types.ts` | [serialization/types.md](./serialization/types.md) | Serialized types + schema version |
+| `src/commands/command.ts` | [commands/command.md](./commands/command.md) | Reversible commands |
+| `src/commands/history.ts` | [commands/history.md](./commands/history.md) | Undo/redo stack |
 | `src/__tests__/**` | [__tests__.md](./__tests__.md) | Test strategy & helpers |
 
 ---

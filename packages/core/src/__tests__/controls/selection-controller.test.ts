@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { Rect, SelectionController, Stage } from '../../index'
+import { History, Rect, SelectionController, Stage } from '../../index'
 
 function dispatchPointer(container: HTMLElement, type: string, x: number, y: number): void {
   const init: PointerEventInit = {
@@ -68,6 +68,26 @@ describe('SelectionController (integration)', () => {
 
     expect(rect.x).toBeCloseTo(100, 3)
     expect(rect.y).toBeCloseTo(90, 3)
+    controller.destroy()
+  })
+
+  it('records a move as an undoable command when given a history', () => {
+    const { stage, container } = makeStage()
+    const rect = new Rect({ x: 50, y: 50, width: 60, height: 60, fill: '#f00' })
+    stage.createLayer().add(rect)
+    const history = new History()
+    const controller = new SelectionController(stage, { history })
+
+    dispatchPointer(container, 'pointerdown', 70, 70)
+    dispatchPointer(container, 'pointermove', 120, 110)
+    dispatchPointer(container, 'pointerup', 120, 110)
+    expect(rect.x).toBeCloseTo(100, 3)
+    expect(history.canUndo).toBe(true)
+
+    history.undo()
+    expect(rect.x).toBeCloseTo(50, 3)
+    history.redo()
+    expect(rect.x).toBeCloseTo(100, 3)
     controller.destroy()
   })
 })

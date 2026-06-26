@@ -2,8 +2,10 @@
 import {
   Circle,
   Ellipse,
+  History,
   Polygon,
   Rect,
+  SceneSerializer,
   SelectionController,
   Stage,
   Text,
@@ -14,8 +16,11 @@ import { onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 const host = ref<HTMLElement | null>(null)
 let stage: Stage | null = null
 let controller: SelectionController | null = null
+const history = new History()
+const serializer = new SceneSerializer()
+let savedJson = ''
 
-const hud = reactive({ zoom: 1, selected: 0, kind: '' })
+const hud = reactive({ zoom: 1, selected: 0, kind: '', canUndo: false, canRedo: false, savedBytes: 0 })
 
 function buildScene(s: Stage) {
   const layer = s.createLayer()
@@ -35,27 +40,41 @@ function buildScene(s: Stage) {
       stroke: '#059669',
       strokeWidth: 2,
     }),
-    new Text({ x: 80, y: 330, text: 'Click to select · drag to move · handles resize/rotate · drag empty to marquee', fontSize: 16, fill: '#e2e8f0' }),
+    new Text({ x: 80, y: 330, text: 'Select & transform · undo/redo · export/import JSON', fontSize: 16, fill: '#e2e8f0' }),
   )
 }
 
 function syncSize() {
   if (stage && host.value) stage.setSize(host.value.clientWidth, host.value.clientHeight)
 }
-
 function resetView() {
   stage?.camera.reset()
   hud.zoom = 1
+}
+function exportScene() {
+  if (!stage) return
+  savedJson = serializer.stringify(stage)
+  hud.savedBytes = savedJson.length
+}
+function importScene() {
+  if (!stage || savedJson === '') return
+  controller?.selection.clear()
+  serializer.parse(stage, savedJson)
+  history.clear()
 }
 
 onMounted(() => {
   const el = host.value
   if (!el) return
   stage = new Stage({ container: el, width: el.clientWidth, height: el.clientHeight, background: '#0b1220' })
-  controller = new SelectionController(stage)
+  controller = new SelectionController(stage, { history })
   controller.selection.onChange((nodes) => {
     hud.selected = nodes.length
     hud.kind = nodes.length === 1 ? (nodes[0]?.type ?? '') : ''
+  })
+  history.onChange(() => {
+    hud.canUndo = history.canUndo
+    hud.canRedo = history.canRedo
   })
   stage.on('wheel', (e) => {
     e.preventDefault()
@@ -85,14 +104,23 @@ onBeforeUnmount(() => {
     <main class="app__stage">
       <div ref="host" class="app__canvas"></div>
       <div class="app__hud">
-        <button type="button" class="app__reset" @click="resetView">reset view</button>
+        <div class="app__row">
+          <button type="button" class="app__btn" :disabled="!hud.canUndo" @click="history.undo()">undo</button>
+          <button type="button" class="app__btn" :disabled="!hud.canRedo" @click="history.redo()">redo</button>
+        </div>
+        <div class="app__row">
+          <button type="button" class="app__btn" @click="exportScene">export</button>
+          <button type="button" class="app__btn" @click="importScene">import</button>
+        </div>
+        <button type="button" class="app__btn" @click="resetView">reset view</button>
         <div>zoom: {{ hud.zoom.toFixed(2) }}×</div>
         <div>selected: {{ hud.selected }}{{ hud.kind ? ` · ${hud.kind}` : '' }}</div>
+        <div v-if="hud.savedBytes">saved: {{ hud.savedBytes }} B</div>
       </div>
     </main>
     <footer class="app__footer">
-      Phase 7 — selection &amp; controls: click/shift/marquee select, move, and resize/rotate
-      handles. Serialization &amp; undo arrive in later phases.
+      Phase 8 — versioned JSON serialization (export/import) and a command/undo layer
+      (move/resize/rotate are undoable). The Vue adapter arrives next.
     </footer>
   </div>
 </template>

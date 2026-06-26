@@ -58,6 +58,11 @@ export class Image extends Shape {
     return Bounds.fromRect(0, 0, this._width, this._height)
   }
 
+  protected override serializedExtras(): Record<string, unknown> {
+    // The bitmap is an asset; serialize size only (re-attach `image` on load).
+    return { width: this._width, height: this._height }
+  }
+
   drawOps(): DrawOp[] {
     if (this._image === null) return []
     return [

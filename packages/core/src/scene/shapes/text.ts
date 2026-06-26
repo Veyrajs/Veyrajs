@@ -95,6 +95,17 @@ export class Text extends Shape {
     return Bounds.fromRect(0, 0, width, this._fontSize * LINE_HEIGHT_FACTOR)
   }
 
+  protected override serializedExtras(): Record<string, unknown> {
+    return {
+      ...super.serializedExtras(),
+      text: this._text,
+      fontSize: this._fontSize,
+      fontFamily: this._fontFamily,
+      textAlign: this._textAlign,
+      textBaseline: this._textBaseline,
+    }
+  }
+
   drawOps(): DrawOp[] {
     return [
       {

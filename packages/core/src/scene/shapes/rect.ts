@@ -43,6 +43,10 @@ export class Rect extends Shape {
     return Bounds.fromRect(0, 0, this._width, this._height)
   }
 
+  protected override serializedExtras(): Record<string, unknown> {
+    return { ...super.serializedExtras(), width: this._width, height: this._height }
+  }
+
   drawOps(): DrawOp[] {
     return [
       {

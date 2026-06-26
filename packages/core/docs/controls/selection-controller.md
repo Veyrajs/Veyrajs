@@ -11,7 +11,7 @@ as a screen-space [`Overlay`](../scene/stage.md).
 ## Exports
 
 - `interface SelectionControllerOptions` — `selection?`, `handleSize?`, `rotateEnabled?`,
-  `boundBox?`, `color?`.
+  `boundBox?`, `color?`, `history?`.
 - `class SelectionController implements Overlay`:
   - `selection` — the managed `SelectionManager`,
   - `drawOps()` — the overlay (box + handles + marquee),
@@ -47,8 +47,8 @@ multi-selection shows the combined world-AABB box (move only).
   and are hit-tested manually in screen coordinates. This is why they stay 9px at any zoom.
 - **Left button only.** It ignores non-primary buttons, leaving e.g. middle-drag free for a
   pan tool.
-- **Direct mutation today.** Move/resize/rotate set node properties directly; Phase 8 routes
-  them through undoable commands.
+- **Undo via history.** Pass a `history`; move/resize/rotate mutate live and the net change
+  is recorded as a `SetPropsCommand` (a `CompositeCommand` for multi-move) on release.
 - **Cursor feedback.** Hovering a handle sets the host element's CSS cursor; `destroy()`
   resets it.
 

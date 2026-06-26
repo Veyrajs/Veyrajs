@@ -127,6 +127,10 @@ export abstract class Container extends Node {
     return bounds
   }
 
+  protected override serializedExtras(): Record<string, unknown> {
+    return { children: this._children.map((child) => child.toObject()) }
+  }
+
   private swap(i: number, j: number): this {
     const a = this._children[i]
     const b = this._children[j]

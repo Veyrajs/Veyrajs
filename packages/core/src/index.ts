@@ -47,6 +47,27 @@ export type {
   RotateResult,
 } from './controls/transform-math'
 
+// Serialization
+export { SceneSerializer } from './serialization/scene-serializer'
+export type { SceneSerializerOptions } from './serialization/scene-serializer'
+export { ClassRegistry, createDefaultRegistry } from './serialization/class-registry'
+export type { NodeFactory } from './serialization/class-registry'
+export { MigrationRunner } from './serialization/migration-runner'
+export type { Migration } from './serialization/migration-runner'
+export { CURRENT_SCHEMA_VERSION } from './serialization/types'
+export type { SceneDocument, SerializedNode } from './serialization/types'
+
+// Commands & history
+export { History } from './commands/history'
+export type { HistoryListener } from './commands/history'
+export {
+  SetPropsCommand,
+  AddNodeCommand,
+  RemoveNodeCommand,
+  CompositeCommand,
+} from './commands/command'
+export type { Command, NodeProps } from './commands/command'
+
 // Concrete shapes
 export { Rect, Circle, Ellipse, Line, Polygon, Image, Text } from './scene/shapes'
 export type {

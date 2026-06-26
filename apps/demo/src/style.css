@@ -83,8 +83,13 @@ body {
   color: #94a3b8;
 }
 
-.app__reset {
-  margin-bottom: 2px;
+.app__row {
+  display: flex;
+  gap: 4px;
+}
+
+.app__btn {
+  flex: 1;
   padding: 4px 8px;
   border-radius: 4px;
   border: 1px solid #334155;
@@ -94,8 +99,13 @@ body {
   cursor: pointer;
 }
 
-.app__reset:hover {
+.app__btn:hover:not(:disabled) {
   background: #334155;
+}
+
+.app__btn:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
 
 .app__log-title {
