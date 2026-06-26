@@ -7,7 +7,15 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "ignore": ["**/dist/**", "**/node_modules/**", "**/coverage/**", "**/.changeset/**", "**/*.vue"]
+    "ignore": [
+      "**/dist/**",
+      "**/.svelte-kit/**",
+      "**/node_modules/**",
+      "**/coverage/**",
+      "**/.changeset/**",
+      "**/*.vue",
+      "**/*.svelte"
+    ]
   },
   "organizeImports": {
     "enabled": true

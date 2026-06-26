@@ -6,6 +6,7 @@ coverage/
 .turbo/
 *.tsbuildinfo
 .vite/
+.svelte-kit/
 .playwright-mcp/
 .idea/
 .vscode/*
