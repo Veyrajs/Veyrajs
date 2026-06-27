@@ -56,7 +56,7 @@ baking any annotation logic into the core.
 | [`@veyrajs/annotations`](./packages/annotations) | placeholder | tsup | **Future only.** Annotation node types + controls. Intentionally empty — the boundary proof. |
 | `@veyrajs/demo` (`apps/`) | ✅ | Vite | Imperative demo: shapes, zoom/pan, selection, export/import, undo/redo. Private. |
 | `@veyrajs/benchmarks` (`apps/`) | ✅ | Vite | tinybench micro-benchmarks + a manual canvas FPS harness. Private. |
-| `@veyrajs/docs` (`apps/`) | placeholder | — | Docs site (VitePress), deferred. |
+| `@veyrajs/docs` (`apps/`) | ✅ | Astro | Docs & demo site (Astro + Starlight) with live interactive demos. Private. |
 
 Each package keeps a per-file English doc set under its own `docs/` folder (mirroring `src/`),
 so every source file has a companion explainer.
@@ -200,7 +200,7 @@ veyrajs/
 └─ apps/
    ├─ demo/         @veyrajs/demo         # Vite + Vue imperative demo
    ├─ benchmarks/   @veyrajs/benchmarks   # tinybench + FPS harness
-   └─ docs/         @veyrajs/docs         # docs site (deferred)
+   └─ docs/         @veyrajs/docs         # Astro + Starlight docs & demo site
 ```
 
 Adapters and apps resolve `@veyrajs/core` straight from source (Vite alias + tsconfig `paths`),

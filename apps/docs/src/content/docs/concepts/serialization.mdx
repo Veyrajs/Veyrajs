@@ -1,0 +1,104 @@
+---
+title: Serialization & Versioning
+description: Round-trip scenes to versioned JSON, with a class registry and migrations.
+sidebar:
+  order: 10
+---
+
+import SerializationDemo from '../../../components/demos/SerializationDemo.astro';
+
+Scenes round-trip to and from **versioned JSON**. A `ClassRegistry` maps type strings back to
+constructors, and a `MigrationRunner` upgrades older documents — so a scene saved today survives
+future schema changes. Add shapes below, **Save**, **Clear**, then **Load** to restore:
+
+<SerializationDemo />
+
+## Save & load
+
+```ts
+import { SceneSerializer } from '@veyrajs/core'
+
+const serializer = new SceneSerializer()
+
+// Save:
+const json = serializer.stringify(stage)          // → JSON string
+localStorage.setItem('scene', json)
+// (serializer.toDocument(stage) returns the SceneDocument object instead of a string)
+
+// Load (replaces the stage's content):
+serializer.parse(stage, localStorage.getItem('scene') ?? '{"version":1,"nodes":[]}')
+// (serializer.load(stage, document) takes a SceneDocument object instead)
+```
+
+`toDocument`/`stringify` serialize the stage's **layers** (its children) via each node's
+`toObject()`. The stage's own size and camera are *viewport* state and are **not** serialized — load
+a scene into any-sized stage at any zoom.
+
+## The document shape
+
+```jsonc
+{
+  "version": 1,                 // CURRENT_SCHEMA_VERSION
+  "nodes": [                    // top-level nodes (Layers)
+    {
+      "type": "Layer",
+      "id": "n3",
+      "children": [
+        { "type": "Rect", "id": "n4", "x": 40, "y": 40, "width": 150, "height": 90, "fill": "#38bdf8" },
+        { "type": "Circle", "id": "n5", "x": 300, "y": 100, "radius": 50, "fill": "#f472b6" }
+      ]
+    }
+  ]
+}
+```
+
+Each `SerializedNode` carries its `type`, `id`, type-specific props, and `children`. Round-trips are
+**exact** for built-in shapes (ids, transforms, style, geometry).
+
+## Custom node types — the ClassRegistry
+
+Deserialization looks up a factory by `type`. Register custom types (e.g. annotation primitives) on a
+registry and pass it to the serializer — no core changes needed:
+
+```ts
+import { createDefaultRegistry, SceneSerializer } from '@veyrajs/core'
+
+const registry = createDefaultRegistry().register('BBox', (d) => new BBox(d as never))
+const serializer = new SceneSerializer({ registry })
+```
+
+Because `toObject` mirrors the constructor, each factory is usually just `(data) => new Ctor(data)`.
+**Unknown types throw** (a missing plugin is loud, not silently dropped).
+
+## Schema migrations
+
+When your saved format changes, register one-step migrations; the runner chains them until the
+document reaches `CURRENT_SCHEMA_VERSION`:
+
+```ts
+import { MigrationRunner, SceneSerializer } from '@veyrajs/core'
+
+const migrations = new MigrationRunner()
+  .register({ from: 0, migrate: (d) => ({ ...d, version: 1, nodes: renameFills(d.nodes) }) })
+  // .register({ from: 1, migrate: … })  // add 1→2 later, etc.
+
+new SceneSerializer({ migrations }).parse(stage, oldJson)
+```
+
+Write **small, pure, one-step** migrations (`0→1`, `1→2`, …) — not a single `0→N`. A missing step
+throws rather than guessing.
+
+## Conventions & gotchas
+
+- **Load replaces, not merges.** `load`/`parse` clear the stage first; the old node instances are
+  gone. **Clear your selection and [history](/Veyrajs/concepts/commands/)** around a load.
+- **Images need re-attaching.** Only an image's *size* round-trips (assets are by-reference) —
+  reassign its `image` source after load.
+- **Stage state isn't saved.** Size, pixel ratio, and camera zoom/pan are viewport concerns; persist
+  them separately if you need them.
+
+## Related
+
+- [Commands & Undo/Redo](/Veyrajs/concepts/commands/) — clear history after a load.
+- [Recipe: Save & load a scene](/Veyrajs/recipes/save-load/).
+- [Advanced → Migrations & Schema Versioning](/Veyrajs/advanced/migrations/).

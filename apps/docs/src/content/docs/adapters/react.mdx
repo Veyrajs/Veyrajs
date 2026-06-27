@@ -1,0 +1,158 @@
+---
+title: React
+description: Declarative Veyrajs components and hooks for React 18+.
+sidebar:
+  order: 2
+---
+
+import ReactScene from '../../../components/islands/ReactScene.tsx';
+
+`@veyrajs/react` wraps the imperative engine in React components and hooks. Install it alongside the
+core (see [Installation](/Veyrajs/guides/installation/)); `react >= 18` is a peer dependency.
+
+<ReactScene client:only="react" />
+
+The scene above is a live React island — `@veyrajs/react` components actually running. Click the
+rectangle (it moves via React state) and drag the selection handles.
+
+```sh
+npm install @veyrajs/core @veyrajs/react
+```
+
+## Quick start
+
+```tsx
+import { ACStage, ACLayer, ACRect, ACCircle } from '@veyrajs/react'
+
+export function Scene() {
+  return (
+    <ACStage width={800} height={480} background="#0b1220" selectable>
+      <ACLayer>
+        <ACRect x={40} y={40} width={150} height={90} fill="#38bdf8" onClick={() => console.log('hi')} />
+        <ACCircle x={300} y={100} radius={50} fill="#f472b6" />
+      </ACLayer>
+    </ACStage>
+  )
+}
+```
+
+`selectable` wires a `SelectionController` + `History` (click-select, transform handles, undo/redo).
+
+## Components
+
+The full set: `ACStage` (root), `ACLayer` / `ACGroup` (containers), and `ACRect`, `ACCircle`,
+`ACEllipse`, `ACLine`, `ACPolygon`, `ACText`, `ACImage` (shapes). Each accepts the node's properties
+as props and re-emits its events — see the [Adapters Overview](/Veyrajs/adapters/overview/#the-components)
+for the full prop table.
+
+### `<ACStage>` props
+
+| Prop | Type | Notes |
+| --- | --- | --- |
+| `width`, `height` | `number` | Canvas size in CSS pixels. |
+| `background` | `string \| null` | Clear colour, or `null` for transparent. |
+| `pixelRatio` | `number` | Override `devicePixelRatio`. |
+| `selectable` | `boolean` | Wire selection + transform handles + undo/redo. |
+| `onReady` | `(stage) => void` | Called once the stage exists. |
+| `style` | `CSSProperties` | Inline style for the host `<div>`. |
+
+## Props & events
+
+Props are **controlled** — they drive the node. Events come back as `onX` callbacks (one per engine
+event):
+
+```tsx
+<ACRect
+  x={x}
+  y={40}
+  width={150}
+  height={90}
+  fill="#38bdf8"
+  onClick={(e) => console.log(e.worldPoint)}
+  onDragmove={(e) => setX(e.target.x)}   // keep React state in sync with a drag
+  onPointerenter={() => setHover(true)}
+/>
+```
+
+The eleven callbacks: `onPointerdown`, `onPointermove`, `onPointerup`, `onPointerenter`,
+`onPointerleave`, `onClick`, `onDblclick`, `onWheel`, `onDragstart`, `onDragmove`, `onDragend`.
+Each receives a [`SceneEvent`](/Veyrajs/concepts/events/).
+
+:::tip[No update loops]
+Because the engine's setters are **guarded**, the prop → node → event → `setState` → prop round-trip
+ends in a no-op when the value is unchanged. You don't need any echo-suppression — just set props
+from events when you let users edit.
+:::
+
+## Hooks
+
+Inside `<ACStage>`, read engine services without prop-drilling:
+
+```tsx
+import { useStage, useCamera, useSelection, useHistory } from '@veyrajs/react'
+
+function Toolbar() {
+  const history = useHistory()      // History | null
+  const camera = useCamera()        // Camera | null
+  return (
+    <div>
+      <button onClick={() => history?.undo()}>Undo</button>
+      <button onClick={() => camera?.reset()}>Reset view</button>
+    </div>
+  )
+}
+```
+
+- `useStage()` → `Stage | null`
+- `useCamera()` → `Camera | null`
+- `useSelection()` → `SelectionManager | null` (non-null only under `selectable`)
+- `useHistory()` → `History | null` (non-null only under `selectable`)
+
+:::caution[They return `null` on the first render]
+The stage is created in an effect, so a component mounting in the same commit as `<ACStage>` sees
+`null` first, then the real value once the context updates. Always guard: `if (!stage) return`.
+:::
+
+## The escape hatch — `ref`
+
+Every component forwards a `ref` to its underlying engine node; `<ACStage>` forwards
+`{ stage, selection, history }`:
+
+```tsx
+import { useRef, useEffect } from 'react'
+import { ACStage, ACRect, type ACStageHandle } from '@veyrajs/react'
+import type { Rect } from '@veyrajs/core'
+
+function Scene() {
+  const rectRef = useRef<Rect>(null)
+  const stageRef = useRef<ACStageHandle>(null)
+
+  useEffect(() => {
+    rectRef.current?.on('click', () => console.log('imperative listener'))
+  }, [])
+
+  return (
+    <ACStage ref={stageRef} width={800} height={480}>
+      <ACLayer><ACRect ref={rectRef} x={40} y={40} width={150} height={90} fill="#38bdf8" /></ACLayer>
+    </ACStage>
+  )
+}
+```
+
+The ref handle resolves asynchronously (after the first effect flush), matching React's model.
+
+## Conventions & gotchas
+
+- **Hooks aren't reactive to engine-internal changes.** They return live engine objects; mutating a
+  node does not re-render React. Subscribe to engine events (or lift state) if the UI must track
+  interactive changes.
+- **`selectable` is all-or-nothing** in the MVP — it wires the default controller. For finer control,
+  use the exposed `stage`/`selection`/`history` imperatively.
+- **`ACImage`** takes a loaded image source; the adapter doesn't load it for you. See
+  [Shapes → Image](/Veyrajs/concepts/shapes/#image).
+
+## Related
+
+- [Adapters Overview](/Veyrajs/adapters/overview/) — the shared model and full prop table.
+- [Events](/Veyrajs/concepts/events/) — the `SceneEvent` every callback receives.
+- [Commands & Undo/Redo](/Veyrajs/concepts/commands/) — what `useHistory()` drives.

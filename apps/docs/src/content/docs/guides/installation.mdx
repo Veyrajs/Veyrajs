@@ -1,0 +1,123 @@
+---
+title: Installation
+description: Add the Veyrajs engine — and optionally a framework adapter — to your project.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Veyrajs ships as scoped packages under `@veyrajs/*`. The engine (`@veyrajs/core`) stands alone;
+each framework adapter is a thin, optional package on top of it.
+
+:::note
+During the pre-1.0 period these snippets reflect the **public API**. If a package is not yet on the
+npm registry, install it from the workspace (or wait for the tagged release); the import paths and
+usage are identical either way.
+:::
+
+## The engine only
+
+`@veyrajs/core` has **zero runtime dependencies** — use it imperatively in any project (vanilla TS,
+a Web Component, a Worker-driven canvas, or a framework you wire up yourself).
+
+<Tabs syncKey="pkg">
+<TabItem label="npm">
+
+```sh
+npm install @veyrajs/core
+```
+
+</TabItem>
+<TabItem label="pnpm">
+
+```sh
+pnpm add @veyrajs/core
+```
+
+</TabItem>
+<TabItem label="yarn">
+
+```sh
+yarn add @veyrajs/core
+```
+
+</TabItem>
+</Tabs>
+
+## With a framework adapter
+
+Install the adapter for your framework **alongside** the core. The framework itself is a
+**peer dependency** — you provide it; the adapter never bundles its own copy.
+
+| Adapter | Package | Peer dependency |
+| --- | --- | --- |
+| **React** | `@veyrajs/react` | `react >= 18`, `react-dom >= 18` |
+| **Vue 3** | `@veyrajs/vue` | `vue ^3.4` |
+| **Svelte 5** | `@veyrajs/svelte` | `svelte ^5` |
+| **Angular 18** | `@veyrajs/angular` | `@angular/core ^18`, `@angular/common ^18` |
+
+For example, the React adapter:
+
+<Tabs syncKey="pkg">
+<TabItem label="npm">
+
+```sh
+npm install @veyrajs/core @veyrajs/react
+```
+
+</TabItem>
+<TabItem label="pnpm">
+
+```sh
+pnpm add @veyrajs/core @veyrajs/react
+```
+
+</TabItem>
+<TabItem label="yarn">
+
+```sh
+yarn add @veyrajs/core @veyrajs/react
+```
+
+</TabItem>
+</Tabs>
+
+You only ever install **one** adapter — they are parallel siblings, never combined.
+
+## Importing
+
+Everything is a named export; there is no default export and no side-effecting global.
+
+```ts
+// Engine
+import { Stage, Layer, Rect, Circle, History, SelectionController } from '@veyrajs/core'
+
+// React adapter
+import { ACStage, ACLayer, ACRect } from '@veyrajs/react'
+```
+
+The packages are **ESM-only** and ship their own `.d.ts` types — no `@types/*` package required.
+
+## TypeScript
+
+No configuration is needed beyond a modern `moduleResolution`. Veyrajs is authored in strict
+TypeScript and every public symbol is fully typed (config objects, events, commands, serialized
+nodes). Recommended `tsconfig.json` essentials:
+
+```jsonc
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler", // or "NodeNext"
+    "strict": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"]
+  }
+}
+```
+
+## Requirements
+
+- **Node.js ≥ 20** for tooling/SSR; the engine itself runs in any modern browser.
+- A browser with **Canvas 2D** and **Pointer Events** (every evergreen browser).
+- **pnpm 10** only if you work inside the Veyrajs monorepo (via Corepack: `corepack enable`).
+
+Next: [build your first scene →](/Veyrajs/guides/getting-started/)

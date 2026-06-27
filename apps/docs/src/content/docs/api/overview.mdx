@@ -1,0 +1,44 @@
+---
+title: API Reference
+description: The complete public surface of @veyrajs/core, grouped by module.
+sidebar:
+  order: 1
+  label: Overview
+---
+
+Everything below is a **named export** of `@veyrajs/core` (ESM-only, fully typed). This page is the
+map; follow a link for each module's signatures. For the *how and why*, see
+[Core Concepts](/Veyrajs/concepts/scene-graph/).
+
+```ts
+import { Stage, Layer, Rect, History, SelectionController } from '@veyrajs/core'
+```
+
+## Modules
+
+| Module | Exports | Reference |
+| --- | --- | --- |
+| **Math** | `Vec2`, `Matrix`, `Bounds`, `MatrixComponents`, `pointInPolygon`, `distanceToSegment`, `distanceToPolyline` | [Math →](/Veyrajs/api/math/) |
+| **Scene graph** | `Node`, `Container`, `Group`, `Layer`, `Stage`, `NodeConfig`, `StageOptions`, `Overlay` | [Scene →](/Veyrajs/api/scene/) |
+| **Camera** | `Camera`, `CameraOptions` | [Camera →](/Veyrajs/api/camera/) |
+| **Shapes** | `Shape`, `Rect`, `Circle`, `Ellipse`, `Line`, `Polygon`, `Image`, `Text` (+ each `*Config`) | [Shapes →](/Veyrajs/api/shapes/) |
+| **Rendering** | `Renderer`, `Renderable`, `FrameInfo`, `Canvas2DRenderer`, `DrawOp` (+ each `*Op`), `FillStrokeStyle` | [Rendering →](/Veyrajs/api/rendering/) |
+| **Events** | `SceneEvent`, `SceneEventType`, `SceneEventPhase`, `SceneEventListener`, `EventManager`, `dispatchEvent` | [Events →](/Veyrajs/api/events/) |
+| **Hit testing** | `GeometricHitTester`, `HitTester`, `HitResult`, `HitType`, `HitTestOptions` | [Hit-Testing →](/Veyrajs/api/hit-testing/) |
+| **Selection & controls** | `SelectionManager`, `SelectionController`, `DEFAULT_CONTROLS`, `ControlDef`, `HandleKind`, `computeResize`, `computeRotation`, `pointerAngle` | [Selection & Controls →](/Veyrajs/api/selection-and-controls/) |
+| **Serialization** | `SceneSerializer`, `ClassRegistry`, `createDefaultRegistry`, `MigrationRunner`, `CURRENT_SCHEMA_VERSION`, `SceneDocument`, `SerializedNode` | [Serialization →](/Veyrajs/api/serialization/) |
+| **Commands & history** | `History`, `SetPropsCommand`, `AddNodeCommand`, `RemoveNodeCommand`, `CompositeCommand`, `Command`, `NodeProps` | [Commands →](/Veyrajs/api/commands/) |
+| **Utilities** | `FrameScheduler`, `nextId`, `VERSION` | [Utilities →](/Veyrajs/api/utilities/) |
+
+## Conventions across the API
+
+- **Coordinates:** top-left origin, y-down, rotation in **degrees clockwise**.
+- **Config objects:** constructors take a single typed config (`new Rect({ x, y, width, height })`).
+- **Guarded setters:** assigning an unchanged value is a no-op (the basis of adapter loop-safety).
+- **Immutability where it counts:** `Matrix` and `Vec2` operations return new instances.
+- **No default export, no globals** — every symbol is a named export.
+
+:::tip[Types are included]
+Every public symbol — config objects, events, commands, serialized nodes — ships its own `.d.ts`.
+No `@types/*` package is needed.
+:::

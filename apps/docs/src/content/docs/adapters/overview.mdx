@@ -1,0 +1,107 @@
+---
+title: Adapters Overview
+description: Declarative Veyrajs components for React, Vue, Svelte, and Angular.
+sidebar:
+  order: 1
+---
+
+import CoreDemo from '../../../components/CoreDemo.astro';
+
+Veyrajs ships four framework adapters. All are thin, parallel siblings over the **same** imperative
+engine — the core has **zero** framework code. Each runs the same six-step lifecycle (create → attach
+→ mirror props → re-emit events → expose node → clean up), differing only in the reactivity
+primitive.
+
+| Adapter | Package | Reactivity | Cascade mechanism | Build |
+| --- | --- | --- | --- | --- |
+| [React](/Veyrajs/adapters/react/) | `@veyrajs/react` | `useEffect` / `useRef` | `NodeContext` + provider | tsup |
+| [Vue 3](/Veyrajs/adapters/vue/) | `@veyrajs/vue` | `watch` / `watchEffect` | provide / inject | tsup |
+| [Svelte 5](/Veyrajs/adapters/svelte/) | `@veyrajs/svelte` | runes (`$effect`, `$bindable`) | context getter over `$state` | svelte-package |
+| [Angular 18](/Veyrajs/adapters/angular/) | `@veyrajs/angular` | lifecycle hooks | hierarchical DI (`@SkipSelf`) | ng-packagr |
+
+Below is the engine all four wrap — the same scene you build declaratively in any framework:
+
+<CoreDemo />
+
+## The components
+
+Every adapter exposes the **same** set of components (Angular uses `ac-*` selectors):
+
+| Component | Wraps | Kind | Shape-specific props |
+| --- | --- | --- | --- |
+| `ACStage` / `ac-stage` | `Stage` | root | `width`, `height`, `background`, `pixelRatio`, `selectable` |
+| `ACLayer` / `ac-layer` | `Layer` | container | — |
+| `ACGroup` / `ac-group` | `Group` | container | — |
+| `ACRect` / `ac-rect` | `Rect` | shape | `width`, `height` |
+| `ACCircle` / `ac-circle` | `Circle` | shape | `radius` |
+| `ACEllipse` / `ac-ellipse` | `Ellipse` | shape | `radiusX`, `radiusY` |
+| `ACLine` / `ac-line` | `Line` | shape | `points`, `closed` |
+| `ACPolygon` / `ac-polygon` | `Polygon` | shape | `points` |
+| `ACText` / `ac-text` | `Text` | shape | `text`, `fontSize`, `fontFamily`, `textAlign`, `textBaseline` |
+| `ACImage` / `ac-image` | `Image` | shape | `image`, `width`, `height` |
+
+Every component also accepts the **common node props** (`x`, `y`, `scaleX`, `scaleY`, `rotation`,
+`skewX`, `skewY`, `offsetX`, `offsetY`, `opacity`, `visible`, `listening`, `id`, `name`); shapes add
+the **paint props** (`fill`, `stroke`, `strokeWidth`, `lineDash`, `lineCap`, `lineJoin`). All eleven
+engine events are re-emitted, and every component hands back its underlying engine node.
+
+## The same scene, four ways
+
+```tsx
+// React
+<ACStage width={800} height={480} selectable>
+  <ACLayer><ACRect x={40} y={40} width={150} height={90} fill="#38bdf8" /></ACLayer>
+</ACStage>
+```
+
+```vue
+<!-- Vue -->
+<ACStage :width="800" :height="480" selectable>
+  <ACLayer><ACRect :x="40" :y="40" :width="150" :height="90" fill="#38bdf8" /></ACLayer>
+</ACStage>
+```
+
+```svelte
+<!-- Svelte 5 -->
+<ACStage width={800} height={480} selectable>
+  <ACLayer><ACRect x={40} y={40} width={150} height={90} fill="#38bdf8" /></ACLayer>
+</ACStage>
+```
+
+```html
+<!-- Angular -->
+<ac-stage [width]="800" [height]="480" selectable>
+  <ac-layer><ac-rect [x]="40" [y]="40" [width]="150" [height]="90" fill="#38bdf8" /></ac-layer>
+</ac-stage>
+```
+
+## Two principles every adapter shares
+
+- **Controlled by props.** Props drive the node; if you let the user move things, sync your state
+  from events (`onDragmove` / `@dragmove` / `ondragmove` / `(dragmove)`). The engine's **guarded
+  setters** make the prop → node → event → prop round-trip a no-op instead of a loop — so there's no
+  echo-suppression machinery, in any framework.
+- **Always an escape hatch.** Every component exposes its underlying engine `node`, and `ACStage`
+  exposes `stage` / `selection` / `history`. Drop to the imperative API whenever you need it — the
+  lesson learned from react-konva / vue-konva.
+
+## Why a cascade?
+
+`ACStage` can only create the engine `Stage` once its host element exists (on mount). In React, Vue,
+and Svelte, children initialize **before** their parent, so each adapter publishes the parent through
+a reactive context and attaches each node the moment its parent becomes available. **Angular is the
+exception**: its `ngOnInit` runs **top-down**, so the parent already exists — no reactivity needed,
+just hierarchical DI.
+
+## `selectable` — selection + undo in one prop
+
+Add `selectable` to `ACStage` and the adapter wires a `SelectionController` + `History` for you:
+click-to-select, marquee, transform handles, and undo/redo. Reach the `selection`/`history` through
+the adapter's hooks/composables/context or the stage's exposed handles.
+
+## Pick your adapter
+
+- [React →](/Veyrajs/adapters/react/) · hooks, refs, `useEffect` lifecycle
+- [Vue →](/Veyrajs/adapters/vue/) · composables, `provide`/`inject`, template refs
+- [Svelte →](/Veyrajs/adapters/svelte/) · runes, `bind:node`, context getters
+- [Angular →](/Veyrajs/adapters/angular/) · standalone components, DI, `@Output()`s

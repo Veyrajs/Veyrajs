@@ -65,3 +65,53 @@
 .veyrajs-demo__stage canvas {
   display: block;
 }
+/* Framework-island demos render their canvas directly inside .veyrajs-demo. */
+.veyrajs-demo canvas {
+  display: block;
+}
+
+/* Numeric readout pinned to the right of a toolbar (zoom %, cursor coords, byte counts). */
+.veyrajs-demo__readout {
+  margin-left: auto;
+  font-size: 0.74rem;
+  color: var(--sl-color-gray-2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Scrollable monospace log panel below a stage (event propagation, etc.). */
+.veyrajs-demo__log {
+  max-height: 168px;
+  overflow: auto;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--sl-font-mono, ui-monospace, monospace);
+  font-size: 0.72rem;
+  line-height: 1.55;
+  color: var(--sl-color-gray-2);
+  background: var(--sl-color-black);
+  border-top: 1px solid var(--sl-color-gray-5);
+}
+.veyrajs-demo__log :is(b, strong) {
+  color: var(--sl-color-white);
+}
+.veyrajs-demo__log .is-capture { color: #fbbf24; }
+.veyrajs-demo__log .is-target { color: #34d399; }
+.veyrajs-demo__log .is-bubble { color: #38bdf8; }
+.veyrajs-demo__log .is-muted { color: var(--sl-color-gray-4); }
+
+/* Slider/control row (transforms demo). */
+.veyrajs-demo__controls {
+  gap: 0.6rem 1rem;
+}
+.veyrajs-demo__controls label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.74rem;
+  color: var(--sl-color-gray-2);
+}
+.veyrajs-demo__controls input[type='range'] {
+  width: 92px;
+  accent-color: var(--sl-color-accent);
+}

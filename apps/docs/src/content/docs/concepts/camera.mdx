@@ -1,0 +1,80 @@
+---
+title: Camera & Coordinate Spaces
+description: Zoom, pan, and converting between screen and world coordinates.
+sidebar:
+  order: 5
+---
+
+import CameraDemo from '../../../components/demos/CameraDemo.astro';
+
+The `Camera` is the viewport's *view* onto the world. It holds a uniform `zoom` and a pan offset, and
+produces the **world → screen** view matrix (and its inverse). Crucially, the camera is **not part of
+the world**: zoom/pan change only what you *see*. Node world matrices, selection bounds, hit-testing,
+and serialization all stay camera-independent.
+
+<CameraDemo />
+
+## Screen vs. world
+
+```text
+screen = zoom · world + (camera.x, camera.y)
+world  = (screen − (camera.x, camera.y)) / zoom
+```
+
+The `Stage` composes `view · world` only at **render time**, so the same scene can be viewed at any
+zoom/pan without ever touching node coordinates. Convert between the two spaces through the stage:
+
+```ts
+const world = stage.screenToWorld({ x: 200, y: 150 }) // e.g. a pointer position → world
+const screen = stage.worldToScreen({ x: 0, y: 0 })    // a world point → on-screen pixels
+```
+
+In event handlers you usually don't need to convert manually — every [`SceneEvent`](/Veyrajs/concepts/events/)
+already carries both `screenPoint` and `worldPoint`.
+
+## Zooming
+
+`zoomAt(anchor, factor)` is **cursor-anchored zoom**: it finds the world point under the screen
+`anchor`, applies the (clamped) new zoom, then pans so that world point maps back to the same anchor.
+The result — the point under the cursor stays put while the scene scales around it:
+
+```ts
+// Wheel-zoom about the cursor (the canonical pattern):
+stage.on('wheel', (e) => {
+  e.preventDefault()
+  stage.camera.zoomAt(e.screenPoint, e.deltaY < 0 ? 1.1 : 1 / 1.1)
+})
+
+stage.camera.setZoom(2)          // absolute zoom (about the origin)
+stage.camera.zoom                // read the current zoom
+```
+
+Zoom is **clamped** to `[minZoom, maxZoom]` (defaults `0.02`–`64`); configure via
+`new Stage({ camera: { minZoom, maxZoom } })`.
+
+## Panning
+
+```ts
+stage.camera.panBy(40, 0)   // shift the view 40 screen px to the right
+stage.camera.panTo(0, 0)    // set the absolute pan offset
+stage.camera.reset()        // back to zoom 1, pan (0, 0)
+```
+
+Drag-to-pan is just `panBy(deltaScreenX, deltaScreenY)` between pointer moves — exactly what the demo
+above does on an empty-canvas drag.
+
+## Conventions & gotchas
+
+- **Camera ≠ world.** World coordinates never move; only the view does. This is why a saved scene
+  reloads identically regardless of the viewer's zoom/pan.
+- **DPR is separate.** The camera works in CSS-pixel screen space; device-pixel-ratio scaling lives
+  in the [renderer](/Veyrajs/concepts/rendering/). They compose at draw time as `dpr · view · world`.
+- **Don't overwrite `camera.onChange`.** The `Stage` wires it to `requestRender()`; replacing it
+  breaks repaints. To react to camera changes, update your UI inside your own zoom/pan handlers.
+- **Rotation is reserved.** The view matrix supports it, but the MVP exposes zoom + pan only.
+
+## Related
+
+- [Scene Graph & Transforms](/Veyrajs/concepts/scene-graph/) — the four coordinate spaces.
+- [Events](/Veyrajs/concepts/events/) — `screenPoint`/`worldPoint` on every event.
+- [Recipe: Pan & zoom an infinite canvas](/Veyrajs/recipes/pan-and-zoom/).

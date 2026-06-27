@@ -1,0 +1,63 @@
+---
+// Click the inner square and watch the capture → target → bubble sequence in the log.
+---
+<div class="veyrajs-demo" data-demo="events">
+  <div class="veyrajs-demo__toolbar">
+    <button type="button" data-ev="clear">Clear log</button>
+    <span class="veyrajs-demo__hint">Click the blue square — capture flows down (▼), bubble flows up (▲)</span>
+  </div>
+  <div class="veyrajs-demo__stage" data-veyrajs="stage" style="height: 200px"></div>
+  <div class="veyrajs-demo__log" data-ev="log"></div>
+</div>
+
+<script>
+  import { Stage, Group, Rect, Text } from '@veyrajs/core'
+
+  function init(root: HTMLElement): void {
+    const host = root.querySelector<HTMLElement>('[data-veyrajs="stage"]')
+    const logEl = root.querySelector<HTMLElement>('[data-ev="log"]')
+    if (!host || !logEl) return
+    const stage = new Stage({ container: host, width: host.clientWidth || 760, height: host.clientHeight || 200, background: '#0b1220' })
+    const layer = stage.createLayer({ name: 'layer' })
+
+    const group = new Group({ name: 'group', x: 250, y: 20 })
+    const outer = new Rect({ name: 'outer', x: 0, y: 0, width: 260, height: 150, fill: '#1e293b', stroke: '#334155', strokeWidth: 1 })
+    const inner = new Rect({ name: 'inner', x: 80, y: 45, width: 100, height: 60, fill: '#38bdf8' })
+    group.add(outer, inner)
+    layer.add(group, new Text({ x: 16, y: 14, text: 'layer ▸ group ▸ inner', fontSize: 13, fill: '#64748b' }))
+
+    const cls: Record<string, string> = { capture: 'is-capture', target: 'is-target', bubble: 'is-bubble' }
+    const arrow: Record<string, string> = { capture: '▼', target: '◉', bubble: '▲' }
+    const log = (name: string, phase: string): void => {
+      const line = document.createElement('div')
+      line.innerHTML = `<span class="${cls[phase] ?? ''}">${arrow[phase] ?? '·'} <b>${name}</b> — ${phase}</span>`
+      logEl.append(line)
+      logEl.scrollTop = logEl.scrollHeight
+    }
+    const divider = (): void => {
+      const line = document.createElement('div')
+      line.innerHTML = `<span class="is-muted">— click —</span>`
+      logEl.append(line)
+    }
+
+    // One handler, reused: currentTarget changes as the event propagates, eventPhase reports the phase.
+    const onClick = (e: { currentTarget: { name?: string } | null; eventPhase: string }): void =>
+      log(e.currentTarget?.name ?? '?', e.eventPhase)
+
+    stage.on('click', divider, { capture: true }) // fires first, at the root, each click
+    layer.on('click', onClick, { capture: true })
+    layer.on('click', onClick)
+    group.on('click', onClick, { capture: true })
+    group.on('click', onClick)
+    outer.on('click', onClick) // target when you click the dark backdrop
+    inner.on('click', onClick) // target when you click the blue square
+
+    // Hover highlight — pointerenter/leave do not bubble.
+    inner.on('pointerenter', () => { inner.fill = '#7dd3fc' })
+    inner.on('pointerleave', () => { inner.fill = '#38bdf8' })
+
+    root.querySelector('[data-ev="clear"]')?.addEventListener('click', () => { logEl.textContent = '' })
+  }
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-demo="events"]')) init(root)
+</script>

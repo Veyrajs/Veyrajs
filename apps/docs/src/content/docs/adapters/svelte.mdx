@@ -1,0 +1,128 @@
+---
+title: Svelte
+description: Declarative Veyrajs components for Svelte 5 (runes).
+sidebar:
+  order: 4
+---
+
+import SvelteScene from '../../../components/islands/SvelteScene.svelte';
+
+`@veyrajs/svelte` wraps the imperative engine in Svelte 5 components built on runes. Install it
+alongside the core (see [Installation](/Veyrajs/guides/installation/)); `svelte ^5` is a peer
+dependency.
+
+<SvelteScene client:only="svelte" />
+
+The scene above is a live Svelte island — `@veyrajs/svelte` components actually running. Click the
+rectangle (it moves via `$state`) and drag the selection handles.
+
+```sh
+npm install @veyrajs/core @veyrajs/svelte
+```
+
+## Quick start
+
+```svelte
+<script lang="ts">
+  import { ACStage, ACLayer, ACRect, ACCircle } from '@veyrajs/svelte'
+  let x = $state(40)
+</script>
+
+<ACStage width={800} height={480} background="#0b1220" selectable>
+  <ACLayer>
+    <ACRect {x} y={40} width={150} height={90} fill="#38bdf8" onclick={() => (x += 20)} />
+    <ACCircle x={300} y={100} radius={50} fill="#f472b6" />
+  </ACLayer>
+</ACStage>
+```
+
+`selectable` wires a `SelectionController` + `History` (click-select, transform handles, undo/redo).
+
+## Components
+
+`ACStage` (root), `ACLayer` / `ACGroup` (containers), and `ACRect`, `ACCircle`, `ACEllipse`,
+`ACLine`, `ACPolygon`, `ACText`, `ACImage` (shapes). Pass node properties as attributes and listen
+with lowercase `on*` callbacks — see the
+[Adapters Overview](/Veyrajs/adapters/overview/#the-components) for the full prop table.
+
+## Props & events
+
+Props are **controlled** — they drive the node. Sync your `$state` from events when users edit:
+
+```svelte
+<ACRect
+  {x}
+  y={40}
+  width={150}
+  height={90}
+  fill="#38bdf8"
+  onclick={(e) => console.log(e.worldPoint)}
+  ondragmove={(e) => (x = e.target.x)}
+  onpointerenter={() => (hover = true)}
+/>
+```
+
+The callbacks: `onpointerdown`, `onpointermove`, `onpointerup`, `onpointerenter`, `onpointerleave`,
+`onclick`, `ondblclick`, `onwheel`, `ondragstart`, `ondragmove`, `ondragend` — each handed a
+[`SceneEvent`](/Veyrajs/concepts/events/).
+
+:::tip[No update loops]
+The engine's **guarded setters** make the prop → node → event → `$state` → prop round-trip a no-op
+when unchanged, so no echo-suppression is needed.
+:::
+
+## The escape hatch — `bind:node`
+
+Every component exposes its engine node via a bindable prop; `<ACStage>` exposes `bind:stage`,
+`bind:selection`, `bind:history`:
+
+```svelte
+<script lang="ts">
+  import { ACStage, ACLayer, ACRect } from '@veyrajs/svelte'
+  import type { Rect } from '@veyrajs/core'
+  import type { Stage, History } from '@veyrajs/core'
+
+  let rect = $state<Rect>()
+  let stage = $state<Stage>()
+  let history = $state<History>()
+
+  $effect(() => { rect?.on('click', () => console.log('imperative')) })
+</script>
+
+<ACStage bind:stage bind:history width={800} height={480} selectable>
+  <ACLayer><ACRect bind:node={rect} x={40} y={40} width={150} height={90} fill="#38bdf8" /></ACLayer>
+</ACStage>
+
+<button onclick={() => history?.undo()}>Undo</button>
+```
+
+## Reading engine state — the context
+
+Inside `<ACStage>`, read the engine handles from the context (init-time only):
+
+```svelte
+<script lang="ts">
+  import { getNodeContext } from '@veyrajs/svelte'
+  const ctx = getNodeContext() // { stage, parent, selection, history } — readonly, nullable
+</script>
+
+<button onclick={() => ctx.history?.undo()}>Undo</button>
+```
+
+:::caution[Init-only & reactive reads]
+`getNodeContext()` follows Svelte's rule — call it at the **top of `<script>`**, never in a handler
+or `onMount`. The fields are getters over reactive state, so to *react* to them read inside
+`$derived`/`$effect`; a bare read at init returns the current (possibly `null`) value.
+:::
+
+## Conventions & gotchas
+
+- **`selectable`** enables `bind:selection` / `bind:history` (and the context's `selection`/`history`);
+  without it they stay `null`.
+- **`ACImage`** takes a loaded `image` source; the adapter doesn't load it for you.
+
+## Related
+
+- [Adapters Overview](/Veyrajs/adapters/overview/) — the shared model and full prop table.
+- [Events](/Veyrajs/concepts/events/) — the `SceneEvent` every callback receives.
+- [Selection & Transform](/Veyrajs/concepts/selection/) — what `selectable` enables.

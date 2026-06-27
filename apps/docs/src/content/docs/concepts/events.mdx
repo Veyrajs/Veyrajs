@@ -1,0 +1,113 @@
+---
+title: Events
+description: A DOM-style federated event system — capture, target, bubble, and derived gestures.
+sidebar:
+  order: 6
+---
+
+import EventsDemo from '../../../components/demos/EventsDemo.astro';
+
+Veyrajs delivers **federated events**: a pointer interaction is hit-tested to a target node, then
+dispatched through the scene graph DOM-style — **capture → target → bubble**. Bind handlers with
+`node.on(type, handler, options?)`.
+
+<EventsDemo />
+
+## Propagation
+
+For a target deep in the tree, the event path is ordered target-first
+(`[target, parent, …, Stage]`) and walked in three phases:
+
+1. **capture** — root → target's parent, calling each node's *capture* listeners.
+2. **target** — the target's capture listeners, then its bubble listeners.
+3. **bubble** — target's parent → root, calling *bubble* listeners (only if the event bubbles).
+
+```ts
+// capture listener (fires top-down, before the target):
+group.on('click', onClick, { capture: true })
+// bubble listener (the default — fires bottom-up, after the target):
+group.on('click', onClick)
+
+shape.on('click', (e) => {
+  if (e.altKey) e.stopPropagation()          // halt after this node
+  // e.stopImmediatePropagation() also skips this node's remaining listeners
+})
+```
+
+`stopPropagation()` halts the walk after the current node; `stopImmediatePropagation()` additionally
+skips the current node's remaining listeners.
+
+## Event types
+
+Eleven event types, split into native (normalized from the browser) and derived (synthesized by the
+engine's small state machines):
+
+| Native | Derived |
+| --- | --- |
+| `pointerdown`, `pointermove`, `pointerup` | `click`, `dblclick` |
+| `wheel` | `dragstart`, `dragmove`, `dragend` |
+| | `pointerenter`, `pointerleave` |
+
+How the derived ones work:
+
+- **click** — a `pointerup` whose target equals the `pointerdown` target (and no drag occurred).
+- **dblclick** — two clicks on the same target within **300 ms**.
+- **drag** — once the pointer moves more than **3 px** from the press point: `dragstart`, then
+  `dragmove`, then `dragend` on release. Drag events always target the **press** node (so a fast drag
+  that outruns the pointer still moves the right node).
+- **hover** — when the hit node changes: `pointerleave` on the old, `pointerenter` on the new. These
+  **do not bubble** (`bubbles: false`), but they still traverse the capture phase — so an ancestor's
+  *capture* listener can observe a descendant's hover.
+
+## The SceneEvent object
+
+Every listener receives a `SceneEvent` carrying the pointer position in **both** spaces plus the
+originating native event:
+
+| Field | What it is |
+| --- | --- |
+| `type` | the event type (`'click'`, `'wheel'`, …) |
+| `target` | the node the interaction resolved to (constant) |
+| `currentTarget` | the node currently handling the event (changes as it propagates) |
+| `eventPhase` | `'capture' \| 'target' \| 'bubble'` |
+| `screenPoint` / `worldPoint` | pointer in screen and world coordinates |
+| `deltaX` / `deltaY` | wheel deltas (0 otherwise) |
+| `pointerId`, `button`, `buttons` | pointer identity / buttons |
+| `altKey`, `ctrlKey`, `shiftKey`, `metaKey` | modifier snapshot |
+| `nativeEvent` | the underlying DOM event (or `null` for synthetic) |
+
+Plus methods: `stopPropagation()`, `stopImmediatePropagation()`, `preventDefault()`, and
+`getLocalPoint(node?)` — which maps `worldPoint` into a node's local space (defaults to
+`currentTarget`), computed lazily so it costs nothing unless you ask.
+
+```ts
+shape.on('pointerdown', (e) => {
+  console.log(e.type, e.target.name, e.eventPhase)
+  const local = e.getLocalPoint()       // pointer in the shape's own frame
+  if (e.shiftKey) e.stopPropagation()
+})
+
+// Wheel handlers can stop page scroll because the wheel listener is non-passive:
+stage.on('wheel', (e) => { e.preventDefault(); /* zoom… */ })
+```
+
+## Listening to the stage
+
+The `Stage` is the root of every path, so global handlers live there. When a pointer hits empty
+canvas, the **stage itself** becomes the target — which is why a stage-level `wheel` or `pointermove`
+handler fires anywhere on the canvas.
+
+## Conventions & gotchas
+
+- **`once` and `off`.** `node.once(type, handler)` auto-removes after one call; `node.off(type, handler?)`
+  removes one or all handlers of a type.
+- **Modifier keys are a snapshot** taken from the native event at construction; synthetic events
+  (`nativeEvent: null`) report all modifiers as `false`.
+- **Touch gestures** (pinch/rotate) and keyboard events are not yet synthesized — bind native
+  listeners on the host element for those.
+
+## Related
+
+- [Hit-Testing](/Veyrajs/concepts/hit-testing/) — how the target node is found.
+- [Camera](/Veyrajs/concepts/camera/) — `screenPoint` vs. `worldPoint`.
+- [Selection & Transform](/Veyrajs/concepts/selection/) — built on capture-phase pointer events.

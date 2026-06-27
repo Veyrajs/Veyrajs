@@ -1,0 +1,163 @@
+---
+title: Getting Started
+description: Build your first Veyrajs scene — imperatively or with a framework adapter.
+---
+
+import CoreDemo from '../../../components/CoreDemo.astro';
+
+This page builds a small interactive scene from scratch. By the end you will have shapes you can
+select, drag, resize, rotate, zoom, and undo — exactly like the live demo below (which *is* the
+engine, running in your browser).
+
+<CoreDemo />
+
+If you have not added the package yet, see [Installation](/Veyrajs/guides/installation/).
+
+## 1. Create a Stage
+
+The `Stage` is the root. It takes over a host element, creates the `<canvas>`, and owns the
+camera, renderer, and event manager.
+
+```ts
+import { Stage } from '@veyrajs/core'
+
+const stage = new Stage({
+  container: document.querySelector('#app')!,
+  width: 800,
+  height: 480,
+  background: '#0b1220',
+})
+```
+
+## 2. Add a Layer
+
+Shapes never live directly on the stage — they live on a `Layer` (a render partition). Add one
+layer and you are ready to draw.
+
+```ts
+import { Layer } from '@veyrajs/core'
+
+const layer = new Layer()
+stage.add(layer)
+```
+
+## 3. Add some shapes
+
+Shapes are real classes with typed config. Position them with the **node transform** (`x`, `y`),
+and paint them with `fill` / `stroke`.
+
+```ts
+import { Rect, Circle } from '@veyrajs/core'
+
+const rect = new Rect({ x: 40, y: 40, width: 150, height: 90, fill: '#38bdf8' })
+layer.add(rect)
+layer.add(new Circle({ x: 300, y: 100, radius: 50, fill: '#f472b6' }))
+```
+
+You never call `render()`. Mutating a node (`rect.x = 60`) marks the scene dirty and schedules
+**one** coalesced redraw on the next animation frame.
+
+## 4. Listen for events
+
+Events are federated: they hit-test the scene and dispatch with DOM-style
+capture → target → bubble. Bind a handler with `.on(...)`.
+
+```ts
+rect.on('click', () => {
+  rect.x += 20 // moves on click; the redraw is automatic
+})
+```
+
+## 5. Zoom and pan
+
+The camera converts between screen and world space. Zoom about a point, or pan by a delta.
+
+```ts
+import { Vec2 } from '@veyrajs/core'
+
+stage.camera.zoomAt(new Vec2(300, 100), 1.2) // 1.2× about (300, 100)
+
+stage.on('wheel', (e) => {
+  e.preventDefault()
+  stage.camera.zoomAt(e.screenPoint, e.deltaY < 0 ? 1.1 : 1 / 1.1)
+})
+```
+
+## 6. Selection, transforms, and undo
+
+`SelectionController` wires click-to-select, the bounds box, resize + rotate handles, and cursor
+feedback — and every drag becomes an **undoable command**. Give it a `History` and you have
+undo/redo for free.
+
+```ts
+import { History, SelectionController } from '@veyrajs/core'
+
+const history = new History()
+new SelectionController(stage, { history })
+
+// later, from a toolbar button:
+history.undo()
+history.redo()
+```
+
+## The whole thing
+
+```ts
+import {
+  Stage, Layer, Rect, Circle, Vec2, History, SelectionController,
+} from '@veyrajs/core'
+
+const stage = new Stage({
+  container: document.querySelector('#app')!,
+  width: 800,
+  height: 480,
+  background: '#0b1220',
+})
+
+const layer = new Layer()
+stage.add(layer)
+
+const rect = new Rect({ x: 40, y: 40, width: 150, height: 90, fill: '#38bdf8' })
+layer.add(rect)
+layer.add(new Circle({ x: 300, y: 100, radius: 50, fill: '#f472b6' }))
+
+rect.on('click', () => { rect.x += 20 })
+stage.camera.zoomAt(new Vec2(300, 100), 1.2)
+
+const history = new History()
+new SelectionController(stage, { history })
+```
+
+That is the entire demo at the top of this page.
+
+## With a framework adapter
+
+The same scene, declaratively. Props drive the node, events come back as callbacks, and a
+`ref` / `bind:node` / public field hands you the underlying engine node when you need it.
+
+```tsx
+// React — @veyrajs/react
+import { ACStage, ACLayer, ACRect, ACCircle } from '@veyrajs/react'
+
+export function Scene() {
+  return (
+    <ACStage width={800} height={480} background="#0b1220" selectable>
+      <ACLayer>
+        <ACRect x={40} y={40} width={150} height={90} fill="#38bdf8" />
+        <ACCircle x={300} y={100} radius={50} fill="#f472b6" />
+      </ACLayer>
+    </ACStage>
+  )
+}
+```
+
+The `selectable` prop wires the `SelectionController` + `History` for you (click-select, transform
+handles, undo/redo). The very same markup works in Vue, Svelte, and Angular — see
+[Framework Adapters](/Veyrajs/adapters/overview/).
+
+## Where to go next
+
+- [Core Concepts](/Veyrajs/concepts/scene-graph/) — how the scene graph, camera, events, and undo
+  actually work.
+- [Design Philosophy](/Veyrajs/guides/design-philosophy/) — the seams and trade-offs behind the API.
+- [Framework Adapters](/Veyrajs/adapters/overview/) — pick React, Vue, Svelte, or Angular.

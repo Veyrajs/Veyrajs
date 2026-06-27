@@ -1,0 +1,66 @@
+---
+// Build a scene, save it to JSON, clear the canvas, then load it back.
+---
+<div class="veyrajs-demo" data-demo="serialize">
+  <div class="veyrajs-demo__toolbar">
+    <button type="button" data-ser="add">+ Shape</button>
+    <button type="button" data-ser="save">Save</button>
+    <button type="button" data-ser="clear">Clear</button>
+    <button type="button" data-ser="load" disabled>Load</button>
+    <span class="veyrajs-demo__readout" data-ser="readout">nothing saved</span>
+  </div>
+  <div class="veyrajs-demo__stage" data-veyrajs="stage" style="height: 260px"></div>
+</div>
+
+<script>
+  import { Stage, Layer, Rect, Circle, SceneSerializer } from '@veyrajs/core'
+
+  const PALETTE = ['#38bdf8', '#f472b6', '#a78bfa', '#34d399', '#fbbf24', '#fb7185']
+
+  function init(root: HTMLElement): void {
+    const host = root.querySelector<HTMLElement>('[data-veyrajs="stage"]')
+    if (!host) return
+    const width = host.clientWidth || 760
+    const height = host.clientHeight || 260
+    const stage = new Stage({ container: host, width, height, background: '#0b1220' })
+    let layer = stage.createLayer()
+    const serializer = new SceneSerializer()
+    let saved: string | null = null
+    let colorIndex = 0
+
+    const readout = root.querySelector<HTMLElement>('[data-ser="readout"]')
+    const loadBtn = root.querySelector<HTMLButtonElement>('[data-ser="load"]')
+
+    layer.add(
+      new Rect({ x: 60, y: 50, width: 130, height: 80, fill: '#38bdf8' }),
+      new Circle({ x: 330, y: 120, radius: 48, fill: '#f472b6' }),
+    )
+
+    const addShape = (): void => {
+      const color = PALETTE[colorIndex++ % PALETTE.length] as string
+      if (Math.random() < 0.5) {
+        const w = 60 + Math.random() * 120
+        layer.add(new Rect({ x: 30 + Math.random() * (width - w - 60), y: 30 + Math.random() * (height - 130), width: w, height: 50 + Math.random() * 70, fill: color }))
+      } else {
+        const r = 26 + Math.random() * 40
+        layer.add(new Circle({ x: 50 + Math.random() * (width - 100), y: 50 + Math.random() * (height - 100), radius: r, fill: color }))
+      }
+    }
+
+    root.querySelector('[data-ser="add"]')?.addEventListener('click', addShape)
+    root.querySelector('[data-ser="save"]')?.addEventListener('click', () => {
+      const json = serializer.stringify(stage)
+      saved = json
+      if (readout) readout.textContent = `saved ${new Blob([json]).size} bytes`
+      if (loadBtn) loadBtn.disabled = false
+    })
+    root.querySelector('[data-ser="clear"]')?.addEventListener('click', () => { layer.removeChildren() })
+    root.querySelector('[data-ser="load"]')?.addEventListener('click', () => {
+      if (!saved) return
+      serializer.parse(stage, saved) // replaces all layers with the saved content
+      layer = stage.children[0] as Layer // re-acquire the rebuilt layer for further edits
+    })
+  }
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-demo="serialize"]')) init(root)
+</script>

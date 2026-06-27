@@ -1,0 +1,137 @@
+---
+title: Vue
+description: Declarative Veyrajs components and composables for Vue 3.
+sidebar:
+  order: 3
+---
+
+import VueScene from '../../../components/islands/VueScene.vue';
+
+`@veyrajs/vue` wraps the imperative engine in Vue 3 components and composables. Install it alongside
+the core (see [Installation](/Veyrajs/guides/installation/)); `vue ^3.4` is a peer dependency.
+
+<VueScene client:only="vue" />
+
+The scene above is a live Vue island — `@veyrajs/vue` components actually running. Click the
+rectangle (it moves via a `ref`) and drag the selection handles.
+
+```sh
+npm install @veyrajs/core @veyrajs/vue
+```
+
+## Quick start
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import { ACStage, ACLayer, ACRect, ACCircle } from '@veyrajs/vue'
+
+const x = ref(40)
+</script>
+
+<template>
+  <ACStage :width="800" :height="480" background="#0b1220" selectable>
+    <ACLayer>
+      <ACRect :x="x" :y="40" :width="150" :height="90" fill="#38bdf8" @click="x += 20" />
+      <ACCircle :x="300" :y="100" :radius="50" fill="#f472b6" />
+    </ACLayer>
+  </ACStage>
+</template>
+```
+
+`selectable` wires a `SelectionController` + `History` (click-select, transform handles, undo/redo).
+
+## Components
+
+`ACStage` (root), `ACLayer` / `ACGroup` (containers), and `ACRect`, `ACCircle`, `ACEllipse`,
+`ACLine`, `ACPolygon`, `ACText`, `ACImage` (shapes). Bind node properties with `:prop` and listen to
+engine events with `@event` — see the [Adapters Overview](/Veyrajs/adapters/overview/#the-components)
+for the full prop table.
+
+## Props & events
+
+Props are **controlled** — they drive the node. Sync your reactive state from events when users edit:
+
+```vue
+<ACRect
+  :x="x"
+  :y="40"
+  :width="150"
+  :height="90"
+  fill="#38bdf8"
+  @click="onClick"
+  @dragmove="(e) => (x = e.target.x)"
+  @pointerenter="hover = true"
+/>
+```
+
+The events: `@pointerdown`, `@pointermove`, `@pointerup`, `@pointerenter`, `@pointerleave`, `@click`,
+`@dblclick`, `@wheel`, `@dragstart`, `@dragmove`, `@dragend` — each handed a
+[`SceneEvent`](/Veyrajs/concepts/events/).
+
+:::tip[No update loops]
+The engine's **guarded setters** make the prop → node → event → state → prop round-trip a no-op when
+the value is unchanged, so no echo-suppression is needed.
+:::
+
+## Composables
+
+Inside `<ACStage>`, reach engine services reactively:
+
+```vue
+<script setup lang="ts">
+import { useStage, useCamera, useSelection, useHistory } from '@veyrajs/vue'
+
+const history = useHistory() // Ref<History | null>
+const camera = useCamera()   // ComputedRef<Camera | null>
+</script>
+
+<template>
+  <button @click="history?.undo()">Undo</button>
+  <button @click="camera?.reset()">Reset view</button>
+</template>
+```
+
+- `useStage()` → `Ref<Stage | null>`
+- `useCamera()` → `ComputedRef<Camera | null>`
+- `useSelection()` → `Ref<SelectionManager | null>` (only under `selectable`)
+- `useHistory()` → `Ref<History | null>` (only under `selectable`)
+
+:::caution[Inside `<ACStage>` only]
+Composables use `inject`, so they must run in a descendant's `setup`. Values are `null` until the
+stage mounts — guard or `watch` them. For a sibling toolbar *outside* the stage, read the stage from
+the `@ready` event or `<ACStage>`'s exposed ref instead.
+:::
+
+## The escape hatch — template refs
+
+Every component exposes its underlying engine `node`; `<ACStage>` exposes `stage` / `selection` /
+`history`:
+
+```vue
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { ACStage, ACRect } from '@veyrajs/vue'
+
+const rect = ref()
+onMounted(() => rect.value?.node.on('click', () => console.log('imperative')))
+</script>
+
+<template>
+  <ACStage @ready="(stage) => console.log('ready', stage)">
+    <ACLayer><ACRect ref="rect" :x="40" :y="40" :width="150" :height="90" fill="#38bdf8" /></ACLayer>
+  </ACStage>
+</template>
+```
+
+## Conventions & gotchas
+
+- **Composables aren't reactive to engine-internal changes.** Mutating a node doesn't re-render Vue;
+  subscribe to engine events (or lift state) when the UI must track interactive edits.
+- **`ACImage`** takes a loaded `:image` source; the adapter doesn't load it for you.
+
+## Related
+
+- [Adapters Overview](/Veyrajs/adapters/overview/) — the shared model and full prop table.
+- [Events](/Veyrajs/concepts/events/) — the `SceneEvent` every handler receives.
+- [Camera](/Veyrajs/concepts/camera/) — what `useCamera()` returns.

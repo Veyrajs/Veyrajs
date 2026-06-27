@@ -1,0 +1,120 @@
+---
+title: Shapes
+description: The seven built-in drawable leaves — geometry, local origins, and configs.
+sidebar:
+  order: 2
+---
+
+import ShapesDemo from '../../../components/demos/ShapesDemo.astro';
+
+A `Shape` is a drawable leaf node. Veyrajs ships seven, each extending `Shape` (which extends
+[`Node`](/Veyrajs/concepts/scene-graph/)) and implementing three methods: `getLocalBounds()`,
+`drawOps()` (backend-neutral [draw ops](/Veyrajs/concepts/rendering/)), and `hitTest()`.
+
+<ShapesDemo />
+
+The node transform (`x`, `y`, `scale`, `rotation`, …) places the shape; geometry is authored around
+the shape's **local origin**, which differs by shape:
+
+| Shape | Local origin | Key config | Filled? |
+| --- | --- | --- | --- |
+| `Rect` | top-left `(0,0)` | `width`, `height` | yes |
+| `Circle` | center `(0,0)` | `radius` | yes |
+| `Ellipse` | center `(0,0)` | `radiusX`, `radiusY` | yes |
+| `Line` | explicit points | `points`, `closed?` | no (stroke) |
+| `Polygon` | explicit points | `points` | yes |
+| `Image` | top-left `(0,0)` | `image`, `width`, `height` | n/a |
+| `Text` | top-left `(0,0)` | `text`, `fontSize`, … | yes (default black) |
+
+All shapes also accept the common [styling](/Veyrajs/concepts/styling/) props (`fill`, `stroke`,
+`strokeWidth`, `lineDash`, `lineCap`, `lineJoin`) and all the `Node` transform/visual props.
+
+## Rect
+
+A `width × height` rectangle whose local origin is its top-left corner, so geometry spans `(0,0)` to
+`(width, height)`. Position it with the **node** transform, not by offsetting geometry.
+
+```ts
+new Rect({ x: 40, y: 40, width: 150, height: 90, fill: '#38bdf8', stroke: '#0ea5e9', strokeWidth: 2 })
+```
+
+## Circle & Ellipse
+
+Both are **center-origin**, so the node's `(x, y)` is the center. A `Circle` is the convenience case
+of an `Ellipse` with equal radii.
+
+```ts
+new Circle({ x: 300, y: 95, radius: 52, fill: '#f472b6' })
+new Ellipse({ x: 480, y: 95, radiusX: 80, radiusY: 48, fill: '#a78bfa' })
+```
+
+## Line & Polygon
+
+Both take an array of local-space `points` (`{ x, y }[]`). A **`Line`** is an open polyline
+(set `closed: true` to join the ends) and is stroke-oriented; a **`Polygon`** is always closed and
+fillable. Points are **copied** on assignment, and the getter returns a readonly view — so external
+mutation of your array never silently changes the shape.
+
+```ts
+new Line({
+  x: 40, y: 230,
+  points: [{ x: 0, y: 0 }, { x: 110, y: 50 }, { x: 220, y: 0 }],
+  stroke: '#fbbf24', strokeWidth: 3,
+})
+
+new Polygon({
+  x: 470, y: 205,
+  points: [{ x: 0, y: -48 }, { x: 46, y: 34 }, { x: -46, y: 34 }],
+  fill: '#34d399', stroke: '#059669', strokeWidth: 2,
+})
+```
+
+A `Polygon` hit-tests its **fill** when `fill` is set, otherwise only near its outline — matching
+what the user sees.
+
+## Image
+
+Draws any `CanvasImageSource` (`HTMLImageElement`, `HTMLCanvasElement`, `ImageBitmap`, video, …) at
+a given `width × height`. **Loading the source is your job** — the shape only draws what it is given.
+
+```ts
+import { Image } from '@veyrajs/core'
+
+const img = new Image({ x: 20, y: 20, width: 256, height: 256 })
+const el = new globalThis.Image()      // the DOM Image — see the note below
+el.onload = () => { img.image = el }    // assignment marks dirty → repaint
+el.src = '/photo.jpg'
+```
+
+:::caution[Name shadowing]
+`Image` from `@veyrajs/core` is the engine's *shape*, not the DOM `Image` constructor. To create a
+DOM image, use `new globalThis.Image()` (or an `<img>` element).
+:::
+
+## Text
+
+A single line of text with a top-left origin. If you provide no `fill`/`stroke`, it defaults to
+black so it's visible out of the box.
+
+```ts
+new Text({ x: 40, y: 320, text: 'Veyrajs', fontSize: 20, fontFamily: 'system-ui', fill: '#e2e8f0' })
+```
+
+:::note[Coarse metrics]
+Without a measuring context, `Text` estimates its width from glyph count
+(`≈ text.length × fontSize × 0.55`). That's fine for layout and rough hit-testing; precise
+measurement is a later refinement. The MVP is single-line, render-only (no editing/wrapping/rich
+text). A `Path` shape (arbitrary Béziers) is also deferred.
+:::
+
+## Custom shapes
+
+Need something the built-ins don't cover? Extend `Shape` and implement the three methods. See
+[Advanced → Custom Node Types](/Veyrajs/advanced/custom-node-types/) and the
+[custom shape recipe](/Veyrajs/recipes/custom-shape/).
+
+## Related
+
+- [Styling](/Veyrajs/concepts/styling/) — fill, stroke, dashes, opacity.
+- [Rendering & the Frame Loop](/Veyrajs/concepts/rendering/) — how shapes become pixels.
+- [Hit-Testing](/Veyrajs/concepts/hit-testing/) — how `containsPoint` powers picking.

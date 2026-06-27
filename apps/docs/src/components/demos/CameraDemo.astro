@@ -1,0 +1,79 @@
+---
+// Pan (drag) and zoom (wheel / buttons) with a live zoom + cursor-world readout.
+---
+<div class="veyrajs-demo" data-demo="camera">
+  <div class="veyrajs-demo__toolbar">
+    <button type="button" data-cam="in">Zoom in</button>
+    <button type="button" data-cam="out">Zoom out</button>
+    <button type="button" data-cam="reset">Reset</button>
+    <span class="veyrajs-demo__hint">Drag to pan · scroll to zoom about the cursor</span>
+    <span class="veyrajs-demo__readout" data-cam="readout">zoom 100%</span>
+  </div>
+  <div class="veyrajs-demo__stage" data-veyrajs="stage" style="height: 320px"></div>
+</div>
+
+<script>
+  import { Stage, Rect, Circle, Polygon, Text } from '@veyrajs/core'
+
+  function init(root: HTMLElement): void {
+    const host = root.querySelector<HTMLElement>('[data-veyrajs="stage"]')
+    if (!host) return
+    const width = host.clientWidth || 760
+    const height = host.clientHeight || 320
+    const stage = new Stage({ container: host, width, height, background: '#0b1220' })
+    const layer = stage.createLayer()
+    layer.add(
+      new Rect({ x: 80, y: 60, width: 150, height: 96, fill: '#38bdf8' }),
+      new Circle({ x: 360, y: 120, radius: 50, fill: '#f472b6' }),
+      new Polygon({ x: 540, y: 120, points: [{ x: 0, y: -54 }, { x: 52, y: 40 }, { x: -52, y: 40 }], fill: '#34d399' }),
+      new Text({ x: 80, y: 210, text: 'World coordinates never move — only the view does.', fontSize: 14, fill: '#94a3b8' }),
+    )
+
+    const readout = root.querySelector<HTMLElement>('[data-cam="readout"]')
+    const update = (wx?: number, wy?: number): void => {
+      if (!readout) return
+      const pct = Math.round(stage.camera.zoom * 100)
+      readout.textContent =
+        wx === undefined ? `zoom ${pct}%` : `zoom ${pct}% · world (${Math.round(wx)}, ${Math.round(wy as number)})`
+    }
+    update()
+
+    // Drag to pan: move the camera by the screen-space delta so the grabbed point stays put.
+    let panning = false
+    let last = { x: 0, y: 0 }
+    stage.on('pointerdown', (e) => {
+      panning = true
+      last = { x: e.screenPoint.x, y: e.screenPoint.y }
+      host.style.cursor = 'grabbing'
+    })
+    stage.on('pointermove', (e) => {
+      if (panning) {
+        stage.camera.panBy(e.screenPoint.x - last.x, e.screenPoint.y - last.y)
+        last = { x: e.screenPoint.x, y: e.screenPoint.y }
+      }
+      const w = stage.screenToWorld(e.screenPoint)
+      update(w.x, w.y)
+    })
+    const endPan = (): void => {
+      panning = false
+      host.style.cursor = ''
+    }
+    stage.on('pointerup', endPan)
+
+    // Wheel zoom about the cursor.
+    stage.on('wheel', (e) => {
+      e.preventDefault()
+      stage.camera.zoomAt(e.screenPoint, e.deltaY < 0 ? 1.1 : 1 / 1.1)
+      const w = stage.screenToWorld(e.screenPoint)
+      update(w.x, w.y)
+    })
+
+    // Buttons zoom about the stage center.
+    const center = { x: width / 2, y: height / 2 }
+    root.querySelector('[data-cam="in"]')?.addEventListener('click', () => { stage.camera.zoomAt(center, 1.2); update() })
+    root.querySelector('[data-cam="out"]')?.addEventListener('click', () => { stage.camera.zoomAt(center, 1 / 1.2); update() })
+    root.querySelector('[data-cam="reset"]')?.addEventListener('click', () => { stage.camera.reset(); update() })
+  }
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-demo="camera"]')) init(root)
+</script>

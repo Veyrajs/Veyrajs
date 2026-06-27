@@ -1,0 +1,123 @@
+---
+title: Scene Graph & Transforms
+description: Stage, Layer, Group, Shape, Node — and how world transforms stay cheap.
+sidebar:
+  order: 1
+---
+
+import TransformsDemo from '../../../components/demos/TransformsDemo.astro';
+
+The scene graph is a typed, mutable, retained-mode tree. You build it once and then *mutate*
+it (`rect.x = 10`); the engine figures out what to redraw.
+
+```text
+Stage                      // root: owns the host element, camera, renderer, events
+ └─ Layer                  // a render partition (Stage's only allowed children)
+     └─ Group              // a transformable container, anywhere in the tree
+         ├─ Shape          // a drawable leaf: Rect, Circle, Line, Text, …
+         └─ Group          // groups nest freely
+```
+
+## The node types
+
+| Class | Role |
+| --- | --- |
+| **`Node`** | The abstract base: identity (`id`, `name`), `parent` link, the local transform (`x`, `y`, `scaleX/Y`, `rotation`, `skewX/Y`, `offsetX/Y`), `opacity`, `visible`, `listening`, events, and serialization. |
+| **`Container`** | A `Node` that holds children: `add(...)`, `removeChild`, `removeChildren`, z-order (`moveToTop`/`moveUp`/…), traversal (`find`, `traverse`, `getDescendants`). |
+| **`Group`** | The everyday container — group nodes to move/scale/rotate them together. |
+| **`Layer`** | A top-level partition; the **Stage's only legal children**. Use sparingly. |
+| **`Shape`** | The drawable leaf — `Rect`, `Circle`, `Ellipse`, `Line`, `Polygon`, `Text`, `Image`. Carries paint style, emits draw ops, answers hit-tests. |
+| **`Stage`** | The root: owns the host element, the `Camera`, the renderer, and the event manager. |
+
+Setters are **guarded** — assigning an unchanged value is a no-op (`if (v !== this._x)`). That is
+what makes the framework adapters loop-safe: re-rendering with the same prop value costs nothing.
+
+```ts
+import { Stage, Layer, Group, Rect } from '@veyrajs/core'
+
+const stage = new Stage({ container: el, width: 800, height: 480 })
+const layer = stage.createLayer()          // Stage.add() accepts Layers only
+const group = new Group({ x: 100, rotation: 15 })
+group.add(new Rect({ width: 80, height: 60, fill: '#38bdf8' }))
+layer.add(group)                            // the rect moves & rotates with the group
+```
+
+:::caution[Layers vs. Groups]
+A **Layer** is a render partition directly under the Stage; `Stage.add()` throws on anything else.
+A **Group** is for logical grouping anywhere in the tree. Reach for a `Group` to organise nodes —
+not a `Layer`. (Konva's per-layer canvas memory ceiling is the cautionary tale; Veyrajs keeps
+layers logical by default.)
+:::
+
+## Transforms & the pivot
+
+Every node has a full affine transform: position, scale, rotation (**degrees, clockwise**), skew,
+and an **offset** that moves the pivot. The local matrix is composed in a fixed order:
+
+```text
+T(x, y) · R(rotation) · Skew(skewX, skewY) · S(scaleX, scaleY) · T(-offsetX, -offsetY)
+```
+
+The trailing `T(-offset)` is what makes `offsetX`/`offsetY` behave as a pivot: rotation and scale
+happen around that local point. Drag the sliders — the yellow dot marks the node's `(x, y)`, which
+is where the local `(offsetX, offsetY)` point lands:
+
+<TransformsDemo />
+
+## Coordinate spaces
+
+Everything is one affine `Matrix` (2×3). There are four explicit spaces:
+
+| Space | What it is |
+| --- | --- |
+| **Screen** | CSS pixels relative to the host element (what pointer events report). |
+| **World** | the logical scene; `screen = ViewMatrix · world` (the [camera](/Veyrajs/concepts/camera/)). |
+| **Local** | a node's own frame; `world = nodeWorldMatrix · local`. |
+| **Media** | *(reserved)* source-image pixels, for annotation work. |
+
+Convention: **top-left origin, y-down, rotation in degrees clockwise** — the Canvas/DOM convention.
+
+## Lazy, version-counted world transforms
+
+A node's `worldMatrix()` is `parent.worldMatrix() · localMatrix()`, computed **lazily** and cached
+against a **version counter**. A node recomputes only when *its own* transform changed or an
+*ancestor's* world matrix actually moved:
+
+- each node has a `_worldVersion` that increments only when its world matrix really changes;
+- a child records the parent version it last computed against;
+- on `worldMatrix()` it returns the cache unless its own transform is dirty or the parent's version
+  advanced.
+
+The payoff: **changing one node never eagerly walks its subtree** — avoiding the whole-subtree
+invalidation that plagues some engines. Bounds (`getLocalBounds` / `getWorldBounds`) are cached the
+same way.
+
+```ts
+const group = new Group({ x: 100 })
+const child = new Rect({ x: 10, width: 20, height: 20 })
+group.add(child)
+child.worldMatrix().applyToPoint({ x: 0, y: 0 }) // { x: 110, y: 0 }
+group.x = 200
+child.worldMatrix().applyToPoint({ x: 0, y: 0 }) // { x: 210, y: 0 } — recomputed lazily
+```
+
+## Dirty tracking — you never call `render()`
+
+A mutation calls an internal `markDirty()`, which walks to the root `Stage` and schedules **one**
+redraw per animation frame via the `FrameScheduler` (Konva's `batchDraw` idea). You mutate freely;
+the engine coalesces:
+
+```ts
+rect.x = 60
+rect.y = 80
+rect.fill = '#f472b6'   // three mutations …
+// … exactly one frame is rendered on the next requestAnimationFrame
+```
+
+See [Rendering & the Frame Loop](/Veyrajs/concepts/rendering/) for what happens inside that frame.
+
+## Related
+
+- [Shapes](/Veyrajs/concepts/shapes/) — the drawable leaves and their geometry.
+- [Camera & Coordinate Spaces](/Veyrajs/concepts/camera/) — screen ↔ world conversions.
+- [Design Philosophy](/Veyrajs/guides/design-philosophy/) — why the matrix composition rule matters.
