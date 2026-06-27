@@ -4,7 +4,7 @@
 // the engine source via the Vite alias in astro.config.mjs.
 ---
 
-<div class="veyrajs-demo">
+<div class="veyrajs-demo" data-demo="core">
   <div class="veyrajs-demo__toolbar">
     <button type="button" data-veyrajs="add-rect">+ Rect</button>
     <button type="button" data-veyrajs="add-circle">+ Circle</button>
@@ -84,7 +84,7 @@
     syncButtons()
   }
 
-  for (const root of document.querySelectorAll<HTMLElement>('.veyrajs-demo')) {
+  for (const root of document.querySelectorAll<HTMLElement>('[data-demo="core"]')) {
     initDemo(root)
   }
 </script>

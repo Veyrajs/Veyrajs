@@ -1,0 +1,39 @@
+---
+// Drive one Rect's transform to see rotation, scale, and the pivot (offset) in action.
+---
+<div class="veyrajs-demo" data-demo="transforms">
+  <div class="veyrajs-demo__toolbar veyrajs-demo__controls">
+    <label>rotation <input type="range" data-t="rotation" min="-180" max="180" value="0" /></label>
+    <label>scaleX <input type="range" data-t="scaleX" min="0.3" max="2.5" step="0.05" value="1" /></label>
+    <label>scaleY <input type="range" data-t="scaleY" min="0.3" max="2.5" step="0.05" value="1" /></label>
+    <label>offsetX <input type="range" data-t="offsetX" min="0" max="160" value="0" /></label>
+    <label>offsetY <input type="range" data-t="offsetY" min="0" max="100" value="0" /></label>
+  </div>
+  <div class="veyrajs-demo__stage" data-veyrajs="stage" style="height: 300px"></div>
+</div>
+
+<script>
+  import { Stage, Rect, Circle } from '@veyrajs/core'
+
+  function init(root: HTMLElement): void {
+    const host = root.querySelector<HTMLElement>('[data-veyrajs="stage"]')
+    if (!host) return
+    const stage = new Stage({ container: host, width: host.clientWidth || 760, height: host.clientHeight || 300, background: '#0b1220' })
+    const layer = stage.createLayer()
+    const rect = new Rect({ x: 380, y: 150, width: 160, height: 100, fill: '#38bdf8', stroke: '#0ea5e9', strokeWidth: 2 })
+    // The yellow dot sits at the node's (x, y): the local point (offsetX, offsetY) maps here,
+    // so rotation and scale pivot around it. Drag the offset sliders to watch the pivot move.
+    const pivot = new Circle({ x: 380, y: 150, radius: 4, fill: '#fbbf24' })
+    layer.add(rect, pivot)
+
+    const props = ['rotation', 'scaleX', 'scaleY', 'offsetX', 'offsetY'] as const
+    for (const prop of props) {
+      const el = root.querySelector<HTMLInputElement>(`[data-t="${prop}"]`)
+      el?.addEventListener('input', () => {
+        rect[prop] = Number(el.value)
+      })
+    }
+  }
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-demo="transforms"]')) init(root)
+</script>

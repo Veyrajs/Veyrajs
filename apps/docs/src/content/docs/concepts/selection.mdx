@@ -1,0 +1,113 @@
+---
+title: Selection & Transform
+description: Selection state, the interactive transformer, handles, and undoable drags.
+sidebar:
+  order: 8
+---
+
+import CoreDemo from '../../../components/CoreDemo.astro';
+
+Selection comes in two layers: **`SelectionManager`** is pure state (which nodes are selected), and
+**`SelectionController`** is the interactive overlay (click/marquee select, move, and resize/rotate
+handles). The demo below is the controller in action — click a shape, drag the handles, scroll to
+zoom; every drag is undoable.
+
+<CoreDemo />
+
+## SelectionManager — pure state
+
+A de-duplicated, ordered set of selected nodes that emits on change. No rendering, no input — just
+state you (or the controller) read.
+
+```ts
+import { SelectionManager } from '@veyrajs/core'
+
+const sel = new SelectionManager()
+const off = sel.onChange((nodes) => updatePanel(nodes)) // → unsubscribe fn
+
+sel.select(rect)      // replace selection with [rect]
+sel.add(circle)       // now [rect, circle]
+sel.toggle(rect)      // now [circle]
+sel.clear()
+
+sel.single            // the lone node, or null (what resize/rotate handles need)
+sel.nodes             // readonly view
+sel.size; sel.isEmpty; sel.has(circle)
+```
+
+`set`/`select` replace; `add`/`remove`/`toggle` mutate. Every mutator only emits when the set
+actually changes (so `select(a)` twice fires once).
+
+## SelectionController — the interactive transformer
+
+Construct it on a stage and it wires everything: pointer handling, a managed `SelectionManager`, and
+a screen-space overlay (bounds box + 8 resize handles + a rotate handle). Pass a `History` and every
+move/resize/rotate becomes an **undoable command**.
+
+```ts
+import { History, SelectionController } from '@veyrajs/core'
+
+const history = new History()
+const controller = new SelectionController(stage, { history })
+
+controller.selection.onChange((nodes) => console.log(nodes.length, 'selected'))
+controller.destroy() // unbind listeners, remove the overlay, reset the cursor
+```
+
+In the adapters, the `selectable` prop on `<ACStage>` creates this controller and a `History` for
+you.
+
+### How it behaves
+
+It listens to stage `pointerdown`/`move`/`up` in the **capture phase** and `stopPropagation()`s when
+it acts — so it's authoritative over node-level handlers. On press:
+
+1. **Handle?** For a single selection, if the pointer is within `handleSize` of a handle, start a
+   resize/rotate drag.
+2. **Shape?** Otherwise, if a shape is hit, select it (shift toggles) and start a move.
+3. **Empty?** Otherwise clear (unless shift) and start a **marquee**; on release, select shapes whose
+   world bounds intersect the marquee.
+
+The overlay maps the selected node's local-bounds corners through its world matrix and then
+`worldToScreen`, so **handles stay a constant size at any zoom**. A single selection shows the
+oriented box + handles; a multi-selection shows the combined world-AABB box (move only).
+
+### Options
+
+```ts
+new SelectionController(stage, {
+  history,                 // enable undo/redo for transforms
+  handleSize: 9,           // hit radius of handles, in screen px
+  rotateEnabled: true,     // show the rotate handle
+  color: '#0ea5e9',        // overlay color
+  boundBox: (r) => ({ ...r, scaleX: Math.max(0.1, r.scaleX) }), // clamp/constrain a transform
+  selection: existingManager, // bring your own SelectionManager
+})
+```
+
+- **Left button only** — non-primary buttons are ignored, leaving e.g. middle-drag free for a pan
+  tool.
+- **Cursor feedback** — hovering a handle sets the host element's CSS cursor; `destroy()` resets it.
+
+## Transform math
+
+The resize/rotate geometry is exposed as pure functions (`computeResize`, `computeRotation`,
+`pointerAngle`) for custom tooling. Resize is **anchored** (the opposite corner stays fixed) and
+**rotation-aware**; a drag past the anchor yields a negative scale (an intentional flip — clamp it via
+`boundBox`). Rotation is **center-fixed**. These helpers target `localMatrix = T·R·S`; pivot offset
+and skew aren't handled by them yet.
+
+## The handle data model
+
+The default 8 resize + 1 rotate handles come from `DEFAULT_CONTROLS`, an array of data-driven
+`ControlDef`s (a `key`, a normalized position `nx`/`ny` on the bounds, an optional screen-pixel
+offset, a `kind`, a `cursor`, and the resize `anchorNx`/`anchorNy`) — a Fabric-style description the
+controller lays out and hit-tests generically. In the MVP the controller uses `DEFAULT_CONTROLS`
+directly (a pluggable handle *set* is a planned extension). See the
+[Selection & Controls API](/Veyrajs/api/selection-and-controls/) for the full `ControlDef` shape.
+
+## Related
+
+- [Commands & Undo/Redo](/Veyrajs/concepts/commands/) — what a drag records.
+- [Hit-Testing](/Veyrajs/concepts/hit-testing/) — `'vertex'` vs `'fill'` results drive the controller.
+- [Events](/Veyrajs/concepts/events/) — the capture-phase pointer handling it relies on.
