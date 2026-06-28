@@ -1,7 +1,19 @@
 # @veyrajs/vue
 
-Vue 3 adapter for [`@veyrajs/core`](../core) — declarative components and composables
-over the imperative engine, with an always-available escape hatch to the underlying nodes.
+[![npm version](https://img.shields.io/npm/v/@veyrajs/vue.svg)](https://www.npmjs.com/package/@veyrajs/vue)
+[![license](https://img.shields.io/npm/l/@veyrajs/vue.svg)](https://github.com/Veyrajs/Veyrajs/blob/main/LICENSE)
+
+Vue 3 adapter for [`@veyrajs/core`](https://www.npmjs.com/package/@veyrajs/core) — declarative
+components and composables over the imperative 2D canvas engine, with an always-available escape
+hatch to the underlying nodes.
+
+## Installation
+
+```bash
+npm install @veyrajs/vue
+```
+
+`@veyrajs/core` is pulled in automatically. **Vue 3.4+** is required as a peer dependency.
 
 ## Usage
 
@@ -45,6 +57,15 @@ Every component accepts the engine node's properties as props, re-emits engine e
 It's a thin layer over the engine: prop changes are mirrored onto the node (the engine's
 guarded setters make this loop-safe), events are re-emitted, and the scene is assembled via
 a reactive cascade so children attach as soon as the stage is ready. The core stays fully
-framework-agnostic; this package is the only Vue-aware code.
+framework-agnostic; this package is the only Vue-aware code, and a parallel sibling to the
+[React](https://www.npmjs.com/package/@veyrajs/react),
+[Svelte](https://www.npmjs.com/package/@veyrajs/svelte), and
+[Angular](https://www.npmjs.com/package/@veyrajs/angular) adapters.
 
-See [docs/](./docs/README.md) for the per-module documentation.
+## Documentation
+
+📖 Full docs, concepts, and live demos: <https://github.com/Veyrajs/Veyrajs>
+
+## License
+
+[MIT](https://github.com/Veyrajs/Veyrajs/blob/main/LICENSE) © Veyrajs

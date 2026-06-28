@@ -1,6 +1,6 @@
 {
   "name": "@veyrajs/core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Framework-agnostic 2D canvas engine: scene graph, renderer abstraction, camera, events, hit-testing, transforms, controls, serialization, and plugin system.",
   "license": "MIT",
   "author": "Veyrajs",
@@ -15,11 +15,11 @@
     "canvas",
     "2d",
     "scene-graph",
+    "retained-mode",
     "graphics",
     "renderer",
-    "typescript",
-    "konva",
-    "fabric"
+    "hit-testing",
+    "typescript"
   ],
   "publishConfig": {
     "access": "public"

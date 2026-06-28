@@ -1,7 +1,19 @@
 # @veyrajs/svelte
 
-Svelte 5 adapter for [`@veyrajs/core`](../core) — declarative components over the
-imperative engine, with an always-available escape hatch (`bind:node`) to the underlying nodes.
+[![npm version](https://img.shields.io/npm/v/@veyrajs/svelte.svg)](https://www.npmjs.com/package/@veyrajs/svelte)
+[![license](https://img.shields.io/npm/l/@veyrajs/svelte.svg)](https://github.com/Veyrajs/Veyrajs/blob/main/LICENSE)
+
+Svelte 5 adapter for [`@veyrajs/core`](https://www.npmjs.com/package/@veyrajs/core) — declarative
+components over the imperative 2D canvas engine, with an always-available escape hatch
+(`bind:node`) to the underlying nodes.
+
+## Installation
+
+```bash
+npm install @veyrajs/svelte
+```
+
+`@veyrajs/core` is pulled in automatically. **Svelte 5+** is required as a peer dependency.
 
 ## Usage
 
@@ -44,7 +56,15 @@ It's a thin layer over the engine: prop changes are mirrored onto the node (the 
 guarded setters make this loop-safe), events are re-emitted as callbacks, and the scene is
 assembled via a reactive cascade (a context getter over the stage's reactive state) so children
 attach as soon as the stage is ready. The core stays fully framework-agnostic; this package is
-the only Svelte-aware code, a parallel sibling to [`@veyrajs/vue`](../vue) and
-[`@veyrajs/react`](../react).
+the only Svelte-aware code, a parallel sibling to the
+[Vue](https://www.npmjs.com/package/@veyrajs/vue),
+[React](https://www.npmjs.com/package/@veyrajs/react), and
+[Angular](https://www.npmjs.com/package/@veyrajs/angular) adapters.
 
-See [docs/](./docs/README.md) for the per-module documentation.
+## Documentation
+
+📖 Full docs, concepts, and live demos: <https://github.com/Veyrajs/Veyrajs>
+
+## License
+
+[MIT](https://github.com/Veyrajs/Veyrajs/blob/main/LICENSE) © Veyrajs

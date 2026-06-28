@@ -1,6 +1,6 @@
 {
   "name": "@veyrajs/vue",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Vue 3 adapter for Veyrajs — declarative components + composables over the engine.",
   "license": "MIT",
   "author": "Veyrajs",

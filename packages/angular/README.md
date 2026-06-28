@@ -1,8 +1,20 @@
 # @veyrajs/angular
 
-Angular adapter for [`@veyrajs/core`](../core) — declarative standalone components over
-the imperative engine, with an always-available escape hatch (the public `node` field) to the
-underlying nodes.
+[![npm version](https://img.shields.io/npm/v/@veyrajs/angular.svg)](https://www.npmjs.com/package/@veyrajs/angular)
+[![license](https://img.shields.io/npm/l/@veyrajs/angular.svg)](https://github.com/Veyrajs/Veyrajs/blob/main/LICENSE)
+
+Angular adapter for [`@veyrajs/core`](https://www.npmjs.com/package/@veyrajs/core) — declarative
+standalone components over the imperative 2D canvas engine, with an always-available escape hatch
+(the public `node` field) to the underlying nodes.
+
+## Installation
+
+```bash
+npm install @veyrajs/angular
+```
+
+`@veyrajs/core` is pulled in automatically. **Angular 18+** (`@angular/core` and
+`@angular/common`) is required as a peer dependency.
 
 ## Usage
 
@@ -52,6 +64,14 @@ It's a thin layer over the engine: input changes are mirrored onto the node in `
 assembles itself through Angular's hierarchical DI — `ngOnInit` runs top-down, so each node's
 parent is ready when it initializes (no reactivity needed). The core stays fully
 framework-agnostic; this package is the only Angular-aware code, a parallel sibling to the
-[Vue](../vue), [React](../react), and [Svelte](../svelte) adapters.
+[Vue](https://www.npmjs.com/package/@veyrajs/vue),
+[React](https://www.npmjs.com/package/@veyrajs/react), and
+[Svelte](https://www.npmjs.com/package/@veyrajs/svelte) adapters.
 
-See [docs/](./docs/README.md) for the per-module documentation.
+## Documentation
+
+📖 Full docs, concepts, and live demos: <https://github.com/Veyrajs/Veyrajs>
+
+## License
+
+[MIT](https://github.com/Veyrajs/Veyrajs/blob/main/LICENSE) © Veyrajs
