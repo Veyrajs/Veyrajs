@@ -4,13 +4,13 @@
   "description": "Vue 3 adapter for Veyrajs — declarative components + composables over the engine.",
   "license": "MIT",
   "author": "Veyrajs",
-  "homepage": "https://github.com/Samandar0021305/AnnotaCanvas/tree/main/packages/vue#readme",
+  "homepage": "https://github.com/Veyrajs/Veyrajs/tree/main/packages/vue#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Samandar0021305/AnnotaCanvas.git",
+    "url": "git+https://github.com/Veyrajs/Veyrajs.git",
     "directory": "packages/vue"
   },
-  "bugs": "https://github.com/Samandar0021305/AnnotaCanvas/issues",
+  "bugs": "https://github.com/Veyrajs/Veyrajs/issues",
   "keywords": ["canvas", "2d", "scene-graph", "vue", "vue3", "graphics", "typescript"],
   "publishConfig": {
     "access": "public"
