@@ -36,7 +36,8 @@ export default defineConfig({
       { label: 'Demos', items: [{ autogenerate: { directory: 'demos' } }] },
       { label: 'Troubleshooting', items: [{ autogenerate: { directory: 'troubleshooting' } }] },
     ],
-    customCss: ['./src/styles/custom.css'],
+    // fonts.css first so its @font-face / @import rules load before custom.css uses them.
+    customCss: ['./src/styles/fonts.css', './src/styles/custom.css'],
   }), react(), vue(), svelte()],
   vite: {
     resolve: {

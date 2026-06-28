@@ -10,6 +10,7 @@
 
 <script>
   import { Stage, Rect, Circle, Ellipse, Line, Polygon, Text, Image } from '@veyrajs/core'
+  import { palette, stroke, roles, onThemeChange } from '../_demo-theme'
 
   // Build a tiny gradient bitmap so the Image shape has a real CanvasImageSource to draw.
   function makeSwatch(): HTMLCanvasElement {
@@ -18,8 +19,8 @@
     c.height = 128
     const g = c.getContext('2d')!
     const grad = g.createLinearGradient(0, 0, 128, 128)
-    grad.addColorStop(0, '#38bdf8')
-    grad.addColorStop(1, '#a78bfa')
+    grad.addColorStop(0, palette.cyan)
+    grad.addColorStop(1, palette.indigo)
     g.fillStyle = grad
     g.fillRect(0, 0, 128, 128)
     g.fillStyle = 'rgba(255,255,255,0.9)'
@@ -28,9 +29,6 @@
     return c
   }
 
-  const label = (x: number, y: number, text: string): Text =>
-    new Text({ x, y, text, fontSize: 12, fill: '#94a3b8' })
-
   function init(root: HTMLElement): void {
     const host = root.querySelector<HTMLElement>('[data-veyrajs="stage"]')
     if (!host) return
@@ -38,40 +36,55 @@
       container: host,
       width: host.clientWidth || 760,
       height: host.clientHeight || 320,
-      background: '#0b1220',
     })
     const layer = stage.createLayer()
 
+    // Track text nodes so their color can follow the light/dark theme.
+    const labels: Text[] = []
+    const label = (x: number, y: number, text: string): Text => {
+      const node = new Text({ x, y, text, fontSize: 12, fill: roles().muted })
+      labels.push(node)
+      return node
+    }
+    const sample = new Text({ x: 240, y: 200, text: 'Text shape', fontSize: 26, fill: roles().ink })
+
     layer.add(
-      new Rect({ x: 40, y: 40, width: 96, height: 64, fill: '#38bdf8', stroke: '#0ea5e9', strokeWidth: 2 }),
+      new Rect({ x: 40, y: 40, width: 96, height: 64, fill: palette.blue, stroke: stroke.blue, strokeWidth: 2 }),
       label(40, 116, 'Rect · top-left origin'),
 
-      new Circle({ x: 250, y: 76, radius: 36, fill: '#f472b6' }),
+      new Circle({ x: 250, y: 76, radius: 36, fill: palette.cyan }),
       label(206, 130, 'Circle · center origin'),
 
-      new Ellipse({ x: 400, y: 76, radiusX: 52, radiusY: 32, fill: '#a78bfa' }),
+      new Ellipse({ x: 400, y: 76, radiusX: 52, radiusY: 32, fill: palette.indigo }),
       label(352, 130, 'Ellipse'),
 
       new Line({
         x: 540, y: 40,
         points: [{ x: 0, y: 64 }, { x: 48, y: 0 }, { x: 96, y: 70 }, { x: 150, y: 8 }],
-        stroke: '#fbbf24', strokeWidth: 3,
+        stroke: palette.amber, strokeWidth: 3,
       }),
       label(540, 124, 'Line · open polyline'),
 
       new Polygon({
         x: 110, y: 232,
         points: [{ x: 0, y: -42 }, { x: 40, y: 30 }, { x: -40, y: 30 }],
-        fill: '#34d399', stroke: '#059669', strokeWidth: 2,
+        fill: palette.teal, stroke: stroke.teal, strokeWidth: 2,
       }),
       label(58, 276, 'Polygon · closed + filled'),
 
-      new Text({ x: 240, y: 200, text: 'Text shape', fontSize: 26, fill: '#e2e8f0' }),
+      sample,
       label(240, 240, 'Text · single line'),
 
       new Image({ x: 470, y: 188, width: 72, height: 72, image: makeSwatch() }),
       label(470, 270, 'Image · any bitmap source'),
     )
+
+    // Recolor canvas text when the Starlight theme toggles.
+    onThemeChange(() => {
+      const r = roles()
+      sample.fill = r.ink
+      for (const node of labels) node.fill = r.muted
+    })
   }
 
   for (const root of document.querySelectorAll<HTMLElement>('[data-demo="shapes"]')) init(root)

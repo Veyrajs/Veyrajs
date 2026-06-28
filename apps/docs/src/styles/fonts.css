@@ -1,0 +1,10 @@
+/* Self-hosted variable fonts via Fontsource. Loaded *before* custom.css (see the
+   customCss order in astro.config.mjs) so the --sl-font / --vy-font-display vars
+   declared there resolve to real faces.
+
+   - Inter            → body text (--sl-font)
+   - Space Grotesk    → display / headings (--vy-font-display)
+   - JetBrains Mono   → code + coordinate readouts (--sl-font-mono) */
+@import "@fontsource-variable/inter/index.css";
+@import "@fontsource-variable/space-grotesk/index.css";
+@import "@fontsource-variable/jetbrains-mono/index.css";

@@ -14,16 +14,17 @@
 
 <script>
   import { Stage, Rect, Circle } from '@veyrajs/core'
+  import { palette, stroke } from '../_demo-theme'
 
   function init(root: HTMLElement): void {
     const host = root.querySelector<HTMLElement>('[data-veyrajs="stage"]')
     if (!host) return
-    const stage = new Stage({ container: host, width: host.clientWidth || 760, height: host.clientHeight || 300, background: '#0b1220' })
+    const stage = new Stage({ container: host, width: host.clientWidth || 760, height: host.clientHeight || 300 })
     const layer = stage.createLayer()
-    const rect = new Rect({ x: 380, y: 150, width: 160, height: 100, fill: '#38bdf8', stroke: '#0ea5e9', strokeWidth: 2 })
+    const rect = new Rect({ x: 380, y: 150, width: 160, height: 100, fill: palette.blue, stroke: stroke.blue, strokeWidth: 2 })
     // The yellow dot sits at the node's (x, y): the local point (offsetX, offsetY) maps here,
     // so rotation and scale pivot around it. Drag the offset sliders to watch the pivot move.
-    const pivot = new Circle({ x: 380, y: 150, radius: 4, fill: '#fbbf24' })
+    const pivot = new Circle({ x: 380, y: 150, radius: 4, fill: palette.amber })
     layer.add(rect, pivot)
 
     const props = ['rotation', 'scaleX', 'scaleY', 'offsetX', 'offsetY'] as const

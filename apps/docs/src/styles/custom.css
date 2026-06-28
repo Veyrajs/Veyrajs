@@ -1,22 +1,111 @@
-/* Veyrajs brand accent (sky/cyan over a dark slate). */
+/* Veyrajs docs theme — "Drafting Table".
+   Light-first precision: cool paper, a faint blueprint grid in the hero, one confident
+   blue accent, and a Space Grotesk / Inter / JetBrains Mono type system. Demos sit on a
+   theme-aware surface (no more hardcoded dark boxes). */
+
+/* ----------------------------------------------------------------------------
+   Type system (theme-independent)
+   ---------------------------------------------------------------------------- */
 :root {
-  --sl-color-accent-low: #082233;
-  --sl-color-accent: #0ea5e9;
-  --sl-color-accent-high: #bae6fd;
-}
-:root[data-theme="light"] {
-  --sl-color-accent-low: #d7f0fb;
-  --sl-color-accent: #0284c7;
-  --sl-color-accent-high: #053246;
+  --sl-font: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --sl-font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, Consolas,
+    monospace;
+  /* Display face for headings, the site title, and the hero — used with restraint. */
+  --vy-font-display: "Space Grotesk Variable", var(--sl-font);
 }
 
-/* ---- live demo widget ---- */
+/* ----------------------------------------------------------------------------
+   Color tokens
+   ---------------------------------------------------------------------------- */
+/* Dark theme (Starlight default). */
+:root {
+  --sl-color-accent-low: #172554;
+  --sl-color-accent: #3b82f6;
+  --sl-color-accent-high: #bfdbfe;
+
+  /* Demo + drafting tokens. */
+  --vy-demo-surface: #0e1525; /* deep neutral the transparent canvas sits on */
+  --vy-demo-inset: #0b1120; /* log / nested panels */
+  --vy-demo-line: #1e293b; /* hairline borders */
+  --vy-grid: #1b2438; /* hero blueprint grid lines */
+
+  --vy-log-capture: #fbbf24;
+  --vy-log-target: #34d399;
+  --vy-log-bubble: #38bdf8;
+}
+
+/* Light theme — the primary "paper" direction. */
+:root[data-theme="light"] {
+  --sl-color-accent-low: #dbeafe;
+  --sl-color-accent: #2563eb;
+  --sl-color-accent-high: #1e3a8a;
+
+  /* Cool near-white paper (not pure white, not cream). */
+  --sl-color-bg: #fcfcfd;
+
+  --vy-demo-surface: #f6f8fc;
+  --vy-demo-inset: #eef2f7;
+  --vy-demo-line: #e2e8f0;
+  --vy-grid: #e6eaf0;
+
+  --vy-log-capture: #b45309;
+  --vy-log-target: #047857;
+  --vy-log-bubble: #0369a1;
+}
+
+/* ----------------------------------------------------------------------------
+   Display typography
+   ---------------------------------------------------------------------------- */
+:is(h1, h2, h3, h4),
+.sl-markdown-content :is(h1, h2, h3, h4),
+.site-title,
+.hero h1 {
+  font-family: var(--vy-font-display);
+  font-weight: 600;
+  letter-spacing: -0.014em;
+}
+
+/* Keep the brand wordmark tight and deliberate. */
+.site-title {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* ----------------------------------------------------------------------------
+   Hero — a drafting surface
+   The splash hero reads as graph paper: a faint grid faded toward the edges, sitting
+   behind the title/tagline/actions. This is the page's one signature moment.
+   ---------------------------------------------------------------------------- */
+.hero {
+  position: relative;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: -1rem -2rem;
+  z-index: -1;
+  background-image: linear-gradient(var(--vy-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--vy-grid) 1px, transparent 1px);
+  background-size: 28px 28px;
+  -webkit-mask-image: radial-gradient(ellipse 78% 72% at 50% 42%, #000 38%, transparent 80%);
+  mask-image: radial-gradient(ellipse 78% 72% at 50% 42%, #000 38%, transparent 80%);
+  pointer-events: none;
+}
+.hero .tagline {
+  text-wrap: balance;
+}
+
+/* ----------------------------------------------------------------------------
+   Live demo widget
+   The stage canvas is transparent (Stage created without a background); `.veyrajs-demo`
+   supplies the theme-aware surface behind it.
+   ---------------------------------------------------------------------------- */
 .veyrajs-demo {
-  margin: 1.25rem 0;
-  border: 1px solid var(--sl-color-gray-5);
-  border-radius: 0.6rem;
+  margin: 1.5rem 0;
+  border: 1px solid var(--vy-demo-line);
+  border-radius: 0.625rem;
   overflow: hidden;
-  background: #0b1220;
+  background: var(--vy-demo-surface);
 }
 .veyrajs-demo__toolbar {
   display: flex;
@@ -25,7 +114,7 @@
   gap: 0.4rem;
   padding: 0.55rem 0.7rem;
   background: var(--sl-color-gray-6);
-  border-bottom: 1px solid var(--sl-color-gray-5);
+  border-bottom: 1px solid var(--vy-demo-line);
 }
 .veyrajs-demo__toolbar button {
   font: inherit;
@@ -33,22 +122,28 @@
   line-height: 1;
   padding: 0.4rem 0.7rem;
   border-radius: 0.4rem;
-  border: 1px solid var(--sl-color-gray-4);
-  background: var(--sl-color-black);
-  color: var(--sl-color-white);
+  border: 1px solid var(--vy-demo-line);
+  background: transparent;
+  color: var(--sl-color-text);
   cursor: pointer;
+  transition: border-color 0.12s ease, color 0.12s ease;
 }
 .veyrajs-demo__toolbar button:hover {
   border-color: var(--sl-color-accent);
+  color: var(--sl-color-accent);
 }
 .veyrajs-demo__toolbar button:disabled {
   opacity: 0.45;
   cursor: not-allowed;
 }
+.veyrajs-demo__toolbar button:disabled:hover {
+  border-color: var(--vy-demo-line);
+  color: var(--sl-color-text);
+}
 .veyrajs-demo__sep {
   width: 1px;
   align-self: stretch;
-  background: var(--sl-color-gray-4);
+  background: var(--vy-demo-line);
   margin: 0 0.2rem;
 }
 .veyrajs-demo__hint {
@@ -62,10 +157,7 @@
   touch-action: none;
   overscroll-behavior: contain;
 }
-.veyrajs-demo__stage canvas {
-  display: block;
-}
-/* Framework-island demos render their canvas directly inside .veyrajs-demo. */
+.veyrajs-demo__stage canvas,
 .veyrajs-demo canvas {
   display: block;
 }
@@ -73,6 +165,7 @@
 /* Numeric readout pinned to the right of a toolbar (zoom %, cursor coords, byte counts). */
 .veyrajs-demo__readout {
   margin-left: auto;
+  font-family: var(--sl-font-mono);
   font-size: 0.74rem;
   color: var(--sl-color-gray-2);
   font-variant-numeric: tabular-nums;
@@ -85,20 +178,29 @@
   overflow: auto;
   margin: 0;
   padding: 0.5rem 0.75rem;
-  font-family: var(--sl-font-mono, ui-monospace, monospace);
+  font-family: var(--sl-font-mono);
   font-size: 0.72rem;
   line-height: 1.55;
   color: var(--sl-color-gray-2);
-  background: var(--sl-color-black);
-  border-top: 1px solid var(--sl-color-gray-5);
+  background: var(--vy-demo-inset);
+  border-top: 1px solid var(--vy-demo-line);
 }
 .veyrajs-demo__log :is(b, strong) {
-  color: var(--sl-color-white);
+  color: var(--sl-color-text);
+  font-weight: 600;
 }
-.veyrajs-demo__log .is-capture { color: #fbbf24; }
-.veyrajs-demo__log .is-target { color: #34d399; }
-.veyrajs-demo__log .is-bubble { color: #38bdf8; }
-.veyrajs-demo__log .is-muted { color: var(--sl-color-gray-4); }
+.veyrajs-demo__log .is-capture {
+  color: var(--vy-log-capture);
+}
+.veyrajs-demo__log .is-target {
+  color: var(--vy-log-target);
+}
+.veyrajs-demo__log .is-bubble {
+  color: var(--vy-log-bubble);
+}
+.veyrajs-demo__log .is-muted {
+  color: var(--sl-color-gray-4);
+}
 
 /* Slider/control row (transforms demo). */
 .veyrajs-demo__controls {
@@ -111,7 +213,7 @@
   font-size: 0.74rem;
   color: var(--sl-color-gray-2);
 }
-.veyrajs-demo__controls input[type='range'] {
+.veyrajs-demo__controls input[type="range"] {
   width: 92px;
   accent-color: var(--sl-color-accent);
 }

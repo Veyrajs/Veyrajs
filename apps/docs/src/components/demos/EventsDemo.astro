@@ -12,19 +12,29 @@
 
 <script>
   import { Stage, Group, Rect, Text } from '@veyrajs/core'
+  import { palette, roles, onThemeChange } from '../_demo-theme'
 
   function init(root: HTMLElement): void {
     const host = root.querySelector<HTMLElement>('[data-veyrajs="stage"]')
     const logEl = root.querySelector<HTMLElement>('[data-ev="log"]')
     if (!host || !logEl) return
-    const stage = new Stage({ container: host, width: host.clientWidth || 760, height: host.clientHeight || 200, background: '#0b1220' })
+    const stage = new Stage({ container: host, width: host.clientWidth || 760, height: host.clientHeight || 200 })
     const layer = stage.createLayer({ name: 'layer' })
 
     const group = new Group({ name: 'group', x: 250, y: 20 })
-    const outer = new Rect({ name: 'outer', x: 0, y: 0, width: 260, height: 150, fill: '#1e293b', stroke: '#334155', strokeWidth: 1 })
-    const inner = new Rect({ name: 'inner', x: 80, y: 45, width: 100, height: 60, fill: '#38bdf8' })
+    const r0 = roles()
+    const outer = new Rect({ name: 'outer', x: 0, y: 0, width: 260, height: 150, fill: r0.panelFill, stroke: r0.panelStroke, strokeWidth: 1 })
+    const inner = new Rect({ name: 'inner', x: 80, y: 45, width: 100, height: 60, fill: palette.blue })
     group.add(outer, inner)
-    layer.add(group, new Text({ x: 16, y: 14, text: 'layer ▸ group ▸ inner', fontSize: 13, fill: '#64748b' }))
+    const caption = new Text({ x: 16, y: 14, text: 'layer ▸ group ▸ inner', fontSize: 13, fill: r0.muted })
+    layer.add(group, caption)
+    // Keep the backdrop + caption legible across theme toggles.
+    onThemeChange(() => {
+      const r = roles()
+      outer.fill = r.panelFill
+      outer.stroke = r.panelStroke
+      caption.fill = r.muted
+    })
 
     const cls: Record<string, string> = { capture: 'is-capture', target: 'is-target', bubble: 'is-bubble' }
     const arrow: Record<string, string> = { capture: '▼', target: '◉', bubble: '▲' }
@@ -53,8 +63,8 @@
     inner.on('click', onClick) // target when you click the blue square
 
     // Hover highlight — pointerenter/leave do not bubble.
-    inner.on('pointerenter', () => { inner.fill = '#7dd3fc' })
-    inner.on('pointerleave', () => { inner.fill = '#38bdf8' })
+    inner.on('pointerenter', () => { inner.fill = '#60a5fa' })
+    inner.on('pointerleave', () => { inner.fill = palette.blue })
 
     root.querySelector('[data-ev="clear"]')?.addEventListener('click', () => { logEl.textContent = '' })
   }
