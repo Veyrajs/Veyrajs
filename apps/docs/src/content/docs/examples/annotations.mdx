@@ -1,0 +1,73 @@
+---
+title: Annotations
+description: Boxes, polygons, keypoints, skeletons, cuboids — drawn, edited, styled, and extended.
+sidebar:
+  order: 4.5
+---
+
+import LiveDemo from '../../../components/LiveDemo.astro';
+
+`@veyrajs/annotations` is the labeling toolkit built **on top of** the engine — every type is an
+ordinary `Shape` subclass, so it lives entirely outside `@veyrajs/core` and proves the plugin
+boundary the engine was designed around. You get six vector types — `BoundingBox` (axis-aligned and
+rotated), `PolygonAnnotation`, `PolylineAnnotation`, `PointAnnotation`, `Skeleton`, and `Cuboid` —
+plus the tools and overlays to draw and reshape them.
+
+```bash
+npm install @veyrajs/annotations @veyrajs/core
+```
+
+There are two ways to put annotations on screen, and the split is worth holding in mind:
+
+- **Declarative** — render annotations from your data with the framework components
+  (`<ACBoundingBox>`, `<ACPolygonAnnotation>`, …) in [React, Vue, Svelte, and Angular](/Veyrajs/examples/frameworks/).
+- **Imperative** — let a user *author* and *edit* them with the draw tools and the `VertexEditor`.
+
+The demos below are the imperative path. Each one is a single file; open the **Code** tab to read
+exactly what runs.
+
+## Bounding boxes with label classes
+
+Drag in **Draw** mode to add a box; switch to **Select** to move, resize, and rotate it (undo is
+wired in). A `LabelSchema` holds your classes — pick one to restyle the next box from its color. This
+is the visual-customization surface: stroke, translucent fill, and a colored label chip all flow
+from the class.
+
+<LiveDemo example="annotation-boxes" height={400} />
+
+## Polygons and vertex editing
+
+Click to drop vertices and click the first point to close the polygon. Once it's closed, the
+`VertexEditor` puts a draggable handle on every vertex — the counterpart to the box transformer, but
+for arbitrary point geometry. The same editor reshapes polygons, polylines, skeletons, and cuboids,
+because every vertex-based type exposes the same `points` accessor.
+
+<LiveDemo example="annotation-polygon" height={400} />
+
+## Keypoints and skeletons
+
+A `Skeleton` is keypoints joined by bones, described by a `SkeletonSchema`. `FACE_5` and `COCO_17`
+ship as presets; pass your own `{ keypoints, edges }` for any topology. The draw tool walks the
+schema's keypoints in order — the prompt tells you which to place next — then hands off to the
+`VertexEditor` so you can fine-tune each joint.
+
+<LiveDemo example="annotation-skeleton" height={400} />
+
+## Custom annotation types
+
+The package is extensible by the same route it was built. Subclass `AnnotationNode`, describe your
+geometry as draw ops, implement bounds and hit-testing, and register a factory — and your type draws,
+hit-tests, and serializes like any built-in. The demo defines a `StarAnnotation` inline (read the
+**Code** tab), then **Save + Load** round-trips the whole scene through JSON to prove the custom type
+survives serialization.
+
+<LiveDemo example="annotation-custom-type" height={400} />
+
+## Where to go next
+
+- **Customize the look** — every node takes `stroke`, `fill`, `strokeWidth`, `lineDash`, `opacity`,
+  plus `label`, `labelColor`, and `showLabel`. Group them into classes with `LabelSchema`.
+- **Customize the controls** — `VertexEditor` takes `handleSize`, `handleColor`, `fillColor`, and an
+  `onChange` hook; each draw tool takes a `defaults` style and an `onCreate` callback.
+- **Render from data** — reach for the [framework components](/Veyrajs/examples/frameworks/) when the
+  annotations come from your application state rather than a user's pointer.

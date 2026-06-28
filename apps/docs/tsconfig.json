@@ -12,6 +12,7 @@
     "jsxImportSource": "react",
     "paths": {
       "@veyrajs/core": ["../../packages/core/src/index.ts"],
+      "@veyrajs/annotations": ["../../packages/annotations/src/index.ts"],
       "@veyrajs/react": ["../../packages/react/src/index.ts"],
       "@veyrajs/vue": ["../../packages/vue/src/index.ts"],
       "@veyrajs/svelte": ["../../packages/svelte/src/index.ts"]

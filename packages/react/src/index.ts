@@ -11,6 +11,14 @@ export {
   ACText,
   ACImage,
 } from './components'
+export {
+  ACBoundingBox,
+  ACPolygonAnnotation,
+  ACPolylineAnnotation,
+  ACPointAnnotation,
+  ACSkeleton,
+  ACCuboid,
+} from './annotations'
 export { useStage, useCamera, useSelection, useHistory } from './hooks'
 export { NodeContext, useNodeContext } from './context'
 export type { NodeContextValue } from './context'

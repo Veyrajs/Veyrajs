@@ -215,6 +215,9 @@ importers:
 
   packages/angular:
     dependencies:
+      '@veyrajs/annotations':
+        specifier: workspace:*
+        version: link:../annotations
       '@veyrajs/core':
         specifier: workspace:*
         version: link:../core
@@ -261,7 +264,14 @@ importers:
     publishDirectory: dist
 
   packages/annotations:
+    dependencies:
+      '@veyrajs/core':
+        specifier: workspace:*
+        version: link:../core
     devDependencies:
+      happy-dom:
+        specifier: 'catalog:'
+        version: 15.11.7
       tsup:
         specifier: 'catalog:'
         version: 8.5.1(postcss@8.5.15)(typescript@5.9.3)(yaml@2.9.0)
@@ -289,6 +299,9 @@ importers:
 
   packages/react:
     dependencies:
+      '@veyrajs/annotations':
+        specifier: workspace:*
+        version: link:../annotations
       '@veyrajs/core':
         specifier: workspace:*
         version: link:../core
@@ -320,6 +333,9 @@ importers:
 
   packages/svelte:
     dependencies:
+      '@veyrajs/annotations':
+        specifier: workspace:*
+        version: link:../annotations
       '@veyrajs/core':
         specifier: workspace:*
         version: link:../core
@@ -366,6 +382,9 @@ importers:
 
   packages/vue:
     dependencies:
+      '@veyrajs/annotations':
+        specifier: workspace:*
+        version: link:../annotations
       '@veyrajs/core':
         specifier: workspace:*
         version: link:../core

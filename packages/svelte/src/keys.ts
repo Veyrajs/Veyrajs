@@ -26,3 +26,6 @@ export const SHAPE_KEYS = [
   'lineCap',
   'lineJoin',
 ]
+
+/** Shape props plus the label props every annotation node understands. */
+export const ANNOTATION_KEYS = [...SHAPE_KEYS, 'label', 'labelColor', 'showLabel', 'labelFontSize']

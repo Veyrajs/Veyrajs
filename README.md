@@ -53,7 +53,7 @@ baking any annotation logic into the core.
 | [`@veyrajs/svelte`](./packages/svelte) | ✅ | svelte-package | Svelte 5 adapter — rune-powered components. |
 | [`@veyrajs/angular`](./packages/angular) | ✅ | ng-packagr | Angular 18 adapter — standalone components. |
 | [`@veyrajs/tools`](./packages/tools) | placeholder | tsup | Reusable interaction tools (pan/select/transform/marquee). |
-| [`@veyrajs/annotations`](./packages/annotations) | placeholder | tsup | **Future only.** Annotation node types + controls. Intentionally empty — the boundary proof. |
+| [`@veyrajs/annotations`](./packages/annotations) | ✅ | tsup | Vector annotations — boxes, polygons, polylines, keypoints, skeletons, cuboids — plus draw tools, a vertex editor, and label schemas. The boundary proof, realized. |
 | `@veyrajs/demo` (`apps/`) | ✅ | Vite | Imperative demo: shapes, zoom/pan, selection, export/import, undo/redo. Private. |
 | `@veyrajs/benchmarks` (`apps/`) | ✅ | Vite | tinybench micro-benchmarks + a manual canvas FPS harness. Private. |
 | `@veyrajs/docs` (`apps/`) | ✅ | Astro | Docs & demo site (Astro + Starlight) with live interactive demos. Private. |
@@ -160,9 +160,9 @@ keeps every annotation concept out of core.
 
 **Extension seams** (the plugin boundary): the `Renderer` interface (new backends), the
 `HitTester` interface (quadtree/pixel-perfect), the `ClassRegistry` (custom serializable node
-types), and `ControlDef` (custom handles). `@veyrajs/annotations` will be built entirely
-against these — the proof of success is adding an annotation primitive with **zero changes to
-`@veyrajs/core`**.
+types), and `ControlDef` (custom handles). `@veyrajs/annotations` is built entirely
+against these — every annotation primitive (bounding box, polygon, keypoint, skeleton, cuboid) is a
+custom node added with **zero changes to `@veyrajs/core`**.
 
 ---
 
@@ -196,7 +196,7 @@ veyrajs/
 │  ├─ svelte/       @veyrajs/svelte       # Svelte 5 adapter
 │  ├─ angular/      @veyrajs/angular      # Angular 18 adapter
 │  ├─ tools/        @veyrajs/tools        # interaction tools (placeholder)
-│  └─ annotations/  @veyrajs/annotations  # FUTURE annotation plugins (empty)
+│  └─ annotations/  @veyrajs/annotations  # vector annotations (boxes, polygons, skeletons, …)
 └─ apps/
    ├─ demo/         @veyrajs/demo         # Vite + Vue imperative demo
    ├─ benchmarks/   @veyrajs/benchmarks   # tinybench + FPS harness
