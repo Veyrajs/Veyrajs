@@ -1,6 +1,6 @@
 {
   "name": "@veyrajs/angular",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Angular adapter for Veyrajs — declarative components over the engine.",
   "license": "MIT",
   "author": "Veyrajs",

@@ -1,7 +1,19 @@
 # @veyrajs/react
 
-React adapter for [`@veyrajs/core`](../core) — declarative components and hooks over the
-imperative engine, with an always-available escape hatch (`ref`) to the underlying nodes.
+[![npm version](https://img.shields.io/npm/v/@veyrajs/react.svg)](https://www.npmjs.com/package/@veyrajs/react)
+[![license](https://img.shields.io/npm/l/@veyrajs/react.svg)](https://github.com/Veyrajs/Veyrajs/blob/main/LICENSE)
+
+React adapter for [`@veyrajs/core`](https://www.npmjs.com/package/@veyrajs/core) — declarative
+components and hooks over the imperative 2D canvas engine, with an always-available escape hatch
+(`ref`) to the underlying nodes.
+
+## Installation
+
+```bash
+npm install @veyrajs/react
+```
+
+`@veyrajs/core` is pulled in automatically. **React 18+** is required as a peer dependency.
 
 ## Usage
 
@@ -44,7 +56,15 @@ node.
 It's a thin layer over the engine: prop changes are mirrored onto the node (the engine's
 guarded setters make this loop-safe), events are re-emitted as callbacks, and the scene is
 assembled via a reactive cascade (context state) so children attach as soon as the stage is
-ready. The core stays fully framework-agnostic; this package is the only React-aware code,
-and a parallel sibling to [`@veyrajs/vue`](../vue).
+ready. The core stays fully framework-agnostic; this package is the only React-aware code, and
+a parallel sibling to the [Vue](https://www.npmjs.com/package/@veyrajs/vue),
+[Svelte](https://www.npmjs.com/package/@veyrajs/svelte), and
+[Angular](https://www.npmjs.com/package/@veyrajs/angular) adapters.
 
-See [docs/](./docs/README.md) for the per-module documentation.
+## Documentation
+
+📖 Full docs, concepts, and live demos: <https://github.com/Veyrajs/Veyrajs>
+
+## License
+
+[MIT](https://github.com/Veyrajs/Veyrajs/blob/main/LICENSE) © Veyrajs
