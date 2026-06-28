@@ -217,3 +217,41 @@
   width: 92px;
   accent-color: var(--sl-color-accent);
 }
+
+/* ----------------------------------------------------------------------------
+   Header — top-level nav (Docs / Example) beside the wordmark
+   ---------------------------------------------------------------------------- */
+/* The default title wrapper clips overflow; the wordmark is short, so let the
+   nav links show beside it. */
+.title-wrapper {
+  overflow: visible;
+}
+.vy-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin-inline-start: 1.25rem;
+}
+.vy-nav__link {
+  font-size: var(--sl-text-sm);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--sl-color-gray-2);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.12s ease;
+}
+a.vy-nav__link:hover {
+  color: var(--sl-color-text-accent);
+}
+/* "Example" is a placeholder until that section is built — muted, not clickable. */
+.vy-nav__link--soon {
+  color: var(--sl-color-gray-4);
+  cursor: default;
+}
+/* Top nav is desktop-only; on mobile the sidebar already lists every page. */
+@media (max-width: 50rem) {
+  .vy-nav {
+    display: none;
+  }
+}
