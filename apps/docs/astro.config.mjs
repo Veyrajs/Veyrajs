@@ -55,6 +55,9 @@ export default defineConfig({
         '@veyrajs/core': fileURLToPath(
           new URL('../../packages/core/src/index.ts', import.meta.url),
         ),
+        '@veyrajs/annotations': fileURLToPath(
+          new URL('../../packages/annotations/src/index.ts', import.meta.url),
+        ),
         '@veyrajs/react': fileURLToPath(
           new URL('../../packages/react/src/index.ts', import.meta.url),
         ),

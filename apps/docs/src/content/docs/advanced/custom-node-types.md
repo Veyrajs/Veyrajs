@@ -10,7 +10,10 @@ Custom node types are how you extend Veyrajs **without touching `@veyrajs/core`*
 for a non-drawable one), register a factory so it round-trips through
 [serialization](/Veyrajs/api/serialization/), and each framework adapter can wrap it as a declarative
 component. This is the `@veyrajs/annotations` path: every annotation primitive (bounding box, polygon,
-keypoint, …) is just a custom node built on these public seams, with **zero core changes**.
+keypoint, …) is just a custom node built on these public seams, with **zero core changes**. For a
+shipped, worked example, see the [Annotations API](/Veyrajs/api/annotations/) and its
+[live demos](/Veyrajs/examples/annotations/) — including a custom `StarAnnotation` defined and
+registered start to finish.
 
 ## Subclassing Shape
 
