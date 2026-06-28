@@ -29,12 +29,12 @@ export default defineConfig({
             { label: 'Design Philosophy', slug: 'guides/design-philosophy' },
           ],
         },
+        { label: 'Examples', items: [{ autogenerate: { directory: 'examples' } }] },
         { label: 'Core Concepts', items: [{ autogenerate: { directory: 'concepts' } }] },
         { label: 'Framework Adapters', items: [{ autogenerate: { directory: 'adapters' } }] },
         { label: 'API Reference', items: [{ autogenerate: { directory: 'api' } }] },
         { label: 'Recipes', items: [{ autogenerate: { directory: 'recipes' } }] },
         { label: 'Advanced', items: [{ autogenerate: { directory: 'advanced' } }] },
-        { label: 'Demos', items: [{ autogenerate: { directory: 'demos' } }] },
         { label: 'Troubleshooting', items: [{ autogenerate: { directory: 'troubleshooting' } }] },
       ],
       // fonts.css first so its @font-face / @import rules load before custom.css uses them.

@@ -1,0 +1,31 @@
+---
+title: Events
+description: Federated pointer events — capture, target, bubble — and the SceneEvent object.
+sidebar:
+  order: 2
+---
+
+import LiveDemo from '../../../components/LiveDemo.astro';
+
+Veyrajs dispatches **DOM-style federated events** through the scene graph: a pointer interaction
+is hit-tested to a target node, then flows **capture → target → bubble**. One `SceneEvent` carries
+the screen point, the world point, the target, and the current phase.
+
+## Event propagation
+
+Click the blue square and watch a single handler fire at every level, in both phases:
+
+<LiveDemo example="event-propagation" height={200} />
+
+## Hover affordances
+
+`pointerenter` / `pointerleave` fire per shape and don't bubble — ideal for outlining the shape
+under the pointer and switching the cursor:
+
+<LiveDemo example="hover-cursor" height={260} />
+
+## Pointer coordinates
+
+Every event carries the pointer in three spaces — screen, world, and any node's local space:
+
+<LiveDemo example="pointer-coordinates" height={280} />

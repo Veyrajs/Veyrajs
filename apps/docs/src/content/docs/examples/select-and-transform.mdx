@@ -1,0 +1,24 @@
+---
+title: Select & Transform
+description: Click-select, drag-to-move, and resize/rotate handles — with undo built in.
+sidebar:
+  order: 4
+---
+
+import LiveDemo from '../../../components/LiveDemo.astro';
+
+`SelectionController` adds an interactive selection + transform layer over any stage: click to
+select, drag to move, and use the handles to resize and rotate. Hand it a `History` and every
+change becomes an undoable command — no extra wiring.
+
+## The transformer
+
+Add shapes, select one, and drag its handles. Undo/redo is wired to every transform:
+
+<LiveDemo example="transformer-basics" height={380} />
+
+## Multi-select
+
+Drag a marquee across several shapes, or shift-click to add and remove:
+
+<LiveDemo example="multi-select" height={320} />

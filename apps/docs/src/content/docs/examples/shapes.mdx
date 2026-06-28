@@ -1,0 +1,21 @@
+---
+title: Shapes & Styling
+description: Every built-in shape, drawn by the engine on one layer.
+sidebar:
+  order: 1
+---
+
+import LiveDemo from '../../../components/LiveDemo.astro';
+
+Veyrajs ships seven shape types — `Rect`, `Circle`, `Ellipse`, `Line`, `Polygon`, `Text`,
+and `Image`. Here they all are on a single layer. Switch to the **Code** tab to see exactly
+how each one is constructed.
+
+<LiveDemo example="shape-gallery" height={320} />
+
+## Transforms
+
+Every node carries a position, rotation, scale, and an **offset** (its pivot). Drag the sliders
+to see how they compose — the amber dot marks the pivot the rect rotates and scales around.
+
+<LiveDemo example="transforms" height={300} />

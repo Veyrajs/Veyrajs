@@ -1,0 +1,15 @@
+---
+title: Selectors
+description: Query the scene graph with find and traverse.
+sidebar:
+  order: 7
+---
+
+import LiveDemo from '../../../components/LiveDemo.astro';
+
+`find` returns the first node matching a predicate; `traverse` visits every descendant. Match by
+type (`instanceof`), by `name`, or by anything else you can express as a function.
+
+## Find & traverse
+
+<LiveDemo example="find-and-traverse" height={300} />

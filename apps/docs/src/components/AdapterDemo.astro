@@ -1,0 +1,46 @@
+---
+// AdapterDemo — the same scene in each framework adapter. React / Vue / Svelte are LIVE islands
+// (passed in via named slots) shown next to their exact ?raw source; Angular is code-only,
+// because this docs site has no Astro-Angular island integration.
+import { Code, TabItem, Tabs } from '@astrojs/starlight/components'
+
+const raw = (pattern: Record<string, unknown>, key: string): string => (pattern[key] ?? '') as string
+const reactSrc = raw(
+  import.meta.glob('./islands/*.tsx', { query: '?raw', import: 'default', eager: true }),
+  './islands/ReactScene.tsx',
+)
+const vueSrc = raw(
+  import.meta.glob('./islands/*.vue', { query: '?raw', import: 'default', eager: true }),
+  './islands/VueScene.vue',
+)
+const svelteSrc = raw(
+  import.meta.glob('./islands/*.svelte', { query: '?raw', import: 'default', eager: true }),
+  './islands/SvelteScene.svelte',
+)
+const angularSrc = raw(
+  import.meta.glob('../examples/adapters/*.txt', { query: '?raw', import: 'default', eager: true }),
+  '../examples/adapters/hello-angular.txt',
+)
+---
+
+<Tabs>
+  <TabItem label="React">
+    <slot name="react" />
+    <Code code={reactSrc} lang="tsx" title="ReactScene.tsx" />
+  </TabItem>
+  <TabItem label="Vue">
+    <slot name="vue" />
+    <Code code={vueSrc} lang="vue" title="VueScene.vue" />
+  </TabItem>
+  <TabItem label="Svelte">
+    <slot name="svelte" />
+    <Code code={svelteSrc} lang="svelte" title="SvelteScene.svelte" />
+  </TabItem>
+  <TabItem label="Angular">
+    <p class="vy-note">
+      The Angular adapter mirrors the same API. This docs site doesn't wire live Angular islands, so
+      it's shown as code — see <a href="/Veyrajs/adapters/angular/">the Angular adapter guide</a>.
+    </p>
+    <Code code={angularSrc} lang="ts" title="hello-scene.component.ts" />
+  </TabItem>
+</Tabs>

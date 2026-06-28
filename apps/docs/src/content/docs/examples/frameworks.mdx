@@ -1,0 +1,25 @@
+---
+title: In Every Framework
+description: The same interactive scene built with each Veyrajs framework adapter.
+sidebar:
+  order: 11
+  label: Frameworks
+---
+
+import AdapterDemo from '../../../components/AdapterDemo.astro';
+import ReactScene from '../../../components/islands/ReactScene.tsx';
+import VueScene from '../../../components/islands/VueScene.vue';
+import SvelteScene from '../../../components/islands/SvelteScene.svelte';
+
+One engine, four adapters. Here's the **same** scene — a label, a click-to-move rectangle, and a
+circle, all `selectable` — built with each one. React, Vue, and Svelte run live below; switch the
+tabs to compare. The Angular adapter is identical in shape and is shown as code.
+
+<AdapterDemo>
+  <ReactScene client:only="react" slot="react" />
+  <VueScene client:only="vue" slot="vue" />
+  <SvelteScene client:only="svelte" slot="svelte" />
+</AdapterDemo>
+
+Each adapter is a thin, declarative wrapper over the same imperative core — see the
+[Adapters](/Veyrajs/adapters/overview/) section for the full API of each.

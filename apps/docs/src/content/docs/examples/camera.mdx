@@ -1,0 +1,18 @@
+---
+title: Camera
+description: Zoom about the cursor, pan, and convert between screen and world space.
+sidebar:
+  order: 5
+---
+
+import LiveDemo from '../../../components/LiveDemo.astro';
+
+The camera owns the view transform. World coordinates stay fixed; the camera zooms and pans over
+them and converts between **screen** and **world** space (`screenToWorld` / `worldToScreen`).
+
+## Zoom & pan
+
+Drag to pan; scroll to zoom about the cursor. The readout shows the live zoom and the world
+coordinate under the pointer:
+
+<LiveDemo example="zoom-and-pan" height={320} />

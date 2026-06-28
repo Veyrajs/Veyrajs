@@ -1,0 +1,26 @@
+import { Component, signal } from '@angular/core'
+import { ACStage, ACLayer, ACRect, ACCircle, ACText } from '@veyrajs/angular'
+
+// The same scene with the Angular adapter — standalone components, ac-* selectors.
+@Component({
+  selector: 'hello-scene',
+  standalone: true,
+  imports: [ACStage, ACLayer, ACRect, ACCircle, ACText],
+  template: `
+    <ac-stage [width]="620" [height]="300" selectable>
+      <ac-layer>
+        <ac-text
+          [x]="18" [y]="14"
+          text="@veyrajs/angular — click the rect; drag the handles"
+          [fontSize]="13" fill="#64748b" />
+        <ac-rect
+          [x]="x()" [y]="70" [width]="150" [height]="90"
+          fill="#2563eb" (click)="x.set(x() + 20)" />
+        <ac-circle [x]="380" [y]="150" [radius]="52" fill="#0ea5e9" />
+      </ac-layer>
+    </ac-stage>
+  `,
+})
+export class HelloScene {
+  readonly x = signal(60)
+}
