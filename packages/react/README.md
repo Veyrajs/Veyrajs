@@ -63,7 +63,7 @@ a parallel sibling to the [Vue](https://www.npmjs.com/package/@veyrajs/vue),
 
 ## Documentation
 
-📖 Full docs, concepts, and live demos: <https://github.com/Veyrajs/Veyrajs>
+📖 [**React adapter guide**](https://veyrajs.github.io/Veyrajs/adapters/react/) · [Full docs & live demos](https://veyrajs.github.io/Veyrajs/) · [GitHub](https://github.com/Veyrajs/Veyrajs)
 
 ## License
 

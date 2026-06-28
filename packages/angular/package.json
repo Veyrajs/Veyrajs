@@ -1,10 +1,10 @@
 {
   "name": "@veyrajs/angular",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Angular adapter for Veyrajs — declarative components over the engine.",
   "license": "MIT",
   "author": "Veyrajs",
-  "homepage": "https://github.com/Veyrajs/Veyrajs/tree/main/packages/angular#readme",
+  "homepage": "https://veyrajs.github.io/Veyrajs/adapters/angular/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Veyrajs/Veyrajs.git",

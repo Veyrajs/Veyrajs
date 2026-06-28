@@ -63,7 +63,7 @@ the only Svelte-aware code, a parallel sibling to the
 
 ## Documentation
 
-📖 Full docs, concepts, and live demos: <https://github.com/Veyrajs/Veyrajs>
+📖 [**Svelte adapter guide**](https://veyrajs.github.io/Veyrajs/adapters/svelte/) · [Full docs & live demos](https://veyrajs.github.io/Veyrajs/) · [GitHub](https://github.com/Veyrajs/Veyrajs)
 
 ## License
 

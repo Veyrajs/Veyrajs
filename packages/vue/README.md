@@ -64,7 +64,7 @@ framework-agnostic; this package is the only Vue-aware code, and a parallel sibl
 
 ## Documentation
 
-📖 Full docs, concepts, and live demos: <https://github.com/Veyrajs/Veyrajs>
+📖 [**Vue adapter guide**](https://veyrajs.github.io/Veyrajs/adapters/vue/) · [Full docs & live demos](https://veyrajs.github.io/Veyrajs/) · [GitHub](https://github.com/Veyrajs/Veyrajs)
 
 ## License
 

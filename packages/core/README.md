@@ -161,11 +161,12 @@ back to the underlying node whenever you need it:
 
 ## Documentation
 
-📖 **Full docs, concepts, and live demos:** <https://github.com/Veyrajs/Veyrajs>
+📖 **Full documentation & live demos:** <https://veyrajs.github.io/Veyrajs/>
 
-The repository hosts an Astro + Starlight documentation site with guides, concept pages
-(scene graph, camera, events, hit-testing, serialization…), and copy-paste recipes
+The docs site (Astro + Starlight) has guides, concept pages (scene graph, camera, events,
+hit-testing, serialization…), an interactive **Examples** gallery, and copy-paste recipes
 (pan & zoom, free drawing, snapping guides, export to PNG, save/load, and more).
+Source on [GitHub](https://github.com/Veyrajs/Veyrajs).
 
 ## Requirements
 

@@ -70,7 +70,7 @@ framework-agnostic; this package is the only Angular-aware code, a parallel sibl
 
 ## Documentation
 
-📖 Full docs, concepts, and live demos: <https://github.com/Veyrajs/Veyrajs>
+📖 [**Angular adapter guide**](https://veyrajs.github.io/Veyrajs/adapters/angular/) · [Full docs & live demos](https://veyrajs.github.io/Veyrajs/) · [GitHub](https://github.com/Veyrajs/Veyrajs)
 
 ## License
 
