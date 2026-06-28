@@ -37,6 +37,7 @@
     "svelte": "^5.0.0"
   },
   "dependencies": {
+    "@veyrajs/annotations": "workspace:*",
     "@veyrajs/core": "workspace:*"
   },
   "devDependencies": {

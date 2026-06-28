@@ -37,6 +37,7 @@
     "vue": "^3.4.0"
   },
   "dependencies": {
+    "@veyrajs/annotations": "workspace:*",
     "@veyrajs/core": "workspace:*"
   },
   "devDependencies": {

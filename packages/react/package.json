@@ -37,6 +37,7 @@
     "react": ">=18"
   },
   "dependencies": {
+    "@veyrajs/annotations": "workspace:*",
     "@veyrajs/core": "workspace:*"
   },
   "devDependencies": {

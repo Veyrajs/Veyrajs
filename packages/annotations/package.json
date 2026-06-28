@@ -1,9 +1,31 @@
 {
   "name": "@veyrajs/annotations",
-  "version": "0.0.0",
-  "description": "FUTURE ONLY — annotation node types and controls for Veyrajs. Intentionally empty.",
-  "license": "UNLICENSED",
-  "private": true,
+  "version": "0.1.0",
+  "description": "Vector annotation node types, tools, and controls for Veyrajs — bounding boxes, polygons, polylines, keypoints, skeletons, and cuboids.",
+  "license": "MIT",
+  "author": "Veyrajs",
+  "homepage": "https://veyrajs.github.io/Veyrajs/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Veyrajs/Veyrajs.git",
+    "directory": "packages/annotations"
+  },
+  "bugs": "https://github.com/Veyrajs/Veyrajs/issues",
+  "keywords": [
+    "canvas",
+    "2d",
+    "annotation",
+    "bounding-box",
+    "polygon",
+    "keypoint",
+    "skeleton",
+    "cuboid",
+    "labeling",
+    "typescript"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "sideEffects": false,
   "files": ["dist"],
@@ -19,10 +41,15 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "test": "vitest run --passWithNoTests",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "@veyrajs/core": "workspace:*"
+  },
   "devDependencies": {
+    "happy-dom": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
