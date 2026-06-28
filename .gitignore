@@ -12,3 +12,8 @@ coverage/
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# Local agent working rules (personal; not part of the published packages).
+# Root-anchored so per-package docs/ folders stay tracked.
+/CLAUDE.md
+/docs/agents/
