@@ -1,0 +1,17 @@
+---
+title: Groups & Z-Order
+description: Stacking order in the scene graph.
+sidebar:
+  order: 6
+---
+
+import LiveDemo from '../../../components/LiveDemo.astro';
+
+A node's stacking order is just its position among its siblings — there's no separate z-index.
+Reorder it with `moveToTop`, `moveToBottom`, `moveUp`, and `moveDown`.
+
+## Restacking
+
+Click a shape to select it, then send it forward or back:
+
+<LiveDemo example="z-order-controls" height={300} />

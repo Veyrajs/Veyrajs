@@ -1,0 +1,73 @@
+---
+// LiveDemo — a single example shown as a live "Demo" tab + its exact "Code" tab.
+//
+// Single source of truth: the example lives in `src/examples/<name>.ts` and exports
+// `init(host) => cleanup`. We import that file two ways:
+//   1. `?raw` (eager) → the source string for the Code tab.
+//   2. a lazy glob → the runnable module, executed client-side in the Demo tab.
+// So the code you read is exactly the code that runs; nothing is hand-copied.
+import { Code, TabItem, Tabs } from '@astrojs/starlight/components'
+
+interface Props {
+  example: string
+  height?: number
+  title?: string
+}
+
+const { example, height = 380, title } = Astro.props as Props
+
+// Eager raw-source map for the Code tab. Keys are relative to this file.
+const sources = import.meta.glob('../examples/*.ts', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+})
+const src = (sources[`../examples/${example}.ts`] ?? `// example not found: ${example}`) as string
+---
+
+<Tabs>
+  <TabItem label="Demo">
+    <div class="veyrajs-demo" data-example={example}>
+      <div class="veyrajs-demo__stage" data-veyrajs="stage" style={`height:${height}px`}></div>
+    </div>
+  </TabItem>
+  <TabItem label="Code">
+    <Code code={src} lang="ts" title={title ?? `${example}.ts`} />
+  </TabItem>
+</Tabs>
+
+<script>
+  // Lazy glob: each example becomes its own chunk, fetched only when mounted.
+  const modules = import.meta.glob('../examples/*.ts')
+
+  function mount(root: HTMLElement): void {
+    if (root.dataset.mounted) return
+    const host = root.querySelector<HTMLElement>('[data-veyrajs="stage"]')
+    const name = root.dataset.example
+    if (!host || !name) return
+    const load = modules[`../examples/${name}.ts`]
+    if (!load) return
+
+    // Init only once the host has a real width — this generically defeats the
+    // "canvas in a hidden tab measures 0" problem and survives responsive layout.
+    const start = (): void => {
+      if (root.dataset.mounted || host.clientWidth === 0) return
+      root.dataset.mounted = '1'
+      void (load() as Promise<{ init(h: HTMLElement): () => void }>).then((m) => m.init(host))
+    }
+
+    if (host.clientWidth > 0) {
+      start()
+    } else {
+      const ro = new ResizeObserver(() => {
+        if (host.clientWidth > 0) {
+          ro.disconnect()
+          start()
+        }
+      })
+      ro.observe(host)
+    }
+  }
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-example]')) mount(root)
+</script>

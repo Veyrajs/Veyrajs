@@ -1,0 +1,24 @@
+---
+title: Serialization & History
+description: Save and load scenes as JSON, and undo/redo through the command stack.
+sidebar:
+  order: 8
+---
+
+import LiveDemo from '../../../components/LiveDemo.astro';
+
+Two day-one features that most canvas libraries bolt on later: scenes round-trip through plain
+**JSON**, and every mutation can be a reversible **command** on a History stack.
+
+## Save & load
+
+`stringify` walks the stage to a JSON document; `parse` rebuilds it. Add shapes, save, clear, then
+load to restore:
+
+<LiveDemo example="save-load-json" height={260} />
+
+## Undo & redo
+
+Wrap a change in a command and run it through `History` to make it reversible:
+
+<LiveDemo example="undo-redo" height={300} />

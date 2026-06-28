@@ -1,0 +1,28 @@
+---
+title: Animation
+description: Veyrajs has no tween engine — here's how to animate with a plain rAF loop.
+sidebar:
+  order: 9
+---
+
+import LiveDemo from '../../../components/LiveDemo.astro';
+
+Veyrajs deliberately ships **no tween or animation engine**. The scene graph is mutable, so you
+animate the same way the browser does: mutate node properties inside a `requestAnimationFrame`
+loop and call `stage.requestRender()`. The engine coalesces the redraw to one frame.
+
+## Bouncing
+
+<LiveDemo example="bouncing-balls" height={340} />
+
+## Orbiting
+
+Each body's position is recomputed every frame from an orbit angle:
+
+<LiveDemo example="orbiting-system" height={360} />
+
+## Spring follow
+
+A tiny spring integrator makes the dot chase the pointer:
+
+<LiveDemo example="spring-drag" height={340} />

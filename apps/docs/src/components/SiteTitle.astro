@@ -1,0 +1,18 @@
+---
+// Header brand + top-level nav.
+// Extends Starlight's default SiteTitle (the logo/title link to home) with two
+// top-level links beside the wordmark:
+//   - Docs     → the documentation entry point.
+//   - Examples → the live demo gallery.
+import Default from '@astrojs/starlight/components/SiteTitle.astro'
+
+// Prefix hrefs with the configured base ('/Veyrajs') so links resolve under the
+// project subpath without hardcoding it (the base may change per deploy).
+const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+---
+
+<Default />
+<nav class="vy-nav" aria-label="Primary">
+  <a class="vy-nav__link" href={`${base}/guides/introduction/`}>Docs</a>
+  <a class="vy-nav__link" href={`${base}/examples/`}>Examples</a>
+</nav>

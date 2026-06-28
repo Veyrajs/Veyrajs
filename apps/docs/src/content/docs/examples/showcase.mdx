@@ -1,0 +1,46 @@
+---
+title: Showcase
+description: The headline demos — performance, free drawing, flowcharts, collision, a mini editor.
+sidebar:
+  order: 10
+---
+
+import LiveDemo from '../../../components/LiveDemo.astro';
+
+The demos that put several features together. Each one is still a single `.ts` file — flip to
+the **Code** tab to read exactly how it's built.
+
+## 10,000 shapes with a tooltip
+
+Thousands of circles share **one** tooltip. A single delegated `pointermove` hit-tests the layer
+and repositions a DOM tooltip — no per-shape listeners, no per-shape text nodes. Bump the count
+and keep hovering.
+
+<LiveDemo example="ten-k-tooltip" height={380} />
+
+## Free drawing
+
+Each stroke is its own `Line`, grown point-by-point as you drag — so strokes stay real,
+selectable nodes. The eraser hit-tests under the pointer and removes what it finds.
+
+<LiveDemo example="free-drawing" height={380} />
+
+## Connected nodes
+
+Drag the boxes; the connectors re-route to follow them. Nodes are `Group`s, edges are `Line`s
+whose endpoints are recomputed on every drag.
+
+<LiveDemo example="flowchart" height={320} />
+
+## Collision detection
+
+Drag the rectangles — any that overlap turn red, via a cheap world-AABB `intersects` test.
+
+<LiveDemo example="collision-detection" height={300} />
+
+## Mini canvas editor
+
+Selection + transform handles, undoable add/delete through the command history, and a PNG export
+— composed entirely from the public API.
+
+<LiveDemo example="mini-canvas-editor" height={420} />

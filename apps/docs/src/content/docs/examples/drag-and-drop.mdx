@@ -1,0 +1,22 @@
+---
+title: Drag & Drop
+description: Manual dragging — there's no draggable flag, so you wire the pointer handshake.
+sidebar:
+  order: 3
+---
+
+import LiveDemo from '../../../components/LiveDemo.astro';
+
+Veyrajs has no `draggable` flag — dragging is a small handshake you wire yourself: `pointerdown`
+on a shape captures the grab offset, `pointermove` updates its **world** position, and `pointerup`
+drops it. Explicit, and fully under your control.
+
+## Drag shapes
+
+<LiveDemo example="drag-shapes" height={300} />
+
+## Snap to grid
+
+Snapping is a one-line change to the drag math — round the world position to the nearest grid step:
+
+<LiveDemo example="snap-to-grid" height={320} />
