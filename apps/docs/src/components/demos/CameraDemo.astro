@@ -14,20 +14,24 @@
 
 <script>
   import { Stage, Rect, Circle, Polygon, Text } from '@veyrajs/core'
+  import { palette, roles, onThemeChange } from '../_demo-theme'
 
   function init(root: HTMLElement): void {
     const host = root.querySelector<HTMLElement>('[data-veyrajs="stage"]')
     if (!host) return
     const width = host.clientWidth || 760
     const height = host.clientHeight || 320
-    const stage = new Stage({ container: host, width, height, background: '#0b1220' })
+    const stage = new Stage({ container: host, width, height })
     const layer = stage.createLayer()
+    const caption = new Text({ x: 80, y: 210, text: 'World coordinates never move — only the view does.', fontSize: 14, fill: roles().muted })
     layer.add(
-      new Rect({ x: 80, y: 60, width: 150, height: 96, fill: '#38bdf8' }),
-      new Circle({ x: 360, y: 120, radius: 50, fill: '#f472b6' }),
-      new Polygon({ x: 540, y: 120, points: [{ x: 0, y: -54 }, { x: 52, y: 40 }, { x: -52, y: 40 }], fill: '#34d399' }),
-      new Text({ x: 80, y: 210, text: 'World coordinates never move — only the view does.', fontSize: 14, fill: '#94a3b8' }),
+      new Rect({ x: 80, y: 60, width: 150, height: 96, fill: palette.blue }),
+      new Circle({ x: 360, y: 120, radius: 50, fill: palette.cyan }),
+      new Polygon({ x: 540, y: 120, points: [{ x: 0, y: -54 }, { x: 52, y: 40 }, { x: -52, y: 40 }], fill: palette.teal }),
+      caption,
     )
+    // Keep the canvas caption legible when the Starlight theme toggles.
+    onThemeChange(() => { caption.fill = roles().muted })
 
     const readout = root.querySelector<HTMLElement>('[data-cam="readout"]')
     const update = (wx?: number, wy?: number): void => {

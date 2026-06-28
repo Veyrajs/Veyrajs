@@ -14,15 +14,14 @@
 
 <script>
   import { Stage, Layer, Rect, Circle, SceneSerializer } from '@veyrajs/core'
-
-  const PALETTE = ['#38bdf8', '#f472b6', '#a78bfa', '#34d399', '#fbbf24', '#fb7185']
+  import { cycle } from '../_demo-theme'
 
   function init(root: HTMLElement): void {
     const host = root.querySelector<HTMLElement>('[data-veyrajs="stage"]')
     if (!host) return
     const width = host.clientWidth || 760
     const height = host.clientHeight || 260
-    const stage = new Stage({ container: host, width, height, background: '#0b1220' })
+    const stage = new Stage({ container: host, width, height })
     let layer = stage.createLayer()
     const serializer = new SceneSerializer()
     let saved: string | null = null
@@ -32,12 +31,12 @@
     const loadBtn = root.querySelector<HTMLButtonElement>('[data-ser="load"]')
 
     layer.add(
-      new Rect({ x: 60, y: 50, width: 130, height: 80, fill: '#38bdf8' }),
-      new Circle({ x: 330, y: 120, radius: 48, fill: '#f472b6' }),
+      new Rect({ x: 60, y: 50, width: 130, height: 80, fill: cycle[0] }),
+      new Circle({ x: 330, y: 120, radius: 48, fill: cycle[1] }),
     )
 
     const addShape = (): void => {
-      const color = PALETTE[colorIndex++ % PALETTE.length] as string
+      const color = cycle[colorIndex++ % cycle.length] as string
       if (Math.random() < 0.5) {
         const w = 60 + Math.random() * 120
         layer.add(new Rect({ x: 30 + Math.random() * (width - w - 60), y: 30 + Math.random() * (height - 130), width: w, height: 50 + Math.random() * 70, fill: color }))

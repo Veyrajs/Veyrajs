@@ -19,8 +19,7 @@
 
 <script>
   import { Circle, History, Layer, Rect, SelectionController, Stage } from '@veyrajs/core'
-
-  const PALETTE = ['#38bdf8', '#f472b6', '#a78bfa', '#34d399', '#fbbf24', '#fb7185']
+  import { cycle, palette, stroke } from './_demo-theme'
 
   function initDemo(root: HTMLElement): void {
     const host = root.querySelector<HTMLElement>('[data-veyrajs="stage"]')
@@ -28,7 +27,7 @@
 
     const width = host.clientWidth || 760
     const height = host.clientHeight || 380
-    const stage = new Stage({ container: host, width, height, background: '#0b1220' })
+    const stage = new Stage({ container: host, width, height })
     const layer = new Layer()
     stage.add(layer)
 
@@ -38,12 +37,12 @@
     new SelectionController(stage, { history })
 
     layer.add(
-      new Rect({ x: 90, y: 80, width: 160, height: 96, fill: '#38bdf8', stroke: '#0ea5e9', strokeWidth: 2 }),
-      new Circle({ x: 360, y: 150, radius: 56, fill: '#f472b6' }),
+      new Rect({ x: 90, y: 80, width: 160, height: 96, fill: palette.blue, stroke: stroke.blue, strokeWidth: 2 }),
+      new Circle({ x: 360, y: 150, radius: 56, fill: palette.cyan }),
     )
 
     let colorIndex = 0
-    const nextColor = (): string => PALETTE[colorIndex++ % PALETTE.length] as string
+    const nextColor = (): string => cycle[colorIndex++ % cycle.length] as string
 
     const button = (action: string): HTMLButtonElement | null =>
       root.querySelector<HTMLButtonElement>(`[data-veyrajs="${action}"]`)
